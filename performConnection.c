@@ -6,26 +6,30 @@
 #define MESG_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 
-int main(){
-
+//ARGS: server message, if it begins with "+" return true
+bool serverResponseValid(*char r){
+if(strcmp(r[0], "+") == 0){
+return true;
+}
+return false;
 }
 
 //implements the communication with the server (Prolog)
 //returns -1 if error, else 0 (later socket filedecriptor)
-int performConnection(int sockfd, int gameid){
+static int performConnection(int sockfd, int gameid){
 //Abkürzungen: PR=Prolog, S=Server, C=Client
 
 //store the messages of the Server (later with read())
-char dataPRS[MES_LENGTH_SERVER];
+static char dataPRS[MES_LENGTH_SERVER];
 
 //Messages the Client sends to the server (later with write())
-char[] versionPRC = "Version 2.0";
+static char[] versionPRC = "Version 2.0";
 //game id to string
-char buffer[13]
-itoa (gameid,buffer,13);
-char[] game_idPRC = strcat("ID ", buffer);
+static char buffer[256]
+itoa (gameid,buffer,256);
+static char[] game_idPRC = strcat("ID ", buffer);
 
-char[] player_number_PRC = "Player";
+static char[] player_number_PRC = "Player";
 
 //invalid socket
 if(fdSocket < 0){
@@ -35,9 +39,9 @@ return -1;
 }
 
 //if testifvalid is negative then there was an error, repeat write() or read() if error
-ssize_t testifvalid = -1;
+static ssize_t testifvalid = -1;
 //Number of invalid attempts you're allowed to have, amount -> see #define ATTEMPTS_INVALID, counts attempts up to this number
-int attempts = 0;
+static int attempts = 0;
 
 //TODO: if Server doesn't respond with "+" -> error handling
 //S: <<Gameserver Version>>
@@ -170,10 +174,4 @@ testifvalid = -1;
 return sockfd;
 }
 
-//ARGS: server message, if it begins with "+" return true
-bool serverResponseValid(*char r){
-if(strcmp(r[0], "+") == 0){
-return true;
-}
-return false;
-}
+
