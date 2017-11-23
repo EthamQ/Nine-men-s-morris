@@ -5,7 +5,7 @@ ARGS=-g $(GAME_ID) -p  $(PLAYER)
 default: build
 
 build: main.c performConnection.c
-	$(CC) $(CFLAGS) sysprak-client.c performConnection.c -o sysprak-client
+	$(CC) $(CFLAGS) main.c performConnection.c -o sysprak-client
 
 play: build
 	./sysprak-client $(ARGS)
