@@ -9,7 +9,7 @@
 #include<string.h>
 #include<stdbool.h>
 #define BUF 256
-#define Game-ID "NMMORRIS"
+#define Game_ID "NMMORRIS"
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
@@ -21,7 +21,7 @@ static char game_idPRC []= "ID <<Game-ID>>";
 static char  numberOfPlayersPRC []= "Player";
 
 //ARGS: server message, if it begins with "+" return true
-bool static serverResponseValid(const char r[]){
+static bool serverResponseValid(const char r[]){
     if(strcmp(r[0], "+") == 0){
         return true;
     }
@@ -31,7 +31,7 @@ bool static serverResponseValid(const char r[]){
 
 
 
-int static performConnection(int sockfd){
+static int performConnection(int sockfd){
     if(sockfd < 0){
     perror("Invalid socket file descriptor");
         close(sockfd);
