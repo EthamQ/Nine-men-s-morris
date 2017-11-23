@@ -46,6 +46,7 @@ int main(){
     if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
         perror("connect");
        close(sockfd);
+       break;
 
         }
         fprintf(stderr,"connected\n");
