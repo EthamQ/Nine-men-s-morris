@@ -147,13 +147,7 @@ int attempts = 0;
         }
     }
     testifvalid = -1;
-    return 0;
-}
-
-
-
-
-
+    
 
 return sockfd;
 }
