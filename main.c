@@ -45,6 +45,7 @@ int main(){
 
     if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) == -1) {
         perror("connect");
+        printf("%p,%d",ai_addr,ai_addrlen);
         close(sockfd);
         return -1;
 
