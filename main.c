@@ -43,10 +43,10 @@ int main(){
         continue;
         }
 
-    if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+    if (connect(sockfd, &ai_addr, sizeof(ai_addrlen)) == -1) {
         perror("connect");
-       close(sockfd);
-       return -1; //break
+        close(sockfd);
+        return -1;
 
         }
         fprintf(stderr,"connected\n");
