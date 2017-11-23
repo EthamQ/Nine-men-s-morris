@@ -44,7 +44,7 @@ int main(){
         }
 
     if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
-        perror("connect");
+        perror("fehler bei connect");
         printf("Socketzahl:%d\n",sockfd);
         close(sockfd);
         continue;
@@ -64,7 +64,7 @@ int main(){
 freeaddrinfo(servinfo); // all done with this structure
 
 if(performConnection(sockfd,123123) < 0) {
-    perror("Socket nicht connected");
+    perror("Fehler bei performConnection");
 }
 else {
     printf("passt");
