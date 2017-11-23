@@ -45,7 +45,7 @@ int main(){
 
     if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
         perror("connect");
-        printf("%d",sockfd);
+        printf("Socketzahl:%d\n",sockfd);
         close(sockfd);
         continue;
 
