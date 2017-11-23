@@ -9,7 +9,7 @@
 #include<string.h>
 #include<stdbool.h>
 #define BUF 256
-#define Game_ID "NMMORRIS"
+#define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
@@ -31,7 +31,7 @@ static bool serverResponseValid(const char r[]){
 
 
 
-static int performConnection(int sockfd){
+static int performConnection(int sockfd,int gameID){
     if(sockfd < 0){
     perror("Invalid socket file descriptor");
         close(sockfd);
