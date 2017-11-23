@@ -43,7 +43,7 @@ int main(){
         continue;
         }
 
-    if (connect(sockfd, *ai_addr,ai_addrlen) == -1) {
+    if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) == -1) {
         perror("connect");
         close(sockfd);
         return -1;
