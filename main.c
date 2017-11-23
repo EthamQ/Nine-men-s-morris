@@ -9,7 +9,7 @@
 #include<string.h>
 #include<stdbool.h>
 #define BUF 256
-#define Game-ID "NMMORRIS"
+#define Game_ID "NMMORRIS"
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
