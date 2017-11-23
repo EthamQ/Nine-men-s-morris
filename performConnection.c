@@ -22,7 +22,7 @@ static char  numberOfPlayersPRC []= "Player";
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
-    if(strcmp(r[0], "+") == 0){
+    if(strncmp(r, "+",1) == 0){
         return true;
     }
     return false;
