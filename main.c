@@ -60,6 +60,11 @@ int main(){
     }
 
 freeaddrinfo(servinfo); // all done with this structure
-performConnection(sockfd,123123);
 
+if(performConnection(sockfd,123123) < 0) {
+    perror("Socket nicht connected");
+}
+else {
+    printf("passt");
+}
 }
