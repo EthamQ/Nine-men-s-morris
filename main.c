@@ -9,7 +9,7 @@
 #include<string.h>
 #include<stdbool.h>
 #define BUF 256
-#define Game_ID "NMMORRIS"
+#define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
@@ -59,6 +59,6 @@ int main(){
     }
 
 freeaddrinfo(servinfo); // all done with this structure
-performConnection(sockfd);
+performConnection(sockfd,123123);
 
 }
