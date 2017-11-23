@@ -32,7 +32,7 @@ static bool serverResponseValid(const char r[]){
 
 
 
-static int performConnection(int sockfd,int gameID){
+ int performConnection(int sockfd,int gameID){
     if(sockfd < 0){
     perror("Invalid socket file descriptor");
         close(sockfd);
