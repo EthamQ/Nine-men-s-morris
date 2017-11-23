@@ -59,6 +59,6 @@ int main(){
     }
 
 freeaddrinfo(servinfo); // all done with this structure
-//performConnection(sockfd);
+performConnection(sockfd);
 
 }
