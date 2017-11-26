@@ -2,6 +2,6 @@
 #define performConnection_H
 
 
-int performConnection(int sockfd, int gameid);
+int performConnection(int sockfd);
 
 #endif

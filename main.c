@@ -63,7 +63,7 @@ int main(){
 
 freeaddrinfo(servinfo); // all done with this structure
 
-if(performConnection(sockfd,123123) < 0) {
+if(performConnection(sockfd) < 0) {
     perror("Fehler bei performConnection");
 }
 else {
