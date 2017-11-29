@@ -5,7 +5,7 @@ char GAMEKINDNAME[50];
 }
 
 
-void readfile(char filename[100]){
+void config(char filename[100]){
 	if(filename == "") {
 		filename = "client.conf";
 	}
