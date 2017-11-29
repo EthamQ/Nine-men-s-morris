@@ -4,7 +4,7 @@ ARGS=-g $(GAME_ID) -p  $(PLAYER)
 
 default: build
 
-build: main.c performConnection.c
+build: thinkerConnector.c performConnection.c
 	$(CC) $(CFLAGS) main.c performConnection.c -o sysprak-client
 
 play: build
