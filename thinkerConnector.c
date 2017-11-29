@@ -20,39 +20,6 @@
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 
-//int main(){
-int thinkConnect(){
-  pid_t pid;
-  switch(pid = fork()){
-    case -1: perror("Fehler bei fork\n");
-      return -1;
-      break;
-    case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-      //Code for Connector (probably call of main.c)
-      if(initConnect < 0){
-        perror("Fehler bei initConect");
-      }
-      else{
-        printf("initConnect success");
-      }
-      if(performConnection(sockfd) < 0) {
-          perror("Fehler bei performConnection");
-      }
-      else {
-          printf("performConnection success");
-      }
-
-      exit(0);
-      break;
-    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
-      //Code for Thinker
-      //Nicht in Meilenstein 2 implementiert
-      wait(NULL);
-      break;
-  }
-return 0;
-}
-
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
       int sockfd;
@@ -94,7 +61,43 @@ int initConnect(){
       fprintf(stderr, "failed to connect\n");
       //exit(2);
       return -1;
+    }
+
+//int main(){
+int thinkConnect(){
+  pid_t pid;
+
+  switch(pid = fork()){
+    case -1: perror("Fehler bei fork\n");
+      return -1;
+      break;
+    case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
+      //Code for Connector (probably call of main.c)
+      if(initConnect < 0){
+        perror("Fehler bei initConect");
       }
+      else{
+        printf("initConnect success");
+      }
+      if(performConnection(sockfd) < 0) {
+          perror("Fehler bei performConnection");
+      }
+      else {
+          printf("performConnection success");
+      }
+
+      exit(0);
+      break;
+    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
+      //Code for Thinker
+      //Nicht in Meilenstein 2 implementiert
+      wait(NULL);
+      break;
+  }
+return 0;
+}
+
+
 
   freeaddrinfo(servinfo); // all done with this structure // Brauche ich addrinfop fuer ahcfolgende funktionen ???
 }
