@@ -1,3 +1,7 @@
+#inlcude<stdio.h>
+#include<string.h>
+
+
 struct config{
 char HOSTNAME[100]
 int PORTNUMBER;
@@ -10,7 +14,7 @@ void config(char filename[100]){
 		filename = "client.conf";
 	}
 	
-	file *fp = fopen(filename,"r");
+	FILE *fp = fopen(filename,"r");
 	
 	if(fp == NULL) {
 		printf("Fehler beim Öffnen der Datei");
