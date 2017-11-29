@@ -1,11 +1,14 @@
+#include<unistd.h>
+#include<stdlib.h>
+#include<stdio.h>
+
+#include"thinkerConnector.h"
+/*
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include <netdb.h>
 #include<arpa/inet.h>
-#include<unistd.h>
-#include<stdlib.h>
-#include<stdio.h>
 #include<string.h>
 #include<stdbool.h>
 #include"performConnection.h"
@@ -16,12 +19,16 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
-
+*/
 
 
 
 int main(){
-
+  thinkConnect();
+  return 0; //bitte aendern falls return unnoetig
+}
+// Server connect wurde nach thinkerConnector.c verschoben fuer bessere Kapselung/Uebersichtlichkeit -juri
+/*
     int sockfd;
     int rv;
 
@@ -70,3 +77,4 @@ else {
     printf("passt");
 }
 }
+*/
