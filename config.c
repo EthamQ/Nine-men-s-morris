@@ -18,8 +18,8 @@ int main(char filename[100]){
 		printf("korrekt");
 		char *line;
 		char *readline;
-		while (readline = fgets(line,256,filename)!= NULL) {
-			   
+		while (fgets(line,256,filename) != NULL) {
+			readline = fgets(line,256,filename);   
 			printf("eingelesener Text :%s\n",readline);
 		}
 	}
