@@ -2,14 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct config{
-char HOSTNAME[100]
-int PORTNUMBER;
-char GAMEKINDNAME[50];
-}
 
 
-void config(char filename[100]){
+
+int main(char filename[100]){
 	if(filename == "") {
 		filename = "client.conf";
 	}
@@ -27,5 +23,6 @@ void config(char filename[100]){
 			printf("eingelesener Text :%s\n",readline);
 		}
 	}
+	return 0;
 }
 		
