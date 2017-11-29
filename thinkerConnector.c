@@ -63,21 +63,27 @@ int initConnect(){
       return -1;
     }
 
-//int main(){
-int thinkConnect(){
-  pid_t pid;
+  freeaddrinfo(servinfo); // all done with this structure // Brauche ich addrinfop fuer ahcfolgende funktionen ???
 
+return sockfd;
+}
+
+
+
+int main(){
+  pid_t pid;
+int sockfd;
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
       return -1;
       break;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Connector (probably call of main.c)
-      if(initConnect < 0){
-        perror("Fehler bei initConect");
+      if((sockfd = initConnect()) < 0){
+        perror("Fehler bei initConnect");
       }
       else{
-        printf("initConnect success");
+        printf("initConnect success\n");
       }
       if(performConnection(sockfd) < 0) {
           perror("Fehler bei performConnection");
@@ -94,10 +100,7 @@ int thinkConnect(){
       wait(NULL);
       break;
   }
+
 return 0;
 }
 
-
-
-  freeaddrinfo(servinfo); // all done with this structure // Brauche ich addrinfop fuer ahcfolgende funktionen ???
-}
