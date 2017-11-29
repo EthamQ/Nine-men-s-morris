@@ -1,6 +1,6 @@
-#inlcude<stdio.h>
-#include<string.h>
-#include<stdlib.h>
+#inlcude <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 struct config{
 char HOSTNAME[100]
