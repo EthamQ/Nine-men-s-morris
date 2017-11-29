@@ -24,7 +24,7 @@ void config(char filename[100]){
 		char *readline;
 		while (readline = fgets(line,256,filename)!= NULL) {
 			   
-			printf(readline);
+			printf("eingelesener Text :%s\n",readline);
 		}
 	}
 }
