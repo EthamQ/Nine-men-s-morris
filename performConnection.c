@@ -137,5 +137,5 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
 	attempts = 0;
 
     } 
-}
+
 
