@@ -73,12 +73,13 @@ int attempts = 0;
 //S: Game-ID request
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        testifvalid = write(1,dataPRS,MES_LENGTH_SERVER);
+        
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
                 perror("Invalid server response3");
                 return -1;
         }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
 
     //C: <<Game-ID>>
@@ -99,6 +100,7 @@ int attempts = 0;
             return -1;
         }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
 
         //S: <<Game-Name>>
@@ -109,6 +111,7 @@ int attempts = 0;
             return -1;
         }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
 
 //C: [[GewŸnschte Mitspielernummer]]
@@ -129,6 +132,7 @@ int attempts = 0;
     return -1;
     }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
 
 //S: <<Mitspieleranzahl>>
@@ -139,6 +143,7 @@ int attempts = 0;
         return -1;
     }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
 
 //S: <<Mitspielernummer>> <<Mitspielername>> <<Bereit>>
@@ -150,6 +155,7 @@ int attempts = 0;
             return -1;
         }
     }
+    printf("%s\n",dataPRS);
     testifvalid = -1;
     
 
