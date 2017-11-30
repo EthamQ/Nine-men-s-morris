@@ -57,6 +57,7 @@ int attempts = 0;
             }
 
         }
+        printf("%s\n",dataPRS);
         testifvalid = -1;
 
 //C: <<Client Version>>
