@@ -40,7 +40,7 @@ int initConnect(){
       for(p = servinfo; p != NULL; p = p->ai_next) {
           if ((sockfd = socket(p->ai_family, p->ai_socktype,
               p->ai_protocol)) == -1) {
-              perror("socket");
+              perror("Fehler bei Socket");
           continue;
           }
 
@@ -51,8 +51,9 @@ int initConnect(){
           continue;
 
           }
+          else{
           fprintf(stderr,"connected\n");
-
+        }
           break; // if we get here, we must have connected successfully
       }
 
