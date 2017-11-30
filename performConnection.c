@@ -18,8 +18,8 @@
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID <<Game-ID>>\n";
-static char  numberOfPlayersPRC []= "Player\n";
+static char game_idPRC []= "ID 1234567891234\n";
+static char  numberOfPlayersPRC []= "2\n";
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -74,7 +74,6 @@ int attempts = 0;
 //S: Game-ID request
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        printf("%s\n",dataPRS);
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
                 perror("Invalid server response3");
                 printf("%s\n",dataPRS);
