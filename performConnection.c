@@ -136,6 +136,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
     testifvalid = -1;
 	attempts = 0;
 
+     return sockfd;
     } 
 
 
