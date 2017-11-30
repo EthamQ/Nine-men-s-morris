@@ -18,8 +18,8 @@
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 1234567891234\n";
-static char  numberOfPlayersPRC []= "2\n";
+static char game_idPRC []= "ID 02pobsvmluimp\n";
+static char  numberOfPlayersPRC []= "PLAYER\n";
 
     //ARGS: server message, if it begins with "+" return true
     static bool serverResponseValid(const char r[]){
@@ -59,6 +59,7 @@ static char  numberOfPlayersPRC []= "2\n";
         }
         printf("%s\n",dataPRS);
         testifvalid = -1;
+	attempts = 0;
 
     //C: <<Client Version>>
     while(testifvalid < 0){
@@ -70,10 +71,12 @@ static char  numberOfPlayersPRC []= "2\n";
     }
     printf("%s\n",versionPRC);
     testifvalid = -1;
-
+	attempts = 0;
+    
     //S: Game-ID request
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+	attempts++;
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
                 perror("Invalid server response3");
                 printf("%s\n",dataPRS);
@@ -82,7 +85,8 @@ static char  numberOfPlayersPRC []= "2\n";
     }
     printf("%s\n",dataPRS);
     testifvalid = -1;
-
+	attempts = 0;
+    
     //C: <<Game-ID>>
     while(testifvalid < 0){
         testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
@@ -93,11 +97,12 @@ static char  numberOfPlayersPRC []= "2\n";
     }
     printf("%s\n",game_idPRC);
     testifvalid = -1;
+	attempts = 0;
 
     //S: <<Gamekind-Name>>
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        printf("%s\n",dataPRS);
+       
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
             perror("Invalid server response4");
             return -1;
@@ -105,18 +110,8 @@ static char  numberOfPlayersPRC []= "2\n";
     }
     printf("%s\n",dataPRS);
     testifvalid = -1;
+	attempts = 0;
     
-    //S: <<Game-Name>>
-    while(testifvalid < 0){
-        testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response");
-            return -1;
-        }
-    }
-    printf("%s\n",dataPRS);
-    testifvalid = -1;
-
     //C: [[GewŸnschte Mitspielernummer]]
     while(testifvalid < 0){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
@@ -126,43 +121,21 @@ static char  numberOfPlayersPRC []= "2\n";
         }
     }
     testifvalid = -1;
+	attempts = 0;
 
     //S: <<Mitspielernummer>> <<Mitspielername>>
     while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+    printf("%s\n",dataPRS);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
         perror("Invalid server response5");
     return -1;
     }
     }
-    printf("%s\n",dataPRS);
+   
     testifvalid = -1;
+	attempts = 0;
 
-    //S: <<Mitspieleranzahl>>
-    while(testifvalid < 0){
-        testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Invalid server response6");
-        return -1;
-    }
-    }
-    printf("%s\n",dataPRS);
-    testifvalid = -1;
-
-    //S: <<Mitspielernummer>> <<Mitspielername>> <<Bereit>>
-    while(testifvalid < 0){
-        testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-
-        if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response7");
-            return -1;
-        }
-    }
-    printf("%s\n",dataPRS);
-    testifvalid = -1;
-    
-
-    return sockfd;
-    }
-
+    } 
+}
 
