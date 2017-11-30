@@ -17,7 +17,7 @@
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "Version 2.0";
+static char versionPRC []= "VERSION 2.0";
 static char game_idPRC []= "ID <<Game-ID>>";
 static char  numberOfPlayersPRC []= "Player";
 
@@ -68,6 +68,7 @@ int attempts = 0;
                 return -1;
             }
     }
+    printf("%s\n",versionPRC);
     testifvalid = -1;
 
 //S: Game-ID request
