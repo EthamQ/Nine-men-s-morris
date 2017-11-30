@@ -52,7 +52,7 @@ int attempts = 0;
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         attempts++;
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-                perror("Invalid server response");
+                perror("Invalid server response2");
                 return -1;
             }
 
@@ -74,7 +74,7 @@ int attempts = 0;
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         testifvalid = write(1,dataPRS,MES_LENGTH_SERVER);
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-                perror("Invalid server respone");
+                perror("Invalid server response3");
                 return -1;
         }
     }
@@ -94,7 +94,7 @@ int attempts = 0;
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server respone");
+            perror("Invalid server response4");
             return -1;
         }
     }
@@ -104,7 +104,7 @@ int attempts = 0;
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server respone");
+            perror("Invalid server response");
             return -1;
         }
     }
@@ -124,7 +124,7 @@ int attempts = 0;
     while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Invalid server respone");
+        perror("Invalid server response5");
     return -1;
     }
     }
@@ -134,7 +134,7 @@ int attempts = 0;
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Invalid server respone");
+        perror("Invalid server response6");
         return -1;
     }
     }
@@ -145,7 +145,7 @@ int attempts = 0;
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
 
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response");
+            perror("Invalid server response7");
             return -1;
         }
     }
