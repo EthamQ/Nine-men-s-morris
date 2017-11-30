@@ -74,9 +74,10 @@ int attempts = 0;
 //S: Game-ID request
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-        
+        printf("%s\n",dataPRS);
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
                 perror("Invalid server response3");
+                printf("%s\n",dataPRS);
                 return -1;
         }
     }
