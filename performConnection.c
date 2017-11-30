@@ -17,9 +17,9 @@
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "VERSION 2.0";
-static char game_idPRC []= "ID <<Game-ID>>";
-static char  numberOfPlayersPRC []= "Player";
+static char versionPRC []= "VERSION 2.0\n";
+static char game_idPRC []= "ID <<Game-ID>>\n";
+static char  numberOfPlayersPRC []= "Player\n";
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
