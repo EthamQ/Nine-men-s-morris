@@ -106,7 +106,12 @@ int sockfd;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
       //Nicht in Meilenstein 2 implementiert
-      wait(NULL);
+	
+	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+	attachSHM();      
+
+
+	wait(NULL);
       break;
   }
 
