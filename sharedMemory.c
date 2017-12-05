@@ -17,15 +17,19 @@ printf("shmat returns a pointer to: %p\n", ptr);
 if(*ptr==-1){
 perror("Fehler bei smat");
 }
+
+//shared memory löschen wenn Thinker und Connector beendet wurden
+shmctl(shared_memory_id, IPC_RMID, 0);
+
 return shared_memory_id;
 }
 
 int writeSHM(){
-
+return 0;
 }
 
 int readSHM(){
-
+return 0;
 }
 
 int main(){

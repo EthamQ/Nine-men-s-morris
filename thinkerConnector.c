@@ -12,6 +12,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include"performConnection.h"
+#include "shm_data.h"
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -79,21 +80,39 @@ int sockfd;
       return -1;
       break;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-      //Code for Connector (probably call of main.c)
+      //Connector
+
+	//Verbindsaufbau zum Server
       if((sockfd = initConnect()) < 0){
         perror("Fehler bei initConnect");
-      }
+      return -1;
+	}
       else{
         printf("initConnect success\n");
-      }
+      return -1;
+	}
+
+	//Prologphase
       if(performConnection(sockfd) < 0) {
           perror("Fehler bei performConnection");
-      }
+      return -1;
+	}
       else {
           printf("performConnection success");
       }
+	//Shared memory erstellen
+	int shmid;
+	if((shmid = createSHM()) < 0){
+	perror("Fehler bei Erstellung der shared memory");
+	return -1;
+	}
+	else{
+	printf("shared memory success");
+	}
+      
+	exit(0);
 
-      exit(0);
+
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
