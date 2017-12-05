@@ -72,7 +72,7 @@ return sockfd;
 
 
 
-int main(){
+int fork_thinker_connector(){
   pid_t pid;
 int sockfd;
   switch(pid = fork()){
@@ -100,19 +100,8 @@ int sockfd;
       else {
           printf("performConnection success");
       }
-	//Shared memory erstellen
-	int shmid;
-	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
-	return -1;
-	}
-	else{
-	printf("shared memory success");
-	}
       
 	exit(0);
-
-
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
@@ -124,3 +113,18 @@ int sockfd;
 return 0;
 }
 
+
+int main(){
+	//Shared memory erstellen
+	int shmid;
+	if((shmid = createSHM()) < 0){
+	perror("Fehler bei Erstellung der shared memory");
+	return -1;
+	}
+	else{
+	printf("shared memory success");
+	}
+
+fork_thinker_connector();
+return 0;
+}
