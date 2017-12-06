@@ -6,6 +6,21 @@
 #include "shm_data.h"
 #define BUFFER_SIZE 256
 
+struct spieler{
+char spielernummer[BUFFER_SIZE];
+char name[BUFFER_SIZE];
+int flag_registriert;
+};
+
+
+struct shm_data{
+char spielname[BUFFER_SIZE];
+char spielernummer[BUFFER_SIZE];
+char anzahl_spieler[BUFFER_SIZE];
+int pid_thinker;
+int pid_connector;
+};
+
 
 
 int createSHM(){
@@ -19,11 +34,12 @@ shmctl(shared_memory_id, IPC_RMID, 0);
 return shared_memory_id;
 }
 
-int attachSHM(){
-int *ptr = shmat(shared_memory_id, 0, 0);
+int attachSHM(int shmID){
+int *ptr = shmat(shmID, 0, 0);
 printf("shmat returns a pointer to: %p\n", ptr);
 if(*ptr==-1){
 perror("Fehler bei smat");
+return 0;
 }
 
 }
