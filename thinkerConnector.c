@@ -74,7 +74,7 @@ return sockfd;
 
 int fork_thinker_connector(){
   pid_t pid;
-int sockfd;
+  int sockfd;
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
       return -1;
@@ -82,33 +82,44 @@ int sockfd;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Connector
 
-	//Verbindsaufbau zum Server
-      if((sockfd = initConnect()) < 0){
-        perror("Fehler bei initConnect");
-      return -1;
-	}
-      else{
-        printf("initConnect success\n");
-      return -1;
-	}
+      //Schreibseite der Pipe schliessen
+      close (fd[1]);
 
-	//Prologphase
-      if(performConnection(sockfd) < 0) {
-          perror("Fehler bei performConnection");
-      return -1;
-	}
-      else {
-          printf("performConnection success");
-      }
-      
-	exit(0);
-      break;
+    	//Verbindsaufbau zum Server
+          if((sockfd = initConnect()) < 0){
+            perror("Fehler bei initConnect");
+          return -1;
+    	    }
+          else{
+            printf("initConnect success\n");
+          return -1;
+    	    }
+
+  	//Prologphase
+        if(performConnection(sockfd) < 0) {
+            perror("Fehler bei performConnection");
+            return -1;
+  	    }
+        else {
+            printf("performConnection success");
+        }
+    //Prologphase Teil 2
+
+
+	    exit(0);
+    break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
+
+      //Leseseite der Pipe schliessen
+      close (fd[0]);
+
       //Nicht in Meilenstein 2 implementiert
-	
+
+
+
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-	attachSHM();      
+	attachSHM();
 
 
 	wait(NULL);
@@ -129,7 +140,15 @@ int main(){
 	else{
 	printf("shared memory success");
 	}
+  //Erstellung der Pipe, muss vor Fork geschehen
+  int pipeFd[2];
+  char pipeBuffer;
+  if (pipe (pipeFd) < 0) {
+      perror ("Fehler bei erstellung der Pipe");
+      exit (EXIT_FAILURE);
+   }
 
-fork_thinker_connector();
+  //Aufteilung in 2 Prozese
+  fork_thinker_connector();
 return 0;
 }
