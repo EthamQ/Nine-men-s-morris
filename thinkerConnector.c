@@ -24,6 +24,8 @@
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 
+short gotSignal;
+
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
       int sockfd;
@@ -77,9 +79,9 @@ return sockfd;
 void signalHandlerThinker(int signalNum){
   //TODO alles
   printf("Signalnummer: %i\n", signalNum);
-  if(signalNum == SIGUSR1){
+  if(gotSignal != 1){
     // ?????
-
+    gotSignal = 1;
   }
   else{
     perror("Signalhandler Fehler");
@@ -148,6 +150,9 @@ int fork_thinker_connector(){
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Thinker
 
+      //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+      attachSHM();
+
       //Leseseite der Pipe schliessen
       close (pipeFd[0]);
 
@@ -159,25 +164,28 @@ int fork_thinker_connector(){
       sa.sa_flags = SA_RESTART;
 
       //TODO While schleife ????
-      //TODO thinken
-      if(validMove("A1") == 1){
-        pipeBuffer ="A1";
-      }
-      else{
-        perror("Fehler: Thinker will ungueltigen Spielzug taetigen,THINKER")
-      }
-      printf("Valider Spielzug gethinkt, THINKER");
+      while(1){
+        if(gotSignal == 1){
+          //TODO thinken
+          if(validMove("A1") == 1){
+            pipeBuffer ="A1";
+          }
+          else{
+            perror("Fehler: Thinker will ungueltigen Spielzug taetigen,THINKER")
+          }
+          printf("Valider Spielzug gethinkt, THINKER");
 
-      //Spielzug an Connector schicken
-      int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
-      if ((write (fd[1], pipeBuffer, n)) != n) {
-         perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
-         return -1;
+          //Spielzug an Connector schicken
+          int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
+          if ((write (fd[1], pipeBuffer, n)) != n) {
+             perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
+             return -1;
+          }
+          printf("Spielzug in die Pipe geschrieben, THINKER");
+          gotSignal = 0; //Auf naechstes Signal warten
+        }
       }
-      printf("Spielzug in die Pipe geschrieben, THINKER");
 
-    	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-    	attachSHM();
 
     	wait(NULL);
           break;
@@ -199,7 +207,7 @@ int main(){
 	}
 
 
-
+  gotSignal = 0;
   //Aufteilung in 2 Prozese
   fork_thinker_connector();
 return 0;
