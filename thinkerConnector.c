@@ -2,19 +2,20 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #include <sys/wait.h> //Fuer Prozesse
-#include <sys/types.h> // ???
 #include <sys/socket.h> //Fuer initConnect
 #include <netinet/in.h>  //Fuer initConnect
 #include <netdb.h> //Fuer initConnect
 #include <arpa/inet.h> //Fuer initConnect
-#include <unistd.h>
-#include <string.h>
-#include <stdbool.h>
 #include <fcntl.h> //Fuer Pipe
 #include <signal.h> //Fuer Signal Connector->Thinker
+
 #include "performConnection.h"
 #include "shm_data.h"
+#include "brain.h"
+
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -73,6 +74,18 @@ return sockfd;
 }
 
 
+void signalHandlerThinker(int signalNum){
+  //TODO alles
+  printf("Signalnummer: %i\n", signalNum);
+  if(signalNum == SIGUSR1){
+    // ?????
+
+  }
+  else{
+    perror("Signalhandler Fehler");
+  }
+}
+
 
 int fork_thinker_connector(){
   //Fork Variablen
@@ -83,8 +96,8 @@ int fork_thinker_connector(){
   char pipeBuffer[PIPE_BUF];
   //Erstellung der Pipe, muss vor Fork geschehen
   if (pipe (pipeFd) < 0) {
-      perror ("Fehler bei erstellung der Pipe");
-      exit (EXIT_FAILURE);
+      perror ("Fehler bei Erstellung der Pipe");
+      return -1:
    }
 
   //Forken
@@ -97,32 +110,40 @@ int fork_thinker_connector(){
 
       //Schreibseite der Pipe schliessen
       close (pipeFd[1]);
+      //TODO Aus Pipe Lesen
+      //Verbindsaufbau zum Server
+        if((sockfd = initConnect()) < 0){
+          perror("Fehler bei initConnect");
+        return -1;
+      	}
+        else{
+          printf("initConnect success\n");
+        return -1;
+      	}
 
-    	//Verbindsaufbau zum Server
-          if((sockfd = initConnect()) < 0){
-            perror("Fehler bei initConnect");
-          return -1;
-    	    }
-          else{
-            printf("initConnect success\n");
-          return -1;
-    	    }
-
-  	//Prologphase
+    	//Prologphase
         if(performConnection(sockfd) < 0) {
             perror("Fehler bei performConnection");
             return -1;
-  	    }
+    	   }
         else {
             printf("performConnection success");
         }
-    //TODO Prologphase Teil 2
+      //Endlosschleife damit Prozess nicht einschlaeft oder sonstwas
+        //while(1){
+          //TODO Prologphase Teil 2
 
 
-    //TODO Auf Negative Serverantwort oder Spielzug warten
+          //TODO Auf Negative Serverantwort oder Spielzug warten
 
+          //Signal an Thinker senden
+          if(kill(getppid(),SIGUSR1)<0){
+            perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+          }
+          printf("Signal an Thinker gesendet, CONNECTOR");
 
-	    exit(0);
+      	  exit(0);
+        //}
     break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Thinker
@@ -130,6 +151,14 @@ int fork_thinker_connector(){
       //Leseseite der Pipe schliessen
       close (pipeFd[0]);
 
+      //Signalhandler fuer Connector Signal definieren
+      //http://pubs.opengroup.org/onlinepubs/009695399/functions/sigaction.html muss code nochmal pruefen
+      struct sigaction sa;
+      sa.sa_handler = signalHandlerThinker;
+      sigemptyset(&sa.sa_mask);
+      sa.sa_flags = SA_RESTART;
+
+      //TODO While schleife ????
       //TODO thinken
       if(validMove("A1") == 1){
         pipeBuffer ="A1";
