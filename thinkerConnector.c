@@ -2,16 +2,18 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include <netdb.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-#include<string.h>
-#include<stdbool.h>
-#include"performConnection.h"
+#include <sys/wait.h> //Fuer Prozesse
+#include <sys/types.h> // ???
+#include <sys/socket.h> //Fuer initConnect
+#include <netinet/in.h>  //Fuer initConnect
+#include <netdb.h> //Fuer initConnect
+#include <arpa/inet.h> //Fuer initConnect
+#include <unistd.h>
+#include <string.h>
+#include <stdbool.h>
+#include <fcntl.h> //Fuer Pipe
+#include <signal.h> //Fuer Signal Connector->Thinker
+#include "performConnection.h"
 #include "shm_data.h"
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
@@ -73,8 +75,19 @@ return sockfd;
 
 
 int fork_thinker_connector(){
+  //Fork Variablen
   pid_t pid;
   int sockfd;
+  //Pipe Variablen
+  int pipeFd[2];
+  char pipeBuffer[PIPE_BUF];
+  //Erstellung der Pipe, muss vor Fork geschehen
+  if (pipe (pipeFd) < 0) {
+      perror ("Fehler bei erstellung der Pipe");
+      exit (EXIT_FAILURE);
+   }
+
+  //Forken
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
       return -1;
@@ -83,7 +96,7 @@ int fork_thinker_connector(){
       //Connector
 
       //Schreibseite der Pipe schliessen
-      close (fd[1]);
+      close (pipeFd[1]);
 
     	//Verbindsaufbau zum Server
           if((sockfd = initConnect()) < 0){
@@ -103,28 +116,43 @@ int fork_thinker_connector(){
         else {
             printf("performConnection success");
         }
-    //Prologphase Teil 2
+    //TODO Prologphase Teil 2
+
+
+    //TODO Auf Negative Serverantwort oder Spielzug warten
 
 
 	    exit(0);
     break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
-      //Code for Thinker
+      //Thinker
 
       //Leseseite der Pipe schliessen
-      close (fd[0]);
+      close (pipeFd[0]);
 
-      //Nicht in Meilenstein 2 implementiert
+      //TODO thinken
+      if(validMove("A1") == 1){
+        pipeBuffer ="A1";
+      }
+      else{
+        perror("Fehler: Thinker will ungueltigen Spielzug taetigen,THINKER")
+      }
+      printf("Valider Spielzug gethinkt, THINKER");
 
+      //Spielzug an Connector schicken
+      int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
+      if ((write (fd[1], pipeBuffer, n)) != n) {
+         perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
+         return -1;
+      }
+      printf("Spielzug in die Pipe geschrieben, THINKER");
 
+    	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+    	attachSHM();
 
-	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-	attachSHM();
-
-
-	wait(NULL);
-      break;
-  }
+    	wait(NULL);
+          break;
+      }
 
 return 0;
 }
@@ -140,13 +168,8 @@ int main(){
 	else{
 	printf("shared memory success");
 	}
-  //Erstellung der Pipe, muss vor Fork geschehen
-  int pipeFd[2];
-  char pipeBuffer;
-  if (pipe (pipeFd) < 0) {
-      perror ("Fehler bei erstellung der Pipe");
-      exit (EXIT_FAILURE);
-   }
+
+
 
   //Aufteilung in 2 Prozese
   fork_thinker_connector();
