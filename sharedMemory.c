@@ -24,8 +24,8 @@ int pid_connector;
 
 
 int createSHM(){
-struct shm_data data;
-int shared_memory_id = shmget(IPC_PRIVATE, sizeof(data), IPC_CREAT | IPC_EXCL);
+int size = sizeof(struct shm_data);
+int shared_memory_id = shmget(IPC_PRIVATE, size, IPC_CREAT | IPC_EXCL);
 printf("shared memory id is: %d\n", shared_memory_id);
 
 //shared memory löschen wenn Thinker und Connector beendet wurden
