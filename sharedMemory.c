@@ -4,7 +4,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include "shm_data.h"
-#define BUFFER_SIZE 256
+
 
 struct spieler{
 char spielernummer[BUFFER_SIZE];
@@ -39,9 +39,9 @@ int *ptr = shmat(shmID, 0, 0);
 printf("shmat returns a pointer to: %p\n", ptr);
 if(*ptr==-1){
 perror("Fehler bei smat");
-return 0;
+return -1;
 }
-
+return 0;
 }
 
 int writeSHM(){
