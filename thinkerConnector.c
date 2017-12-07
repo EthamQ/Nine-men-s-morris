@@ -151,7 +151,7 @@ int fork_thinker_connector(){
       //Thinker
 
       //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-      attachSHM();
+      //attachSHM();
 
       //Leseseite der Pipe schliessen
       close (pipeFd[0]);
@@ -176,8 +176,9 @@ int fork_thinker_connector(){
           printf("Valider Spielzug gethinkt, THINKER");
 
           //Spielzug an Connector schicken
+
           int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
-          if ((write (fd[1], pipeBuffer, n)) != n) {
+          if ((write (pipeFd[1], pipeBuffer, gesendeteBytes)) != gesendeteBytes) {
              perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
              return -1;
           }
@@ -196,6 +197,7 @@ return 0;
 
 
 int main(){
+  /*
 	//Shared memory erstellen
 	int shmid;
 	if((shmid = createSHM()) < 0){
@@ -205,7 +207,7 @@ int main(){
 	else{
 	printf("shared memory success");
 	}
-
+*/
 
   gotSignal = 0;
   //Aufteilung in 2 Prozese
