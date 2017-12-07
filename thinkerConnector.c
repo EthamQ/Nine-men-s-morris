@@ -167,16 +167,15 @@ int fork_thinker_connector(){
       while(1){
         if(gotSignal == 1){
           //TODO thinken
-          if(validMove("A1") == 1){
+          //if(validMove("A1") == 1){
             pipeBuffer ="A1";
-          }
+          //}
           else{
             perror("Fehler: Thinker will ungueltigen Spielzug taetigen,THINKER")
           }
           printf("Valider Spielzug gethinkt, THINKER");
 
-          //Spielzug an Connector schicken
-
+          //Spielzug an Connector schicken / in die Pipe schreiben
           int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
           if ((write (pipeFd[1], pipeBuffer, gesendeteBytes)) != gesendeteBytes) {
              perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
@@ -185,6 +184,7 @@ int fork_thinker_connector(){
           printf("Spielzug in die Pipe geschrieben, THINKER");
           gotSignal = 0; //Auf naechstes Signal warten
         }
+        //sleep(0.5);
       }
 
 
