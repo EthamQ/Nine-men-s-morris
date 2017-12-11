@@ -20,6 +20,7 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
+#define CONFIG_DEFAULT client.conf
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
@@ -118,9 +119,24 @@ int sockfd;
 return 0;
 }
 
+*char game_id;
+*char configname;
+//Weißt die Kommandozeilenparameter Variablen zu
+void init_cmd_args(*char gameID, *char config){
+game_id = gameID;
+configname = config;
+}
 
-int main(){
-	//Shared memory erstellen
+int main(int argc, char *argv[]){
+//Kommandozeilenparameter
+if(argc > 2){
+init_cmd_args(argv[1], argv[2]);
+}
+else{
+init_cmd_args(argv[1], CONFIG_DEFAULT);
+}
+
+//Shared memory erstellen
 	int shmid;
 	if((shmid = createSHM()) < 0){
 	perror("Fehler bei Erstellung der shared memory");
@@ -130,6 +146,7 @@ int main(){
 	printf("shared memory success");
 	}
 
+//Thinker Connector
 fork_thinker_connector();
 return 0;
 }
