@@ -4,8 +4,8 @@ ARGS=-g $(GAME_ID) -p  $(PLAYER)
 
 default: build
 
-build: thinkerConnector.c performConnection.c sharedMemory.c draw.c
-	$(CC) $(CFLAGS) thinkerConnector.c performConnection.c sharedMemory.c draw.c -o sysprak-client
+build: readConfig.c thinkerConnector.c performConnection.c sharedMemory.c draw.c
+	$(CC) $(CFLAGS) readConfig.c thinkerConnector.c performConnection.c sharedMemory.c draw.c -o sysprak-client
 
 play: build
 	./sysprak-client $(ARGS)

@@ -12,6 +12,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include"performConnection.h"
+#include "config.h"
 #include "shm_data.h"
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
@@ -20,7 +21,7 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
-#define CONFIG_DEFAULT client.conf
+#define CONFIG_DEFAULT "client.conf"
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
@@ -119,10 +120,10 @@ int sockfd;
 return 0;
 }
 
-*char game_id;
-*char configname;
+char* game_id;
+char* configname;
 //Weißt die Kommandozeilenparameter Variablen zu
-void init_cmd_args(*char gameID, *char config){
+void init_cmd_args(char* gameID, char* config){
 game_id = gameID;
 configname = config;
 }
@@ -135,6 +136,8 @@ init_cmd_args(argv[1], argv[2]);
 else{
 init_cmd_args(argv[1], CONFIG_DEFAULT);
 }
+
+read_configfile();
 
 //Shared memory erstellen
 	int shmid;
