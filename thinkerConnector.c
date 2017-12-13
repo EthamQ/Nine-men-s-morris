@@ -152,7 +152,7 @@ int fork_thinker_connector(){
       }
       //Endlosschleife damit Prozess nicht einschlaeft oder sonstwas
       while(gameOver != 1){
-
+        printf("Ich bin eine Endlosschleife :D CONECTOR");
         //TODO Prologphase Teil 2
 
 
