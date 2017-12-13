@@ -6,7 +6,7 @@
 
 
 short think(){
-  String move;
+  string move;
   //Spielfeld einlesen
     //TODO
 

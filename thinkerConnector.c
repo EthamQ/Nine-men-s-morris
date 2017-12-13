@@ -89,7 +89,7 @@ void signalHandlerThinker(int signalNum){
 
 
 //Spielzug an Connector schicken / in die Pipe schreiben
-short sendMove(String moveD){
+short sendMove(string moveD){
   char pipeBuffer[5];
 
   pipeBuffer = moveDest;
