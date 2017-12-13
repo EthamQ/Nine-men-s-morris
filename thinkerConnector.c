@@ -26,6 +26,7 @@
 
 short gotSignal = 0;
 short gameOver = 0;
+char moveDest[5];
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
@@ -86,6 +87,24 @@ void signalHandlerThinker(int signalNum){
   }
 }
 
+
+//Spielzug an Connector schicken / in die Pipe schreiben
+short sendMove(String moveD){
+  char pipeBuffer[5];
+
+  pipeBuffer = moveDest;
+
+  int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
+
+  if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
+       printf("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
+       return -1;
+    }
+  printf("Spielzug in die Pipe geschrieben, BRAIN");
+  }
+  //sleep(0.5);
+  return 0;
+}
 
 int fork_thinker_connector(){
   //Fork Variablen
