@@ -2,11 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
-
 char* think(){
-  char move[];
+  char move[] = "";
   //Spielfeld einlesen
     //TODO
 
@@ -15,6 +12,4 @@ char* think(){
 
 
  return move;
-}
-
 }
