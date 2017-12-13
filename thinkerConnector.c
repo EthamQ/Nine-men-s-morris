@@ -138,7 +138,7 @@ int fork_thinker_connector(){
     	}
       else{
         printf("initConnect success\n");
-        return -1;
+        //return -1;
       }
 
       printf("Beginne mit performConnection");
