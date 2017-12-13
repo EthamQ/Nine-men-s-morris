@@ -1,10 +1,11 @@
 #include <unistd.h>
 
+char moveDest[];
 //Spielzug an Connector schicken / in die Pipe schreiben
-short sendMove(*char destination){
+short sendMove(){
   char pipeBuffer[5];
 
-  pipeBuffer = &destination;
+  pipeBuffer = moveDest;
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
   if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
@@ -18,8 +19,14 @@ short sendMove(*char destination){
 }
 
 short think(){
-  *char dest = "test";
-  if(sendmove(dest) == 0){
+  //Spielfeld einlesen
+    //TODO
+
+  //Thinken
+  moveDest = "A1 A2"
+
+  //Move senden
+  if(sendmove() == 0){
     return 0;
   }
   else{

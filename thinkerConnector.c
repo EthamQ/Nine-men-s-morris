@@ -148,8 +148,8 @@ int fork_thinker_connector(){
 
           //Aus der Pipe den Spielzug lesen
 
-          if(((read (pipeFd[0], movePipe, 5)) == 5)&&(movePipe != "")){
-            printf("Spielzug aus Pipe gelesen: %s\n", );
+          if(((read (pipeFd[0], movePipe, 5)) == 5)){//&&(movePipe != "")){
+            printf("Spielzug aus Pipe gelesen: %s\n", movePipe);
 
           }
           else{
