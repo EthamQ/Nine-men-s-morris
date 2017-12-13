@@ -5,22 +5,16 @@
 
 
 
-short think(){
-  string move;
+char* think(){
+  char move[];
   //Spielfeld einlesen
     //TODO
 
   //Thinken
   move = "A1 A2";
 
-  //Move senden
-  if(sendmove(move) == 0){
-    return 0;
-  }
-  else{
-    return -1;
-  }
-//  return -1;
+
+ return move;
 }
 
 }
