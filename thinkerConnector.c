@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <string.h>
 #include <stdbool.h>
 #include <sys/wait.h> //Fuer Prozesse
@@ -16,6 +17,21 @@
 //#include "shm_data.h"
 #include "brain.h"
 
+=======
+#include <sys/wait.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include <netdb.h>
+#include<arpa/inet.h>
+#include<unistd.h>
+#include<string.h>
+#include<stdbool.h>
+#include "performConnection.h"
+#include "config_header.h"
+#include "shm_data.h"
+#include "drawfield.h"
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -23,6 +39,7 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
+#define CONFIG_DEFAULT "client.conf"
 
 short gotSignal = 0;
 short gameOver = 0;
@@ -31,6 +48,7 @@ int pipeFd[2];
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
+printf("\ninitConnect() gestartet.\n");
       int sockfd;
       int rv;
 
@@ -49,26 +67,32 @@ int initConnect(){
       for(p = servinfo; p != NULL; p = p->ai_next) {
           if ((sockfd = socket(p->ai_family, p->ai_socktype,
               p->ai_protocol)) == -1) {
-              perror("Fehler bei Socket");
+              //perror("Fehler bei Socket");
           continue;
           }
 
       if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
-          perror("fehler bei connect");
-          printf("Socketzahl:%d\n",sockfd);
+          //perror("fehler bei connect");
+          //printf("\nSocket file descriptor: %d\n",sockfd);
           close(sockfd);
           continue;
 
           }
           else{
-          fprintf(stderr,"connected\n");
+          printf("\ninitConnect(): Connected\n");
+          printf("Socket file descriptor: %d\n",sockfd);
+	
         }
           break; // if we get here, we must have connected successfully
       }
 
       if (p == NULL) {
       // looped off the end of the list with no connection
+<<<<<<< HEAD
       fprintf(stderr, "failed to connect\n");
+=======
+      fprintf(stderr, "\ninitConnect(): Failed to connect\n");
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
       return -1;
     }
 
@@ -76,6 +100,7 @@ int initConnect(){
   return sockfd;
 }
 
+<<<<<<< HEAD
 void signalHandlerThinker(int signalNum){
   //TODO alles
   printf("Signalnummer: %i\n", signalNum);
@@ -88,6 +113,10 @@ void signalHandlerThinker(int signalNum){
       perror("Signalhandler Fehler, neues Signal waehrend altes signal noch verarbeitet wird");
     }
   }
+=======
+printf("\ninitConnect() fertig ausgeführt.\n");
+return sockfd;
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
 }
 
 //Spielzug an Connector schicken / in die Pipe schreiben
@@ -107,7 +136,11 @@ short sendMove(){
 }
 
 int fork_thinker_connector(){
+<<<<<<< HEAD
   //Fork Variablen
+=======
+printf("\nStarte fork_thinker_connector\n");
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
   pid_t pid;
   int sockfd;
 
@@ -122,10 +155,10 @@ int fork_thinker_connector(){
 
   //Forken
   switch(pid = fork()){
-    case -1: perror("Fehler bei fork\n");
+    case -1: perror("\nfork_thinker_connector: Fehler bei fork\n");
       return -1;
       break;
-    case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
+    case 0: printf("fork_thinker_connector: Kindprozess(Connector) mit der id %d und der Variable pid = %d.\n Mein Elternprozess ist: %d\n\n", getpid(), pid, getppid());
       //Connector
 
       //Schreibseite der Pipe schliessen
@@ -133,6 +166,7 @@ int fork_thinker_connector(){
 
       //Verbindsaufbau zum Server
       if((sockfd = initConnect()) < 0){
+<<<<<<< HEAD
         perror("Fehler bei initConnect");
         return -1;
     	}
@@ -140,10 +174,20 @@ int fork_thinker_connector(){
         printf("initConnect success\n");
         //return -1;
       }
+=======
+        perror("fork_thinker_connector: Fehler bei initConnect\n");
+      return -1;
+	}
+      else{
+        printf("fork_thinker_connector: initConnect success\n");
+      return -1;
+	}
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
 
       printf("Beginne mit performConnection \n");
     	//Prologphase
       if(performConnection(sockfd) < 0) {
+<<<<<<< HEAD
           perror("Fehler bei performConnection");
           return -1;
     	  }
@@ -205,24 +249,78 @@ int fork_thinker_connector(){
     	wait(NULL); //AUf Child Warten
           break;
       }
+=======
+          perror("fork_thinker_connector: Fehler bei performConnection");
+      return -1;
+	}
+      else {
+          printf("fork_thinker_connector: performConnection success");
+      }
+      
+	//Exit connector
+	exit(0);
+      break;
+    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d.\nMeinElternprozess ist: %d\n", getpid(), pid, getppid());
+      //Code for Thinker
+	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+	attachSHM();      
+	
+	//Warten bis Kindprozess beendet wurde
+	wait(NULL);
+      break;
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
   }
 
 return 0;
 }
 
+<<<<<<< HEAD
 int main(){
   /*
 	//Shared memory erstellen
+=======
+char* game_id;
+char* configname;
+//Weißt die Kommandozeilenparameter Variablen zu
+void init_cmd_args(char* gameID, char* config){
+printf("Starte init_cmd_args\n\n");
+printf("GameID: %s", gameID);
+printf("config Pfad: %s\n\n", config);
+game_id = gameID;
+configname = config;
+}
+
+int main(int argc, char *argv[]){
+//Kommandozeilenparameter
+if(argc > 1){
+if(argc > 2){
+init_cmd_args(argv[1], argv[2]);
+}
+else{
+init_cmd_args(argv[1], CONFIG_DEFAULT);
+}
+}
+
+read_configfile();
+drawField();
+//Shared memory erstellen
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
 	int shmid;
 	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
+	perror("\nmain: Fehler bei Erstellung der shared memory\n");
 	return -1;
 	}
 	else{
-	printf("shared memory success");
+	printf("\nmain: shared memory success\n");
 	}
+<<<<<<< HEAD
 */
   //Aufteilung in 2 Prozese
   fork_thinker_connector();
+=======
+
+//Thinker Connector
+fork_thinker_connector();
+>>>>>>> 9878ab0d973ba94636da88daa0ec2461747de510
 return 0;
 }
