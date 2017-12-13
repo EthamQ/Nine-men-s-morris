@@ -94,6 +94,7 @@ int fork_thinker_connector(){
 
   //Pipe Variablen
   int pipeFd[2];
+  char[5] movePipe;
 
 
   //Erstellung der Pipe, muss vor Fork geschehen
@@ -133,7 +134,7 @@ int fork_thinker_connector(){
         }
       //Endlosschleife damit Prozess nicht einschlaeft oder sonstwas
         while(gameOver != 1){
-          char[5] movePipe;
+
           //TODO Prologphase Teil 2
 
 
@@ -147,7 +148,7 @@ int fork_thinker_connector(){
 
           //Aus der Pipe den Spielzug lesen
 
-          if(((read (fd[0], movePipe, 5)) == 5)&&(movePipe != "")){
+          if(((read (pipeFd[0], movePipe, 5)) == 5)&&(movePipe != "")){
             printf("Spielzug aus Pipe gelesen: %s\n", );
 
           }
@@ -186,6 +187,7 @@ int fork_thinker_connector(){
     	wait(NULL); //AUf Child Warten
           break;
       }
+  }
 
 return 0;
 }
@@ -203,8 +205,6 @@ int main(){
 	printf("shared memory success");
 	}
 */
-
-  gotSignal = 0;
   //Aufteilung in 2 Prozese
   fork_thinker_connector();
 return 0;
