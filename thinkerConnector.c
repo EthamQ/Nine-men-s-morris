@@ -13,7 +13,7 @@
 #include <signal.h> //Fuer Signal Connector->Thinker
 
 #include "performConnection.h"
-#include "shm_data.h"
+//#include "shm_data.h"
 #include "brain.h"
 
 #define BUF 256
@@ -94,13 +94,13 @@ int fork_thinker_connector(){
 
   //Pipe Variablen
   int pipeFd[2];
-  char[5] movePipe;
+  char movePipe[5];
 
 
   //Erstellung der Pipe, muss vor Fork geschehen
   if (pipe (pipeFd) < 0) {
       perror ("Fehler bei Erstellung der Pipe");
-      return -1:
+      return -1;
    }
 
   //Forken

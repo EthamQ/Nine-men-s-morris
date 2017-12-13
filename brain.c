@@ -7,7 +7,7 @@ short sendMove(*char destination){
   pipeBuffer = &destination;
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
-  if ((write (pipeFd[1], pipeBuffer, gesendeteBytes)) != gesendeteBytes) {
+  if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
        perror("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
        return -1;
     }
@@ -18,12 +18,14 @@ short sendMove(*char destination){
 }
 
 short think(){
-  if(sendmove() == 0{
-  return 0;
+  *char dest = "test";
+  if(sendmove(dest) == 0){
+    return 0;
   }
   else{
     return -1;
   }
+//  return -1;
 }
 
 }
