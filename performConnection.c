@@ -33,7 +33,8 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
 
 
     int performConnection(int sockfd){
-
+printf("Starte performConnection");
+    printf("\nSocket file descriptor: %d\n",sockfd);
     if(sockfd < 0){
     perror("Invalid socket file descriptor");
         close(sockfd);
