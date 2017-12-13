@@ -24,7 +24,8 @@
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
 
-short gotSignal;
+short gotSignal = 0;
+short gameOver = 0;
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
@@ -66,15 +67,12 @@ int initConnect(){
       if (p == NULL) {
       // looped off the end of the list with no connection
       fprintf(stderr, "failed to connect\n");
-      //exit(2);
       return -1;
     }
 
   freeaddrinfo(servinfo); // all done with this structure // Brauche ich addrinfop fuer ahcfolgende funktionen ???
-
-return sockfd;
+  return sockfd;
 }
-
 
 void signalHandlerThinker(int signalNum){
   //TODO alles
@@ -84,7 +82,7 @@ void signalHandlerThinker(int signalNum){
     gotSignal = 1;
   }
   else{
-    perror("Signalhandler Fehler");
+    perror("Signalhandler Fehler, neues Signal waehrend altes signal noch verarbeitet wird");
   }
 }
 
@@ -93,9 +91,11 @@ int fork_thinker_connector(){
   //Fork Variablen
   pid_t pid;
   int sockfd;
+
   //Pipe Variablen
   int pipeFd[2];
-  char pipeBuffer[PIPE_BUF];
+
+
   //Erstellung der Pipe, muss vor Fork geschehen
   if (pipe (pipeFd) < 0) {
       perror ("Fehler bei Erstellung der Pipe");
@@ -111,16 +111,16 @@ int fork_thinker_connector(){
       //Connector
 
       //Schreibseite der Pipe schliessen
-      close (pipeFd[1]);
-      //TODO Aus Pipe Lesen
+      close(pipeFd[1]);
+
       //Verbindsaufbau zum Server
         if((sockfd = initConnect()) < 0){
           perror("Fehler bei initConnect");
-        return -1;
+          return -1;
       	}
         else{
           printf("initConnect success\n");
-        return -1;
+          return -1;
       	}
 
     	//Prologphase
@@ -132,7 +132,8 @@ int fork_thinker_connector(){
             printf("performConnection success");
         }
       //Endlosschleife damit Prozess nicht einschlaeft oder sonstwas
-        //while(1){
+        while(gameOver != 1){
+          char[5] movePipe;
           //TODO Prologphase Teil 2
 
 
@@ -143,6 +144,16 @@ int fork_thinker_connector(){
             perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
           }
           printf("Signal an Thinker gesendet, CONNECTOR");
+
+          //Aus der Pipe den Spielzug lesen
+
+          if(((read (fd[0], movePipe, 5)) == 5)&&(movePipe != "")){
+            printf("Spielzug aus Pipe gelesen: %s\n", );
+
+          }
+          else{
+            perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+          }
 
       	  exit(0);
         //}
@@ -164,31 +175,15 @@ int fork_thinker_connector(){
       sa.sa_flags = SA_RESTART;
 
       //TODO While schleife ????
-      while(1){
+      while(gameOver != 1){
         if(gotSignal == 1){
-          //TODO thinken
-          //if(validMove("A1") == 1){
-            pipeBuffer ="A1";
-          //}
-          else{
-            perror("Fehler: Thinker will ungueltigen Spielzug taetigen,THINKER")
-          }
-          printf("Valider Spielzug gethinkt, THINKER");
-
-          //Spielzug an Connector schicken / in die Pipe schreiben
-          int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write isyt die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
-          if ((write (pipeFd[1], pipeBuffer, gesendeteBytes)) != gesendeteBytes) {
-             perror("Fehler beim schreiben des Spielzugs in das pipe, THINKER");
-             return -1;
-          }
-          printf("Spielzug in die Pipe geschrieben, THINKER");
-          gotSignal = 0; //Auf naechstes Signal warten
+          think();
+          gotSignal = 0; //gotSignal zuruecksetzen um auf neues Signal zu warten
         }
-        //sleep(0.5);
+
       }
 
-
-    	wait(NULL);
+    	wait(NULL); //AUf Child Warten
           break;
       }
 

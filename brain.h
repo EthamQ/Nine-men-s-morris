@@ -1,7 +1,8 @@
-#ifndef brain_H
-#define brain_H
+#ifndef BRAIN_H
+#define BRAIN_H
 
 
-short validMove(char[] goal);
+short think();
+
 
 #endif
