@@ -26,7 +26,7 @@ int pid_connector;
 int createSHM(){
 int size = sizeof(struct SHM_data);
 int shared_memory_id = shmget(IPC_PRIVATE, size, IPC_CREAT | IPC_EXCL);
-printf("shared memory id is: %d\n", shared_memory_id);
+printf("\nshared memory id is: %d\n", shared_memory_id);
 
 //shared memory löschen wenn Thinker und Connector beendet wurden
 shmctl(shared_memory_id, IPC_RMID, 0);
@@ -35,10 +35,11 @@ return shared_memory_id;
 }
 
 int attachSHM(int shmID){
+printf("\nattachSHM gestartet\n");
 int *ptr = shmat(shmID, 0, 0);
 printf("shmat returns a pointer to: %p\n", ptr);
 if(*ptr==-1){
-perror("Fehler bei smat");
+perror("\nFehler bei attachSHM\n");
 return -1;
 }
 return 0;

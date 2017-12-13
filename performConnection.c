@@ -39,7 +39,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
         close(sockfd);
         return -1;
     }else{
-        printf("Good to go?!");
+        printf("Perform connection received a valid socket file descriptor\n");
         }
     //if testifvalid is negative then there was an error, repeat write() or read() if error
     ssize_t testifvalid = -1;
@@ -52,7 +52,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         attempts++;
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-                perror("Invalid server response2");
+                perror("Invalid server response Gameserver Version");
                 return -1;
             }
 
@@ -78,7 +78,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
 	attempts++;
             if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-                perror("Invalid server response3");
+                perror("Invalid server response Gamed-ID request\n");
                 printf("%s\n",dataPRS);
                 return -1;
         }
@@ -104,7 +104,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
        
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response4");
+            perror("Invalid server response Gamekind-Name\n");
             return -1;
         }
     }
@@ -128,7 +128,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
     printf("%s\n",dataPRS);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Invalid server response5");
+        perror("Invalid server response Mitspielernummer Mitspielername\n");
     return -1;
     }
     }
