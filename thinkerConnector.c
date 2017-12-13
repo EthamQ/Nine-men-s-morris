@@ -93,15 +93,15 @@ void signalHandlerThinker(int signalNum){
 //Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
   char *pipeBuffer= think();
-  printf("%s", pipeBuffer);
+  printf("pipebuffer: %s \n", pipeBuffer);
 
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
   if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
-       printf("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
+       perror("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
        return -1;
     }
-  printf("Spielzug in die Pipe geschrieben, BRAIN");
+  printf("Spielzug in die Pipe geschrieben, BRAIN \n");
   //sleep(0.5);
   return 0;
 }
@@ -141,18 +141,18 @@ int fork_thinker_connector(){
         //return -1;
       }
 
-      printf("Beginne mit performConnection");
+      printf("Beginne mit performConnection \n");
     	//Prologphase
       if(performConnection(sockfd) < 0) {
           perror("Fehler bei performConnection");
           return -1;
     	  }
       else {
-          printf("performConnection success");
+          printf("performConnection success \n");
       }
       //Endlosschleife damit Prozess nicht einschlaeft oder sonstwas
       while(gameOver != 1){
-        printf("Ich bin eine Endlosschleife :D CONECTOR");
+        printf("Ich bin eine Endlosschleife :D  \n");
         //TODO Prologphase Teil 2
 
 
@@ -162,12 +162,12 @@ int fork_thinker_connector(){
         if(kill(getppid(),SIGUSR1)<0){
           perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
         }
-        printf("Signal an Thinker gesendet, CONNECTOR");
+        printf("Signal an Thinker gesendet, CONNECTOR \n");
 
         //Aus der Pipe den Spielzug lesen
 
         if(((read (pipeFd[0], movePipe, 5)) == 5)){//&&(movePipe != "")){
-          printf("Spielzug aus Pipe gelesen: %s\n", movePipe);
+          printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
         }
         else{
           perror("Spielzug konnte nicht aus der Pipe gelesen werden");
@@ -176,7 +176,7 @@ int fork_thinker_connector(){
     	  exit(0);
         //}
     break;
-    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
+    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d \n", getpid(), pid, getppid());
       //Thinker
 
       //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
@@ -191,13 +191,13 @@ int fork_thinker_connector(){
       sa.sa_handler = signalHandlerThinker;
       sigemptyset(&sa.sa_mask);
       sa.sa_flags = SA_RESTART;
-      printf("Sigalhandler definiert");
+      printf("Sigalhandler definiert \n");
 
       //TODO While schleife ????
       while(gameOver != 1){
         if(gotSignal == 1){
           think();
-          printf("Ich bin eine Endlosschleife, THINKER :D");
+          printf("Ich bin eine Endlosschleife, THINKER :D \n");
           gotSignal = 0; //gotSignal zuruecksetzen um auf neues Signal zu warten
         }
       }
