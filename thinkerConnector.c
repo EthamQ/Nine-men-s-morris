@@ -14,6 +14,7 @@
 #include"performConnection.h"
 #include "config.h"
 #include "shm_data.h"
+#include "drawfield.h"
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -138,7 +139,7 @@ init_cmd_args(argv[1], CONFIG_DEFAULT);
 }
 
 read_configfile();
-
+drawField();
 //Shared memory erstellen
 	int shmid;
 	if((shmid = createSHM()) < 0){

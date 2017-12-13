@@ -13,7 +13,7 @@ int flag_registriert;
 };
 
 
-struct shm_data{
+struct SHM_data{
 char spielname[BUFFER_SIZE];
 char spielernummer[BUFFER_SIZE];
 char anzahl_spieler[BUFFER_SIZE];
@@ -24,7 +24,7 @@ int pid_connector;
 
 
 int createSHM(){
-int size = sizeof(struct shm_data);
+int size = sizeof(struct SHM_data);
 int shared_memory_id = shmget(IPC_PRIVATE, size, IPC_CREAT | IPC_EXCL);
 printf("shared memory id is: %d\n", shared_memory_id);
 
@@ -52,6 +52,4 @@ int readSHM(){
 return 0;
 }
 
-int main(){
-createSHM();
-}
+

@@ -1,5 +1,5 @@
-#ifndef shm_data
-#define shm_data
+#ifndef SHM_DATA
+#define SHM_DATA
 #define BUFFER_SIZE 256
 
 
