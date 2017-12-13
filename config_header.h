@@ -1,4 +1,4 @@
 #ifdef CONFIG
 #define CONFIG
-int read_config();
+int read_configfile();
 #endif
