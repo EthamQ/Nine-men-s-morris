@@ -1,4 +1,4 @@
 #ifndef DRAW
 #define DRAW
-void drawField();
+extern void drawField();
 #endif 

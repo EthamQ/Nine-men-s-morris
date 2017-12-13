@@ -11,8 +11,8 @@
 #include<unistd.h>
 #include<string.h>
 #include<stdbool.h>
-#include"performConnection.h"
-#include "config.h"
+#include "performConnection.h"
+#include "config_header.h"
 #include "shm_data.h"
 #include "drawfield.h"
 #define BUF 256
