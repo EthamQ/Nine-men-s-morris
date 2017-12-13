@@ -26,7 +26,7 @@
 
 short gotSignal = 0;
 short gameOver = 0;
-char moveDest[5];
+*char moveDest[5];
 int pipeFd[2];
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
@@ -90,9 +90,9 @@ void signalHandlerThinker(int signalNum){
 
 //Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
-  char pipeBuffer[];
+  *char pipeBuffer;
 
-  pipeBuffer[] = think();
+  *pipeBuffer[] = think();
   printf("%s", &pipeBuffer);
 
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !

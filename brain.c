@@ -8,7 +8,7 @@ char* think(){
     //TODO
 
   //Thinken
-  move = "A1 A2";
+  move[] = "A1 A2";
 
 
  return move;
