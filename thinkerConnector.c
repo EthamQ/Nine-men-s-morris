@@ -90,10 +90,8 @@ void signalHandlerThinker(int signalNum){
 
 //Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
-  *char pipeBuffer;
-
-  *pipeBuffer = think();
-  printf("%s", &pipeBuffer);
+  char *pipeBuffer= think();
+  printf("%s", pipeBuffer);
 
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 

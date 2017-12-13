@@ -1,9 +1,12 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char* think(){
-  const char move[] = {"A1 A2"};
+	char *move;
+	move=malloc(sizeof(move));
+  	strcpy(move,"A1 A2");
   //Spielfeld einlesen
     //TODO
 
