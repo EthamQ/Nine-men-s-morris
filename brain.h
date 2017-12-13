@@ -2,7 +2,7 @@
 #define BRAIN_H
 
 
-short think();
+char* think();
 
 
 #endif

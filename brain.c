@@ -3,12 +3,12 @@
 #include <string.h>
 
 char* think(){
-  char move[] = "";
+  const char move[] = {"A1 A2"};
   //Spielfeld einlesen
     //TODO
 
   //Thinken
-  move[] = "A1 A2";
+  //move[] = "A1 A2";
 
 
  return move;
