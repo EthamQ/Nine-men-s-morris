@@ -18,7 +18,7 @@
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 02pobsvmluimp\n";
+static char game_idPRC []= "ID 2cgmq6cbfqpyr\n";
 static char  numberOfPlayersPRC []= "PLAYER\n";
 
     //ARGS: server message, if it begins with "+" return true
