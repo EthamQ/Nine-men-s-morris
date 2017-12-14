@@ -103,7 +103,11 @@ short sendMove(){
 }
 
 void signalHandlerThinker(int signalNum){
-	sendmove();
+  if(signalNum==SIGUSR1){
+
+
+	sendMove();
+}
 }
 
 int fork_thinker_connector(){
@@ -136,8 +140,7 @@ int fork_thinker_connector(){
 
 
 
-  pid_t pid;
-int sockfd;
+ 
 
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
@@ -222,7 +225,7 @@ return 0;
 
 int main(){
 	drawField();
-	read_configfile(DEFAULT_CLIENT);
+	read_configfile(CONFIG_DEFAULT);
 
 	fork_thinker_connector();
 return 0;
