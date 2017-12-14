@@ -15,6 +15,7 @@
 #include "shm_data.h"
 #include "debugging.h"
 #include "config_header.h"
+#include <sys/shm.h>
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -76,6 +77,19 @@ return sockfd;
 
 
 int fork_thinker_connector(){
+	int shmid;
+	if((shmid = createSHM()) < 0){
+	perror("Fehler bei Erstellung der shared memory");
+	return -1;
+	}
+	else{
+	printf("shared memory success");
+	}
+
+
+
+
+
   pid_t pid;
 int sockfd;
   switch(pid = fork()){
@@ -112,8 +126,7 @@ int sockfd;
       //Nicht in Meilenstein 2 implementiert
 	
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-//	attachSHM();      
-
+shmat(shmid, NULL, 0);
 
 	wait(NULL);
       break;
@@ -124,16 +137,6 @@ return 0;
 
 
 int main(){
-	//Shared memory erstellen
-	int shmid;
-	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
-	return -1;
-	}
-	else{
-	printf("shared memory success");
-	}
-
 	drawField();
 	read_configfile(DEFAULT_CLIENT);
 

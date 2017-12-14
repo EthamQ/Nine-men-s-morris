@@ -34,16 +34,6 @@ shmctl(shared_memory_id, IPC_RMID, 0);
 return shared_memory_id;
 }
 
-int attachSHM(int shmID){
-printf("\nattachSHM gestartet\n");
-int *ptr = shmat(shmID, 0, 0);
-printf("shmat returns a pointer to: %p\n", ptr);
-if(*ptr==-1){
-perror("\nFehler bei attachSHM\n");
-return -1;
-}
-return 0;
-}
 
 int writeSHM(){
 return 0;
