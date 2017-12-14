@@ -22,7 +22,7 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
-
+#define DEFAULT_CLIENT "client.conf"
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
 int initConnect(){
@@ -135,7 +135,7 @@ int main(){
 	}
 
 	drawField();
-	read_configfile("config.txt");
+	read_configfile(DEFAULT_CLIENT);
 
 fork_thinker_connector();
 return 0;
