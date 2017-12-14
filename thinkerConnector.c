@@ -23,7 +23,7 @@
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
-#define MES_LENGTH_SERVER 100
+#define MES_LENGTH_SERVER 1048
 #define ATTEMPTS_INVALID 20
 #define CONFIG_DEFAULT "client.conf"
 
