@@ -112,7 +112,7 @@ int sockfd;
       //Nicht in Meilenstein 2 implementiert
 	
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-	attachSHM();      
+//	attachSHM();      
 
 
 	wait(NULL);

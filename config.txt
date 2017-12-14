@@ -1,5 +1,0 @@
-parametername = parameterwert
-parametername2 = parameterwert2
-parametername3 = parameterwert3
-
-
