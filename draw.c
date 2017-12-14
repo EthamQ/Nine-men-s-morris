@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define zeilen 15
 #define spalten 40
-#include "drawfield.h"
+#include "debugging.h"
 
 //Gibt ein Mühlespielfeld auf der Konsole aus
 //TODO: übersichtlicher schreiben und Koordinaten speichern wo man Spielsteine ablegen kann

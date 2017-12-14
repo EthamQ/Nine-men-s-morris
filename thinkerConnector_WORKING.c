@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-	#include <sys/wait.h>
+#include <sys/wait.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<netinet/in.h>
@@ -13,6 +13,8 @@
 #include<stdbool.h>
 #include"performConnection.h"
 #include "shm_data.h"
+#include "debugging.h"
+#include "config_header.h"
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -131,6 +133,9 @@ int main(){
 	else{
 	printf("shared memory success");
 	}
+
+	drawField();
+	read_configfile("config.txt");
 
 fork_thinker_connector();
 return 0;
