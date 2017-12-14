@@ -4,11 +4,13 @@
 #include "config_header.h"
 
 
-int read_configfile(){
+int read_configfile(char* configname){
 FILE* file;
 //zu Testzwecken
 //char* filepath = "/mnt/c/Users/rapha/Desktop/config.txt";
-char* filepath = "/root/SysPrak/MuehleGruppe13/config.txt";
+//char* filepath = "/root/SysPrak/MuehleGruppe13/config.txt";
+char* filepath = configname;
+
 file = fopen(filepath, "r");
 if(file == NULL){
 perror("No such config file");

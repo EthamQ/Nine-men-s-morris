@@ -2,20 +2,24 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <sys/wait.h> //Fuer Prozesse
-#include <sys/socket.h> //Fuer initConnect
-#include <netinet/in.h>  //Fuer initConnect
-#include <netdb.h> //Fuer initConnect
-#include <arpa/inet.h> //Fuer initConnect
-#include <fcntl.h> //Fuer Pipe
-#include <signal.h> //Fuer Signal Connector->Thinker
 
-#include "performConnection.h"
+#include <sys/wait.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include <netdb.h>
+#include<arpa/inet.h>
+#include <fcntl.h>
+#include <signal.h>
+#include<unistd.h>
+#include<string.h>
+#include<stdbool.h>
+#include"performConnection.h"
 #include "shm_data.h"
-#include "drawfield.h"
+#include "debugging.h"
+#include "config_header.h"
 #include "brain.h"
+#include <sys/shm.h>
 
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
@@ -24,6 +28,7 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
+
 #define CONFIG_DEFAULT "client.conf"
 
 short gotSignal = 0;
@@ -102,6 +107,7 @@ void signalHandlerThinker(int signalNum){
 }
 
 int fork_thinker_connector(){
+
 	  printf("\nStarte fork_thinker_connector\n");
 
 	  //Fork Variablen
@@ -116,6 +122,22 @@ int fork_thinker_connector(){
 	      perror ("Fehler bei Erstellung der Pipe");
 	      return -1;
 	   }
+
+	int shmid;
+	if((shmid = createSHM()) < 0){
+	perror("Fehler bei Erstellung der shared memory");
+	return -1;
+	}
+	else{
+	printf("shared memory success");
+	}
+
+
+
+
+
+  pid_t pid;
+int sockfd;
 
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
@@ -166,8 +188,6 @@ int fork_thinker_connector(){
       //Code for Thinker
       //Nicht in Meilenstein 2 implementiert
 
-			//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-			attachSHM();
 
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
@@ -187,6 +207,11 @@ int fork_thinker_connector(){
 				perror("sigaction fehler ???");
 			}
 
+	
+	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+shmat(shmid, NULL, 0);
+
+
 			wait(NULL);
       break;
   }
@@ -196,15 +221,8 @@ return 0;
 
 
 int main(){
-	//Shared memory erstellen
-	int shmid;
-	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
-	return -1;
-	}
-	else{
-	printf("shared memory success");
-	}
+	drawField();
+	read_configfile(DEFAULT_CLIENT);
 
 	fork_thinker_connector();
 return 0;
