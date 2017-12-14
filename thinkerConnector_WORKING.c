@@ -2,17 +2,21 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-	#include <sys/wait.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include <netdb.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-#include<string.h>
-#include<stdbool.h>
-#include"performConnection.h"
+#include <string.h>
+#include <stdbool.h>
+#include <sys/wait.h> //Fuer Prozesse
+#include <sys/socket.h> //Fuer initConnect
+#include <netinet/in.h>  //Fuer initConnect
+#include <netdb.h> //Fuer initConnect
+#include <arpa/inet.h> //Fuer initConnect
+#include <fcntl.h> //Fuer Pipe
+#include <signal.h> //Fuer Signal Connector->Thinker
+
+#include "performConnection.h"
 #include "shm_data.h"
+#include "drawfield.h"
+#include "brain.h"
+
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -20,6 +24,12 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 100
 #define ATTEMPTS_INVALID 20
+#define CONFIG_DEFAULT "client.conf"
+
+short gotSignal = 0;
+short gameOver = 0;
+char moveDest[5] = "Test";
+int pipeFd[2];
 
 
 //initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
@@ -71,11 +81,42 @@ int initConnect(){
 return sockfd;
 }
 
+//Spielzug an Connector schicken / in die Pipe schreiben
+short sendMove(){
+  char *pipeBuffer= think();
+  printf("pipebuffer: %s \n", pipeBuffer);
 
+  int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
+
+  if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
+       perror("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
+       return -1;
+    }
+  printf("Spielzug in die Pipe geschrieben, BRAIN \n");
+  //sleep(0.5);
+  return 0;
+}
+
+void signalHandlerThinker(int signalNum){
+	sendmove();
+}
 
 int fork_thinker_connector(){
-  pid_t pid;
-int sockfd;
+	  printf("\nStarte fork_thinker_connector\n");
+
+	  //Fork Variablen
+	  pid_t pid;
+	  int sockfd;
+
+	  //Pipe Variablen
+	  char movePipe[5];
+
+	  //Erstellung der Pipe, muss vor Fork geschehen
+	  if (pipe (pipeFd) < 0) {
+	      perror ("Fehler bei Erstellung der Pipe");
+	      return -1;
+	   }
+
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
       return -1;
@@ -83,37 +124,70 @@ int sockfd;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Connector
 
-	//Verbindsaufbau zum Server
+			//Schreibseite der Pipe schliessen
+      close(pipeFd[1]);
+
+			//Verbindsaufbau zum Server
       if((sockfd = initConnect()) < 0){
         perror("Fehler bei initConnect");
       return -1;
-	}
+			}
       else{
         printf("initConnect success\n");
-      
-	}
+			}
 
-	//Prologphase
+			//Prologphase
       if(performConnection(sockfd) < 0) {
       	  printf("%i",sockfd);
           perror("Fehler bei performConnection");
       return -1;
-	}
+			}
       else {
           printf("performConnection success");
       }
-      
-	exit(0);
+			//Signal an Thinker senden
+			if(kill(getppid(),SIGUSR1)<0){
+					perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+			}
+			printf("Signal an Thinker gesendet, CONNECTOR \n");
+
+			//Aus der Pipe den Spielzug lesen
+
+			if(((read (pipeFd[0], movePipe, 5)) == 5)){//&&(movePipe != "")){
+				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+			}
+			else{
+				perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+			}
+
+			exit(0);
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
       //Nicht in Meilenstein 2 implementiert
-	
-	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-	attachSHM();      
 
+			//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+			attachSHM();
 
-	wait(NULL);
+			//Leseseite der Pipe schliessen
+			close (pipeFd[0]);
+
+			//Signalhandler fuer Connector Signal definieren
+			//http://pubs.opengroup.org/onlinepubs/009695399/functions/sigaction.html muss code nochmal pruefen
+			struct sigaction sa;
+			sa.sa_handler = signalHandlerThinker;
+			sigemptyset(&sa.sa_mask);
+			sa.sa_flags = SA_RESTART;
+			printf("Signalhandler definiert THINKER \n");
+
+			if(sigaction(SIGUSR1, NULL , NULL ) > 0){///!!!!!!
+				printf("sigaction sucess THINKER");
+			}
+			else{
+				perror("sigaction fehler ???");
+			}
+
+			wait(NULL);
       break;
   }
 
@@ -132,6 +206,6 @@ int main(){
 	printf("shared memory success");
 	}
 
-fork_thinker_connector();
+	fork_thinker_connector();
 return 0;
 }
