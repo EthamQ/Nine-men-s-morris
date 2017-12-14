@@ -14,7 +14,7 @@
 #define PORTNUMBER 1357
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define BUF_SIZE 256
-#define MES_LENGTH_SERVER 100
+#define MES_LENGTH_SERVER 1048
 #define ATTEMPTS_INVALID 20
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
