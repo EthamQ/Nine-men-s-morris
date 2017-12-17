@@ -104,10 +104,8 @@ short sendMove(){
 
 void signalHandlerThinker(int signalNum){
   if(signalNum==SIGUSR1){
-
-
 	sendMove();
-}
+  }
 }
 
 int fork_thinker_connector(){
@@ -122,10 +120,13 @@ int fork_thinker_connector(){
 	  char movePipe[5];
 
 	  //Erstellung der Pipe, muss vor Fork geschehen
-	  if (pipe (pipeFd) < 0) {
+	  if (pipe(pipeFd) < 0) {
 	      perror ("Fehler bei Erstellung der Pipe");
 	      return -1;
 	   }
+     else{
+       printf("pipe erstellt, success");
+     }
 
 	int shmid;
 	if((shmid = createSHM()) < 0){
@@ -136,11 +137,6 @@ int fork_thinker_connector(){
 	printf("shared memory success");
 	}
 
-
-
-
-
- 
 
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
@@ -207,10 +203,10 @@ int fork_thinker_connector(){
 				printf("sigaction sucess THINKER");
 			}
 			else{
-				perror("sigaction fehler ???");
+				perror("sigaction groesser Null, Fehler ???");
 			}
 
-	
+
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
 shmat(shmid, NULL, 0);
 
