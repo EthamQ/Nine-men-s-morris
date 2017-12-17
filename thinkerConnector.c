@@ -199,7 +199,7 @@ int fork_thinker_connector(){
 			sa.sa_flags = SA_RESTART;
 			printf("Signalhandler definiert THINKER \n");
 
-			if(sigaction(SIGUSR1, NULL , NULL ) > 0){///!!!!!!
+			if(sigaction(SIGUSR1, NULL , NULL ) == 0){ //Bei success 0, sonst -1
 				printf("sigaction sucess THINKER");
 			}
 			else{
