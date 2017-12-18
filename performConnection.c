@@ -9,6 +9,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include"performConnection.h"
+#define PIPE_BUF 24
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
