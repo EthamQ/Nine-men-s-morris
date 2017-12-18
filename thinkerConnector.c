@@ -20,6 +20,7 @@
 #include "config_header.h"
 #include "brain.h"
 #include <sys/shm.h>
+#include "maintainConnection.h"
 
 #define PIPE_BUF 24
 #define BUF 256
@@ -171,6 +172,21 @@ int fork_thinker_connector(){
 			}
       else {
           printf("performConnection success");
+      }
+      while(1){
+        switch(maintainConnection(sockfd)){
+
+          case 0: 
+          if(conWAIT(sockfd)<0){
+            perror("conWAIT, Connector");
+          } //C: +OKWAIT 
+           break;
+         // case 1:
+           default:
+            perror("Switch: CONNECTOR");
+
+        
+        }
       }
 			//Signal an Thinker senden
 			if(kill(getppid(),SIGUSR1)<0){
