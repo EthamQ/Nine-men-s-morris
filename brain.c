@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <draw.c> //Siehe Meilenstein 3
+#include "drawfield.h" //Siehe Meilenstein 3
 
 char* think(){
 	char *move;
