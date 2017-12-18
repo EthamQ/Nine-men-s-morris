@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "drawfield.h" //Siehe Meilenstein 3
+
 char* think(){
 	char *move;
 	move=malloc(sizeof(move));
