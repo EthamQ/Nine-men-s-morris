@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -Wextra -Werror
+CFLAGS=-g -Wall -Wextra
 ARGS=-g $(GAME_ID) -p  $(PLAYER)
 
 default: build

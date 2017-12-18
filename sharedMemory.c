@@ -3,23 +3,10 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <string.h>
 #include "shm_data.h"
 
 
-struct spieler{
-char spielernummer[BUFFER_SIZE];
-char name[BUFFER_SIZE];
-int flag_registriert;
-};
-
-
-struct SHM_data{
-char spielname[BUFFER_SIZE];
-char spielernummer[BUFFER_SIZE];
-char anzahl_spieler[BUFFER_SIZE];
-int pid_thinker;
-int pid_connector;
-};
 
 
 
@@ -35,12 +22,25 @@ return shared_memory_id;
 }
 
 
-int writeSHM(){
+int writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
+	printf("WRITE\n");
+	struct SHM_data d = *shm_pointer;
+	//printf("%s %s", d.spielname, data);
+	if(flag == SPIELNAME){
+		//strcpy(d.spielname, data);	
+	}
+	
 return 0;
 }
 
-int readSHM(){
-return 0;
+void readSHM(struct SHM_data* shm_pointer, int flag){
+	printf("READ\n");
+	struct SHM_data d = *shm_pointer;
+	if(flag == SPIELNAME){
+	printf("AUSLESEN: %s", d.spielname);
+	
+	}
+
 }
 
 

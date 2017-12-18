@@ -208,7 +208,16 @@ int fork_thinker_connector(){
 
 
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-shmat(shmid, NULL, 0);
+		struct SHM_data* pointer = shmat(shmid, NULL, 0);
+	if(pointer==(void*)-1){
+		printf("\n\nSHMAFEHLER, WERT: %i\n\n", (void*)shmat(shmid, NULL, 0));
+		perror("shmat");
+	}
+
+	
+writeSHM(pointer, "HALLO", SPIELNAME);
+//readSHM(pointer, SPIELNAME);
+//shmat(shmid, NULL, 0);
 
 
 			wait(NULL);
@@ -220,6 +229,7 @@ return 0;
 
 
 int main(){
+	
 	drawField();
 	read_configfile(CONFIG_DEFAULT);
 
