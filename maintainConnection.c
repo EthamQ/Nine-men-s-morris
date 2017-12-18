@@ -10,17 +10,30 @@
 
 
 short maintainConnection(int sockfd){
+  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
+    printf("nothing");
+  }
   return 0;
 }
 
 short conWAIT(int sockfd){
+  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
+    printf("nothing");
+  }
   return 0;
 }
 
 short conGAMEOVER(int sockfd){
+  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
+    printf("nothing");
+  }
+
   return 0;
 }
 
 short conMOVE(in sockfd, char[]){
+  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
+    printf("nothing");
+  }
   return 0;
 }
