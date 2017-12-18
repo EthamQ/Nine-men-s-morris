@@ -21,6 +21,7 @@
 #include "brain.h"
 #include <sys/shm.h>
 
+#define PIPE_BUF 24
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
 #define PORTNUMBER 1357
@@ -88,13 +89,16 @@ return sockfd;
 
 //Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
-  char *pipeBuffer= think();
+  char *pipeBuffer= malloc(sizeof(char)*(256));
+  pipeBuffer=think();
+  printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
+  //free(move);
   printf("pipebuffer: %s \n", pipeBuffer);
 
-  int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
+  //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
-  if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
-       perror("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
+  if( (write (pipeFd[1], pipeBuffer, sizeof(pipeBuffer))) >0) {
+       perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
   printf("Spielzug in die Pipe geschrieben, BRAIN \n");
@@ -102,8 +106,10 @@ short sendMove(){
   return 0;
 }
 
-void signalHandlerThinker(int signalNum){
+static void signalHandlerThinker(int signalNum){
+  printf("Signalhandler go?\n");
   if(signalNum==SIGUSR1){
+    printf("Signal SIGUSR1 angekommen\n");
 	sendMove();
   }
 }
@@ -116,8 +122,8 @@ int fork_thinker_connector(){
 	  pid_t pid;
 	  int sockfd;
 
-	  //Pipe Variablen
-	  char movePipe[5];
+	  //Pipe BUFFER
+	  char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
 
 	  //Erstellung der Pipe, muss vor Fork geschehen
 	  if (pipe(pipeFd) < 0) {
@@ -172,9 +178,11 @@ int fork_thinker_connector(){
 			}
 			printf("Signal an Thinker gesendet, CONNECTOR \n");
 
-			//Aus der Pipe den Spielzug lesen
+			sleep(1);
+      //Aus der Pipe den Spielzug lesen
 
-			if(((read (pipeFd[0], movePipe, 5)) == 5)){//&&(movePipe != "")){
+     // fgets(stdout, )
+			if(((read (pipeFd[0], movePipe, sizeof(movePipe))) >0)){//&&(movePipe != "")){
 				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
 			}
 			else{
@@ -199,8 +207,8 @@ int fork_thinker_connector(){
 			sa.sa_flags = SA_RESTART;
 			printf("Signalhandler definiert THINKER \n");
 
-			if(sigaction(SIGUSR1, NULL , NULL ) == 0){ //Bei success 0, sonst -1
-				printf("sigaction sucess THINKER");
+			if(sigaction(SIGUSR1, &sa , NULL ) == 0){ //Bei success 0, sonst -1
+				printf("sigaction sucess THINKER\n");
 			}
 			else{
 				perror("sigaction groesser Null, Fehler ???");
@@ -208,7 +216,8 @@ int fork_thinker_connector(){
 
 
 	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-shmat(shmid, NULL, 0);
+      shmat(shmid, NULL, 0);
+      printf("THINKER: jetzt beginnt das warten\n");
 
 
 			wait(NULL);
