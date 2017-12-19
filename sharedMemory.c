@@ -25,10 +25,11 @@ return shared_memory_id;
 int writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
 	printf("\nStarte writeSHM\n");
 	printf("\nwrite: Übergabeparameter Pointer zu: %p\n", shm_pointer);
-	struct SHM_data d = *shm_pointer;
+	//struct SHM_data d = *shm_pointer;
 	if(flag == SPIELNAME){
-		strcpy(d.spielname, data);	
-		printf("\nIm struct SHM_data wurde folgender Spielname reingeschrieben: %s\n", data);
+		strcpy(shm_pointer->spielname, data);	
+		printf("\nwrite: Im struct SHM_data wurde folgender Spielname reingeschrieben: %s\n", data);
+		printf("write: AUSLESEN spielname: %s", shm_pointer->spielname);
 	}
 return 0;
 }
@@ -36,10 +37,8 @@ return 0;
 void readSHM(struct SHM_data* shm_pointer, int flag){
 	printf("\nStarte readSHM\n");
 	printf("\nread: Übergabeparameter Pointer zu: %p\n", shm_pointer);
-	struct SHM_data d = *shm_pointer;
-	printf("AUSLESEN spielname: %s", d.spielname);
 	if(flag == SPIELNAME){
-	printf("AUSLESEN spielname: %s", d.spielname);
+		printf("AUSLESEN spielname: %s", shm_pointer->spielname);
 	}
 
 }

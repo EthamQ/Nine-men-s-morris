@@ -114,7 +114,7 @@ int fork_thinker_connector(){
 	  
 	  //Shared memory
 	  int shmid;
-	if((shmid = shmget(IPC_PRIVATE, sizeof(struct SHM_data), IPC_CREAT | IPC_EXCL)) < 0){
+	if((shmid =shmget(IPC_PRIVATE,  sizeof(struct SHM_data), IPC_CREAT | 0666) < 0)){
 	perror("\nFehler bei Erstellung der shared memory\n");
 	return -1;
 	}
@@ -124,6 +124,7 @@ int fork_thinker_connector(){
 	//shared memory löschen wenn Thinker und Connector beendet wurden
 	//shmctl(shmid, IPC_RMID, 0);
 	}
+	shmat(shmid, NULL, 0);
 	
 
 	  //Fork Variablen
