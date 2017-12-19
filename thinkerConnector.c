@@ -63,7 +63,7 @@ int initConnect(){
 
       if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
 	  perror("fehler bei connect");
-          printf("Socketzahl:%d\n",sockfd);
+          printf("\nSocket filedescriptor:%d\n",sockfd);
           close(sockfd);
           continue;
 
@@ -94,10 +94,10 @@ short sendMove(){
   int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
   if( (write (pipeFd[1], pipeBuffer, gesendeteBytes) ) != gesendeteBytes) {
-       perror("Fehler beim schreiben des Spielzugs in das pipe, BRAIN");
+       perror("\nFehler beim schreiben des Spielzugs in das pipe, BRAIN\n");
        return -1;
     }
-  printf("Spielzug in die Pipe geschrieben, BRAIN \n");
+  printf("\nSpielzug in die Pipe geschrieben, BRAIN \n");
   //sleep(0.5);
   return 0;
 }
@@ -111,6 +111,20 @@ void signalHandlerThinker(int signalNum){
 int fork_thinker_connector(){
 
 	  printf("\nStarte fork_thinker_connector\n");
+	  
+	  //Shared memory
+	  int shmid;
+	if((shmid = shmget(IPC_PRIVATE, sizeof(struct SHM_data), IPC_CREAT | IPC_EXCL)) < 0){
+	perror("\nFehler bei Erstellung der shared memory\n");
+	return -1;
+	}
+	else{
+	printf("\nshared memory success\n");
+	printf("\nshared memory id is: %d\n", shmid);
+	//shared memory löschen wenn Thinker und Connector beendet wurden
+	//shmctl(shmid, IPC_RMID, 0);
+	}
+	
 
 	  //Fork Variablen
 	  pid_t pid;
@@ -125,17 +139,15 @@ int fork_thinker_connector(){
 	      return -1;
 	   }
      else{
-       printf("pipe erstellt, success");
+       printf("\npipe erstellt, success\n");
      }
 
-	int shmid;
-	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
-	return -1;
-	}
-	else{
-	printf("shared memory success");
-	}
+	
+
+
+
+
+	
 
 
   switch(pid = fork()){
@@ -207,16 +219,18 @@ int fork_thinker_connector(){
 			}
 
 
-	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-		struct SHM_data* pointer = shmat(shmid, NULL, 0);
-	if(pointer==(void*)-1){
-		printf("\n\nSHMAFEHLER, WERT: %i\n\n", (void*)shmat(shmid, NULL, 0));
-		perror("shmat");
+	
+		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	if(shm_pointer==(void*)-1){
+		perror("\nshmat fehlgeschlagen\n");
+	}
+	else{
+		printf("\nshmat erfolgreich\n");
 	}
 
 	
-writeSHM(pointer, "HALLO", SPIELNAME);
-//readSHM(pointer, SPIELNAME);
+writeSHM(shm_pointer, "HALLO", SPIELNAME);
+readSHM(shm_pointer, SPIELNAME);
 //shmat(shmid, NULL, 0);
 
 
