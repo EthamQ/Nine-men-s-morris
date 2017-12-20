@@ -36,10 +36,10 @@ return 0;
 
 void readSHM(struct SHM_data* shm_pointer, int flag){
 	printf("\nStarte readSHM\n");
-	printf("\nread: Übergabeparameter Pointer zu: %p\n", shm_pointer);
 	if(flag == SPIELNAME){
 		printf("AUSLESEN spielname: %s", shm_pointer->spielname);
 	}
+	
 
 }
 

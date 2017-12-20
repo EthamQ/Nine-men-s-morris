@@ -133,7 +133,7 @@ int fork_thinker_connector(){
 
 	  //Pipe Variablen
 	  char movePipe[5];
-
+ 
 	  //Erstellung der Pipe, muss vor Fork geschehen
 	  if (pipe(pipeFd) < 0) {
 	      perror ("Fehler bei Erstellung der Pipe");
@@ -246,7 +246,9 @@ return 0;
 int main(){
 	
 	drawField();
+
 	read_configfile(CONFIG_DEFAULT);
+
 
 	fork_thinker_connector();
 return 0;
