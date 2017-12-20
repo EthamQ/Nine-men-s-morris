@@ -116,34 +116,32 @@ static void signalHandlerThinker(int signalNum){
 }
 
 int fork_thinker_connector(){
+  printf("\nStarte fork_thinker_connector\n");
 
-	  printf("\nStarte fork_thinker_connector\n");
+  //Fork Variablen
+  pid_t pid;
+  int sockfd;
 
-	  //Fork Variablen
-	  pid_t pid;
-	  int sockfd;
+  //Pipe BUFFER
+  char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
 
-	  //Pipe BUFFER
-	  char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
-
-	  //Erstellung der Pipe, muss vor Fork geschehen
-	  if (pipe(pipeFd) < 0) {
-	      perror ("Fehler bei Erstellung der Pipe");
-	      return -1;
-	   }
-     else{
-       printf("pipe erstellt, success");
-     }
+  //Erstellung der Pipe, muss vor Fork geschehen
+  if (pipe(pipeFd) < 0) {
+      perror ("Fehler bei Erstellung der Pipe");
+      return -1;
+   }
+   else{
+     printf("pipe erstellt, success");
+   }
 
 	int shmid;
 	if((shmid = createSHM()) < 0){
-	perror("Fehler bei Erstellung der shared memory");
-	return -1;
+	   perror("Fehler bei Erstellung der shared memory");
+	   return -1;
 	}
 	else{
-	printf("shared memory success");
+	   printf("shared memory success");
 	}
-
 
   switch(pid = fork()){
     case -1: perror("Fehler bei fork\n");
@@ -158,7 +156,7 @@ int fork_thinker_connector(){
 			//Verbindsaufbau zum Server
       if((sockfd = initConnect()) < 0){
         perror("Fehler bei initConnect");
-      return -1;
+        return -1;
 			}
       else{
         printf("initConnect success\n");
@@ -168,24 +166,24 @@ int fork_thinker_connector(){
       if(performConnection(sockfd) < 0) {
       	  printf("%i",sockfd);
           perror("Fehler bei performConnection");
-      return -1;
+          return -1;
 			}
       else {
           printf("performConnection success");
       }
       while(1){
         switch(maintainConnection(sockfd)){
-
-          case 0: 
-          if(conWAIT(sockfd)<0){
-            perror("conWAIT, Connector");
-          } //C: +OKWAIT 
-           break;
-         // case 1:
-           default:
+          case 0:
+            if(conWAIT(sockfd)<0){
+              perror("conWAIT, Connector");
+            } //C: +OKWAIT
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          default:
             perror("Switch: CONNECTOR");
-
-        
         }
       }
 			//Signal an Thinker senden
@@ -196,9 +194,7 @@ int fork_thinker_connector(){
 
 			sleep(1);
       //Aus der Pipe den Spielzug lesen
-
-     // fgets(stdout, )
-			if(((read (pipeFd[0], movePipe, sizeof(movePipe))) >0)){//&&(movePipe != "")){
+			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
 				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
 			}
 			else{
@@ -209,8 +205,6 @@ int fork_thinker_connector(){
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
       //Code for Thinker
-      //Nicht in Meilenstein 2 implementiert
-
 
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
@@ -230,24 +224,19 @@ int fork_thinker_connector(){
 				perror("sigaction groesser Null, Fehler ???");
 			}
 
-
-	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+	    //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
       shmat(shmid, NULL, 0);
       printf("THINKER: jetzt beginnt das warten\n");
-
 
 			wait(NULL);
       break;
   }
-
 return 0;
 }
-
 
 int main(){
 	drawField();
 	read_configfile(CONFIG_DEFAULT);
-
 	fork_thinker_connector();
 return 0;
 }
