@@ -7,7 +7,11 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+
 #define BUF 256
+#define MES_LENGTH_SERVER 1048
+
+static char messageToSend[1048]; //siehe perfcon
 
 short maintainConnection(int sockfd){
   char *serverResponse=malloc(sizeof(char)*BUF);
@@ -29,7 +33,51 @@ short maintainConnection(int sockfd){
     return -1;
 }
 
+//ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
+int sendConMess(int sockfd){
+  short attempts = 0;
+  short testifvalid = -1 //TODO deklaration dieser Variable verschieben ?
+  if(messageToSend != ""){
+    //Siehe perfCon
+    while(testifvalid < 0){
+      testifvalid = write(sockfd, messageToSend, (int)strlen(messageToSend));
+      attempts++;
+      if(attempts >= ATTEMPTS_INVALID){
+          messageToSend = "";
+          return -1;
+      }
+    }
+  }
+  printf("Wir senden: \"%s\" MAINCON\n", messageToSend);
+  messageToSend = "";
+  return 0;
+}
+
+char* readConMess(int sockfd){
+  char *messageToRead;
+  char messageBuffer[MES_LENGTH_SERVER];
+
+  messageToRead=malloc(sizeof(messageToRead));
+  short attempts = 0;
+  short testifvalid = -1
+
+  while(testifvalid < 0){
+    testifvalid = read(sockfd, messageBuffer, MES_LENGTH_SERVER);
+    attempts++;
+    if(attempts >= ATTEMPTS_INVALID){
+      perror("Invalid server response2");
+      printf("%sfehlertest",messageBuffer);
+      return -1;
+    }
+  }
+  printf("Server sendet: \"%s\" MAINCON\n", messageBuffer);
+  strcpy(move,messageBuffer);
+  return messageToRead;
+  //TODO MEMORYLEAK VERHINDERN
+}
+
 short conWAIT(int sockfd){
+  /*
   char *clientResponse = (char*)malloc(sizeof(char)*BUF);
   //strcpy(clientResponse, ""); //DEFAULT WERT
   strcpy(clientResponse, "OKWAIT");
@@ -41,18 +89,19 @@ short conWAIT(int sockfd){
     return -1;
   }
   return 0;
-}
-
-short conGAMEOVER(int sockfd){
-  if(sockfd == 0){ //Nur temrporaer um compile fehler zu verhindern
-    printf("nothing");
-  }
+  */
+  messageToSend = "OKWAIT\n";
+  sendConMess(sockfd);
   return 0;
 }
 
-//short conMOVE(int sockfd, char *array){
- // if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
-  //  printf("nothing");
-  //}
- // return 0;
-//}
+short conGAMEOVER(int sockfd){
+  if(sockfd < 0){
+    perror("Fehlerhafter Sockfd in gameover, MAINCON");
+  }
+}
+
+short conMOVE(int sockfd){//, char *array){
+
+  return 0;
+}

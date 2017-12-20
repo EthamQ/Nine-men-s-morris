@@ -25,15 +25,15 @@ static char versionPRC []= "VERSION 2.0\n";
 static char game_idPRC []= "ID 02pobsvmluimp\n";
 static char  numberOfPlayersPRC []= "PLAYER\n";
 
-    //ARGS: server message, if it begins with "+" return true
-    static bool serverResponseValid(const char r[]){
+//ARGS: server message, if it begins with "+" return true
+static bool serverResponseValid(const char r[]){
     if(strncmp(r, "+",1) == 0){
         return true;
     }
       return false;
-    }
+}
 
-    int performConnection(int sockfd){
+int performConnection(int sockfd){
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");

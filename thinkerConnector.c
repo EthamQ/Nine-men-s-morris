@@ -173,34 +173,40 @@ int fork_thinker_connector(){
       }
       while(1){
         switch(maintainConnection(sockfd)){
-          case 0:
+          case 0: //WAIT
             if(conWAIT(sockfd)<0){
-              perror("conWAIT, Connector");
-            } //C: +OKWAIT
+              perror("conWAIT, CONNECTOR");
+            }
             break;
-          case 1:
+          case 1: //GAMEOVER
+            if(conGAMEOVER(int sockfd)<0{
+              perror("conGAMEOVER failure, CONNECTOR");
+            }
             break;
-          case 2:
+          case 2: //MOVE
+            if(conMOVE(int sockfd)<0{
+              perror("conGAMEOVER failure, CONNECTOR");
+            }
+
+            //Signal an Thinker senden
+            if(kill(getppid(),SIGUSR1)<0){
+                perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+            }
+            printf("Signal an Thinker gesendet, CONNECTOR \n");
+            sleep(1); //TODO ist sleep hier notwendig ?
+            //Aus der Pipe den Spielzug lesen
+            if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+              printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+            }
+            else{
+              perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+            }
+
             break;
           default:
-            perror("Switch: CONNECTOR");
+            perror("Switch failure CONNECTOR");
         }
       }
-			//Signal an Thinker senden
-			if(kill(getppid(),SIGUSR1)<0){
-					perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
-			}
-			printf("Signal an Thinker gesendet, CONNECTOR \n");
-
-			sleep(1);
-      //Aus der Pipe den Spielzug lesen
-			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
-				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
-			}
-			else{
-				perror("Spielzug konnte nicht aus der Pipe gelesen werden");
-			}
-
 			exit(0);
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
