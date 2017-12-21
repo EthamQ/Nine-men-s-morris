@@ -133,7 +133,7 @@ char* performConnection(int sockfd){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       if(strstr(dataPRS,"ENDPLAYERS")){
         printf("ENDPLAYERS ERKANNT;gesendet: \"%s\" PERFCON \n",dataPRS);
-        return "ERROR";
+        //return dataPRS;
       }
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){

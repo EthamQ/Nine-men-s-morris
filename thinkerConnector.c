@@ -165,7 +165,7 @@ int fork_thinker_connector(){
 			//Prologphase
       char* uselessChar2 = "ERROR";
       char* uselessChar3 = performConnection(sockfd);
-      if(strcmp(uselessChar3,uselessChar2)!=0) {
+      if(strcmp(uselessChar3,uselessChar2)==0) {
       	  printf("%i",sockfd);
           perror("Fehler bei performConnection");
           return -1;
