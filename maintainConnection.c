@@ -16,7 +16,7 @@
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
 short maintainConnection(int sockfd){
-  char *serverResponse=malloc(sizeof(char)*BUF);
+  char *serverResponse=malloc(sizeof(char)*1048);
 
    if((read(sockfd,serverResponse,sizeof(serverResponse)))<0){
       perror("read bei maintainConnection");
@@ -35,8 +35,9 @@ short maintainConnection(int sockfd){
       free(serverResponse);
       return 2;
     }
+  //  printf("Serverantwort: %s , MAINCON", serverResponse);
     free(serverResponse);
-    return -1;
+      return -1;
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !

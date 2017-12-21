@@ -169,7 +169,7 @@ int fork_thinker_connector(){
           return -1;
 			}
       else {
-          printf("performConnection success");
+          printf("performConnection success \n");
       }
       while(1){
         switch(maintainConnection(sockfd)){
