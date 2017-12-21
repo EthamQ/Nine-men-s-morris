@@ -10,6 +10,7 @@
 
 #define BUF 256
 #define MES_LENGTH_SERVER 1048
+#define ATTEMPTS_INVALID 20
 
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
@@ -38,10 +39,10 @@ short maintainConnection(int sockfd){
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
-int sendConMess(int sockfd, char message){
+int sendConMess(int sockfd, char messageToSend){
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
-  messageToSend = message;
+  //char messageToSend = message;
   if(messageToSend != ""){
     //Siehe perfCon
     while(testifvalid < 0){
@@ -71,7 +72,7 @@ char* readConMess(int sockfd){
     attempts++;
     if(attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response2");
-      printf("%sfehlertest",messageBuffer);
+      printf("%sfehlertest",&messageBuffer);
       return -1;
     }
   }
@@ -96,7 +97,10 @@ short conWAIT(int sockfd){
   return 0;
   */
   //messageToSend = "OKWAIT\n";
-  sendConMess(sockfd, "OKWAIT\n");
+  char* messageCon = (char*)malloc(sizeof(char)*BUF);
+  messageCon = "OKWAIT\n"
+  sendConMess(sockfd, messageCon);
+  free(messageCon);
   return 0;
 }
 
