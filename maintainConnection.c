@@ -11,7 +11,7 @@
 #define BUF 256
 #define MES_LENGTH_SERVER 1048
 
-static char messageToSend[1048]; //siehe perfcon
+static char messageToSend[1048] = ""; //test, "" spaeter entfernen ??
 
 short maintainConnection(int sockfd){
   char *serverResponse=malloc(sizeof(char)*BUF);
@@ -96,9 +96,7 @@ short conWAIT(int sockfd){
 }
 
 short conGAMEOVER(int sockfd){
-  if(sockfd < 0){
-    perror("Fehlerhafter Sockfd in gameover, MAINCON");
-  }
+  return sockfd;
 }
 
 short conMOVE(int sockfd){//, char *array){

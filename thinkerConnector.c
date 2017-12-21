@@ -179,12 +179,12 @@ int fork_thinker_connector(){
             }
             break;
           case 1: //GAMEOVER
-            if(conGAMEOVER(int sockfd)<0){
+            if(conGAMEOVER(sockfd)<0){
               perror("conGAMEOVER failure, CONNECTOR");
             }
             break;
           case 2: //MOVE
-            if(conMOVE(int sockfd)<0{
+            if(conMOVE(sockfd)<0){
               perror("conGAMEOVER failure, CONNECTOR");
             }
 
@@ -207,7 +207,7 @@ int fork_thinker_connector(){
             perror("Switch failure CONNECTOR");
         }
       }
-
+      printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
