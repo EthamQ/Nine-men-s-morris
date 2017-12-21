@@ -149,7 +149,7 @@ int fork_thinker_connector(){
       break;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Connector
-
+      short endCon = 0;
 			//Schreibseite der Pipe schliessen
       close(pipeFd[1]);
 
@@ -187,7 +187,6 @@ int fork_thinker_connector(){
             if(conMOVE(sockfd)<0){
               perror("conGAMEOVER failure, CONNECTOR");
             }
-
             //Signal an Thinker senden
             if(kill(getppid(),SIGUSR1)<0){
                 perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
@@ -201,11 +200,16 @@ int fork_thinker_connector(){
             else{
               perror("Spielzug konnte nicht aus der Pipe gelesen werden");
             }
-
             break;
           default:
             perror("Switch failure CONNECTOR");
+            endCon = -1
+            break;
         }
+        if(endCon == -1){
+          break;
+        }
+
       }
       printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
