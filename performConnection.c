@@ -34,7 +34,7 @@ static bool serverResponseValid(const char r[]){
 }
 
 char* performConnection(int sockfd){
-    char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
+    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
@@ -133,7 +133,7 @@ char* performConnection(int sockfd){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       if(strstr(dataPRS,"ENDPLAYERS")){
         printf("ENDPLAYERS ERKANNT;gesendet: \"%s\" PERFCON \n",dataPRS);
-        return sockfd;
+        return "ERROR";
       }
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
@@ -155,5 +155,5 @@ char* performConnection(int sockfd){
     }
     testifvalid = -1;
     attempts = 0;
-    return serverPiecelist;
+    return dataPRS;
 }
