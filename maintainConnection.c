@@ -12,8 +12,7 @@
 #define MES_LENGTH_SERVER 1048
 #define ATTEMPTS_INVALID 20
 
-const char* uselessChar;
-&uselessChar == "";
+
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
 short maintainConnection(int sockfd){
@@ -42,10 +41,12 @@ short maintainConnection(int sockfd){
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
 int sendConMess(int sockfd, char messageToSend){
+  const char* uselessChar;
+  uselessChar = "";
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
   //char messageToSend = message;
-  if(strcmp(&messageToSend, uselessChar) != 0){
+  if(strcmp(&messageToSend, "uselessChar") != 0){
     //Siehe perfCon
     while(testifvalid < 0){
       testifvalid = write(sockfd, &messageToSend, (int)strlen(&messageToSend));
@@ -61,7 +62,7 @@ int sendConMess(int sockfd, char messageToSend){
   }
   printf("Wir senden: \"%s\" MAINCON\n", &messageToSend);
   //messageToSend = "";
-  return sockfd; //TODO wegtun
+  return 0; //TODO wegtun
 }
 
 char* readConMess(int sockfd){
@@ -91,10 +92,10 @@ short conWAIT(int sockfd){
 
   //messageToSend = "OKWAIT\n";
   char* messageCon = (char*)malloc(sizeof(char)*BUF);
-  messageCon = "OKWAIT\n"
+  messageCon = "OKWAIT\n";
   sendConMess(sockfd, messageCon);
   free(messageCon);
-  return 0;
+  return sockfd;
 }
 
 short conGAMEOVER(int sockfd){
