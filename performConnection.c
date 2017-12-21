@@ -131,8 +131,8 @@ int performConnection(int sockfd){
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       if(strstr(dataPRS,"ENDPLAYERS")){
-        printf("ENDPLAYERS ERKANNT; PERFCON");
-        return sockfd;
+        printf("ENDPLAYERS ERKANNT; PERFCON \n");
+        //return sockfd;
       }
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
