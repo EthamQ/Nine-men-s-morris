@@ -33,12 +33,13 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-int performConnection(int sockfd){
+char* performConnection(int sockfd){
+    char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
       close(sockfd);
-      return -1;
+      return "ERROR";
     }
     else{
       printf("Good to go?!");
@@ -56,7 +57,7 @@ int performConnection(int sockfd){
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
         perror("Invalid server response2");
         printf("%sfehlertest",dataPRS);
-        return -1;
+        return "ERROR";
       }
     }
     printf("%s\n",dataPRS);
@@ -68,7 +69,7 @@ int performConnection(int sockfd){
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return "ERROR";
         }
     }
     printf("%s\n",versionPRC);
@@ -82,7 +83,7 @@ int performConnection(int sockfd){
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
             perror("Invalid server response3");
             printf("%s\n",dataPRS);
-            return -1;
+            return "ERROR";
         }
     }
     printf("%s\n",dataPRS);
@@ -94,7 +95,7 @@ int performConnection(int sockfd){
         testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return "ERROR";
         }
     }
     printf("%s\n",game_idPRC);
@@ -106,7 +107,7 @@ int performConnection(int sockfd){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
             perror("Invalid server response4");
-            return -1;
+            return "ERROR";
         }
     }
     printf("%s\n",dataPRS);
@@ -118,7 +119,7 @@ int performConnection(int sockfd){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return "ERROR";
         }
     }
     testifvalid = -1;
@@ -137,7 +138,7 @@ int performConnection(int sockfd){
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
-      return -1;
+      return "ERROR";
       }
     }
 
@@ -149,10 +150,10 @@ int performConnection(int sockfd){
         testifvalid = write(sockfd, "THINKING", 8);
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return "ERROR";
         }
     }
     testifvalid = -1;
     attempts = 0;
-    return sockfd;
+    return serverPiecelist;
 }
