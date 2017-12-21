@@ -130,13 +130,13 @@ int performConnection(int sockfd){
     //S: ENDPLAYERS
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-      printf("%s\n",dataPRS);
-      if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response5");
       if(strstr(dataPRS,"ENDPLAYERS")){
         printf("ENDPLAYERS ERKANNT; PERFCON");
         return sockfd;
       }
+      printf("%s\n",dataPRS);
+      if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
+      perror("Invalid server response5");
       return -1;
       }
     }
