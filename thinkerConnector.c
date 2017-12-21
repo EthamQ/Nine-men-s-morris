@@ -63,7 +63,7 @@ int initConnect(){
 
       if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
 	  perror("fehler bei connect");
-          printf("Socketzahl:%d\n",sockfd);
+          printf("\nSocket filedescriptor:%d\n",sockfd);
           close(sockfd);
           continue;
 
@@ -94,11 +94,13 @@ short sendMove(){
 
   //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
+  
   if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))>0){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
   }
   printf("Spielzug in die Pipe geschrieben, BRAIN \n");
+
   //sleep(0.5);
   return 0;
 }
@@ -112,6 +114,7 @@ static void signalHandlerThinker(int signalNum){
 }
 
 int fork_thinker_connector(){
+
 	printf("\nStarte fork_thinker_connector\n");
 	//Fork Variablen
 	pid_t pid;
@@ -129,14 +132,16 @@ int fork_thinker_connector(){
     printf("pipe erstellt, success");
   }
 
-	int shmid;
-	if((shmid = createSHM()) < 0){
-	   perror("Fehler bei Erstellung der shared memory");
-	    return -1;
+	  //Shared memory erstellen und attachen
+	int shmid = createSHM();
+	struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	if(shm_pointer==(void*)-1){
+		perror("\nshmat fehlgeschlagen\n");
 	}
 	else{
-	   printf("shared memory success");
+		printf("\nshmat erfolgreich\n");
 	}
+
 
 
   switch(pid = fork()){
@@ -145,6 +150,9 @@ int fork_thinker_connector(){
       break;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Connector
+	  
+	  //in die shared memory schreiben
+	  writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
 
 			//Schreibseite der Pipe schliessen
       close(pipeFd[1]);
@@ -206,18 +214,22 @@ int fork_thinker_connector(){
 				perror("sigaction groesser Null, Fehler ???");
 			}
 
+
     	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-      shmat(shmid, NULL, 0);
       printf("THINKER: jetzt beginnt das warten\n");
     	wait(NULL);
+
       break;
     }
     return 0;
 }
 
 int main(){
+	
 	drawField();
+
 	read_configfile(CONFIG_DEFAULT);
+
 	fork_thinker_connector();
 return 0;
 }
