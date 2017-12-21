@@ -61,7 +61,7 @@ int sendConMess(int sockfd, char messageToSend){
   }
   printf("Wir senden: \"%s\" MAINCON\n", &messageToSend);
   //messageToSend = "";
-  return 0;
+  return sockfd; //TODO wegtun
 }
 
 char* readConMess(int sockfd){
@@ -88,19 +88,7 @@ char* readConMess(int sockfd){
 }
 
 short conWAIT(int sockfd){
-  /*
-  char *clientResponse = (char*)malloc(sizeof(char)*BUF);
-  //strcpy(clientResponse, ""); //DEFAULT WERT
-  strcpy(clientResponse, "OKWAIT");
-  strcat(clientResponse, "\n");
 
-  int n = write(sockfd,clientResponse,sizeof(clientResponse));
-  if(n<0){
-    perror("Fehler bei Schreiben +OKWAIT in Sockfd, maintainConnection.c");
-    return -1;
-  }
-  return 0;
-  */
   //messageToSend = "OKWAIT\n";
   char* messageCon = (char*)malloc(sizeof(char)*BUF);
   messageCon = "OKWAIT\n"
@@ -117,3 +105,19 @@ short conMOVE(int sockfd){
 
   return sockfd;
 }
+
+
+/*
+altes conwait
+char *clientResponse = (char*)malloc(sizeof(char)*BUF);
+//strcpy(clientResponse, ""); //DEFAULT WERT
+strcpy(clientResponse, "OKWAIT");
+strcat(clientResponse, "\n");
+
+int n = write(sockfd,clientResponse,sizeof(clientResponse));
+if(n<0){
+  perror("Fehler bei Schreiben +OKWAIT in Sockfd, maintainConnection.c");
+  return -1;
+}
+return 0;
+*/
