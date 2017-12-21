@@ -12,6 +12,8 @@
 #define MES_LENGTH_SERVER 1048
 #define ATTEMPTS_INVALID 20
 
+const char* uselessChar;
+&uselessChar == "";
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
 short maintainConnection(int sockfd){
@@ -43,7 +45,7 @@ int sendConMess(int sockfd, char messageToSend){
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
   //char messageToSend = message;
-  if(strcmp(messageToSend, "") != 0){
+  if(strcmp(&messageToSend, uselessChar) != 0){
     //Siehe perfCon
     while(testifvalid < 0){
       testifvalid = write(sockfd, &messageToSend, (int)strlen(&messageToSend));
@@ -74,8 +76,8 @@ char* readConMess(int sockfd){
     testifvalid = read(sockfd, messageBuffer, MES_LENGTH_SERVER);
     attempts++;
     if(attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response2");
-      printf("%sfehlertest",&messageBuffer);
+      perror("Invalid server response");
+      //printf("%sfehlertest",&messageBuffer);
       return -1;
     }
   }
