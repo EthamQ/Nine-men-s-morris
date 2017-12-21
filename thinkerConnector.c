@@ -112,19 +112,8 @@ int fork_thinker_connector(){
 
 	  printf("\nStarte fork_thinker_connector\n");
 	  
-	  //Shared memory
-	  int shmid;
-	if((shmid =shmget(IPC_PRIVATE,  sizeof(struct SHM_data), IPC_CREAT | 0666) < 0)){
-	perror("\nFehler bei Erstellung der shared memory\n");
-	return -1;
-	}
-	else{
-	printf("\nshared memory success\n");
-	printf("\nshared memory id is: %d\n", shmid);
-	//shared memory löschen wenn Thinker und Connector beendet wurden
-	//shmctl(shmid, IPC_RMID, 0);
-	}
-	shmat(shmid, NULL, 0);
+	  //Shared memory erstellen und attachen
+	int shmid = createSHM();
 	
 
 	  //Fork Variablen
@@ -221,6 +210,7 @@ int fork_thinker_connector(){
 
 
 	
+	//Ab hier Testaufruf der shared memory Methoden
 		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 	if(shm_pointer==(void*)-1){
 		perror("\nshmat fehlgeschlagen\n");
@@ -228,11 +218,9 @@ int fork_thinker_connector(){
 	else{
 		printf("\nshmat erfolgreich\n");
 	}
-
-	
-writeSHM(shm_pointer, "HALLO", SPIELNAME);
-readSHM(shm_pointer, SPIELNAME);
-//shmat(shmid, NULL, 0);
+	writeSHM(shm_pointer, "HALLO", SPIELNAME);
+	readSHM(shm_pointer, SPIELNAME);
+	//Ende Testaufruf
 
 
 			wait(NULL);

@@ -11,14 +11,20 @@
 
 
 int createSHM(){
-int size = sizeof(struct SHM_data);
-int shared_memory_id = shmget(IPC_PRIVATE, size, IPC_CREAT | IPC_EXCL);
-printf("\nshared memory id is: %d\n", shared_memory_id);
-
-//shared memory löschen wenn Thinker und Connector beendet wurden
-shmctl(shared_memory_id, IPC_RMID, 0);
-
-return shared_memory_id;
+  int shmid;
+	if((shmid =shmget(IPC_PRIVATE,  sizeof(struct SHM_data), IPC_CREAT | 0666) < 0)){
+	perror("\nFehler bei Erstellung der shared memory\n");
+	return -1;
+	}
+	else{
+	printf("\nshared memory success\n");
+	printf("\nshared memory id is: %d\n", shmid);
+	//shared memory löschen wenn Thinker und Connector beendet wurden
+	//shmctl(shmid, IPC_RMID, 0);
+	}
+	shmat(shmid, NULL, 0);
+	
+	return shmid;
 }
 
 
@@ -36,9 +42,11 @@ return 0;
 
 void readSHM(struct SHM_data* shm_pointer, int flag){
 	printf("\nStarte readSHM\n");
-	if(flag == SPIELNAME){
-		printf("AUSLESEN spielname: %s", shm_pointer->spielname);
-	}
+	printf("\nread: Übergabeparameter Pointer zu: %p\n", shm_pointer);
+	printf("Flag: %i", flag);
+	printf("read: AUSLESEN spielname: %s", shm_pointer->spielname);
+	
+	
 	
 
 }
