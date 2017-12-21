@@ -11,7 +11,7 @@
 #define BUF 256
 #define MES_LENGTH_SERVER 1048
 
-static char messageToSend[1048] = ""; //test, "" spaeter entfernen ??
+//static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
 short maintainConnection(int sockfd){
   char *serverResponse=malloc(sizeof(char)*BUF);
@@ -22,19 +22,23 @@ short maintainConnection(int sockfd){
     printf("Server antwort, maintainConnection %s\n",serverResponse);
 
     if(strstr(serverResponse,"+WAIT")){
+      free(serverResponse);
       return 0;
     }
     if(strstr(serverResponse,"+GAMEOVER")){
+      free(serverResponse);
       return 1;
     }
     if(strstr(serverResponse,"+MOVE")){
+      free(serverResponse);
       return 2;
     }
+    free(serverResponse);
     return -1;
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
-int sendConMess(int sockfd){
+int sendConMess(int sockfd, char messageToSend[256]){
   short attempts = 0;
   short testifvalid = -1 //TODO deklaration dieser Variable verschieben ?
   if(messageToSend != ""){
@@ -43,13 +47,13 @@ int sendConMess(int sockfd){
       testifvalid = write(sockfd, messageToSend, (int)strlen(messageToSend));
       attempts++;
       if(attempts >= ATTEMPTS_INVALID){
-          messageToSend = "";
+          //messageToSend = "";
           return -1;
       }
     }
   }
   printf("Wir senden: \"%s\" MAINCON\n", messageToSend);
-  messageToSend = "";
+  //messageToSend = "";
   return 0;
 }
 
@@ -90,8 +94,8 @@ short conWAIT(int sockfd){
   }
   return 0;
   */
-  messageToSend = "OKWAIT\n";
-  sendConMess(sockfd);
+  //messageToSend = "OKWAIT\n";
+  sendConMess(sockfd, "OKWAIT\n");
   return 0;
 }
 
@@ -101,5 +105,5 @@ short conGAMEOVER(int sockfd){
 
 short conMOVE(int sockfd){//, char *array){
 
-  return 0;
+  return sockfd;
 }
