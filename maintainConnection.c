@@ -38,9 +38,10 @@ short maintainConnection(int sockfd){
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
-int sendConMess(int sockfd, char messageToSend[256]){
+int sendConMess(int sockfd, char message){
   short attempts = 0;
-  short testifvalid = -1 //TODO deklaration dieser Variable verschieben ?
+  short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
+  messageToSend = message;
   if(messageToSend != ""){
     //Siehe perfCon
     while(testifvalid < 0){
@@ -63,7 +64,7 @@ char* readConMess(int sockfd){
 
   messageToRead=malloc(sizeof(messageToRead));
   short attempts = 0;
-  short testifvalid = -1
+  short testifvalid = -1;
 
   while(testifvalid < 0){
     testifvalid = read(sockfd, messageBuffer, MES_LENGTH_SERVER);
@@ -75,7 +76,7 @@ char* readConMess(int sockfd){
     }
   }
   printf("Server sendet: \"%s\" MAINCON\n", messageBuffer);
-  strcpy(move,messageBuffer);
+  strcpy(messageToRead,messageBuffer);
   return messageToRead;
   //TODO MEMORYLEAK VERHINDERN
 }
@@ -103,7 +104,7 @@ short conGAMEOVER(int sockfd){
   return sockfd;
 }
 
-short conMOVE(int sockfd){//, char *array){
+short conMOVE(int sockfd){
 
   return sockfd;
 }

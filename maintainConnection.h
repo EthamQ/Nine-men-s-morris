@@ -7,6 +7,6 @@ short conWAIT(int sockfd);
 
 short conGAMEOVER(int sockfd);
 
-short conMOVE(int sockfd, char[]);
+short conMOVE(int sockfd);
 
 #endif
