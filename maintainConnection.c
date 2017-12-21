@@ -31,9 +31,9 @@ short conGAMEOVER(int sockfd){
   return 0;
 }
 
-short conMOVE(int sockfd, char *array){
+short conMOVE(int sockfd)//, char *array){
   if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
-    printf("%s nothing", &array);
+    printf("nothing");
   }
   return 0;
 }
