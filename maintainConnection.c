@@ -43,7 +43,7 @@ int sendConMess(int sockfd, char messageToSend){
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
   //char messageToSend = message;
-  if(messageToSend != ""){
+  if(strcmp(messageToSend, "") != 0){
     //Siehe perfCon
     while(testifvalid < 0){
       testifvalid = write(sockfd, messageToSend, (int)strlen(messageToSend));
@@ -54,7 +54,10 @@ int sendConMess(int sockfd, char messageToSend){
       }
     }
   }
-  printf("Wir senden: \"%s\" MAINCON\n", messageToSend);
+  else{
+    perror("messageToSend == 0, MAINCON");
+  }
+  printf("Wir senden: \"%s\" MAINCON\n", &messageToSend);
   //messageToSend = "";
   return 0;
 }
@@ -63,7 +66,7 @@ char* readConMess(int sockfd){
   char *messageToRead;
   char messageBuffer[MES_LENGTH_SERVER];
 
-  messageToRead=malloc(sizeof(messageToRead));
+  messageToRead=malloc(sizeof(messageToRead)); //&messageToRead ???
   short attempts = 0;
   short testifvalid = -1;
 
