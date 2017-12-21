@@ -164,7 +164,8 @@ int fork_thinker_connector(){
 
 			//Prologphase
       char* uselessChar2 = "ERROR";
-      if(strcmp(performConnection(sockfd),uselessChar2)!=0) {
+      char* uselessChar3 = performConnection(sockfd);
+      if(strcmp(uselessChar3,uselessChar2)!=0) {
       	  printf("%i",sockfd);
           perror("Fehler bei performConnection");
           return -1;
@@ -173,7 +174,7 @@ int fork_thinker_connector(){
           printf("performConnection success \n");
       }
       while(1){
-        switch(maintainConnection(sockfd)){
+        switch(maintainConnection(sockfd,uselessChar3)){
           case 0: //WAIT
             printf("conWait Aufruf, THINKCON");
             if(conWAIT(sockfd)<0){
