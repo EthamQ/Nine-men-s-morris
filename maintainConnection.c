@@ -46,10 +46,10 @@ int sendConMess(int sockfd, char* messageToSend){
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
   //char messageToSend = message;
-  if(strcmp(&messageToSend, &uselessChar) != 0){
+  if(strcmp(messageToSend, uselessChar) != 0){
     //Siehe perfCon
     while(testifvalid < 0){
-      testifvalid = write(sockfd, &messageToSend, (int)strlen(&messageToSend));
+      testifvalid = write(sockfd, messageToSend, (int)strlen(messageToSend));
       attempts++;
       if(attempts >= ATTEMPTS_INVALID){
           //messageToSend = "";
@@ -60,7 +60,7 @@ int sendConMess(int sockfd, char* messageToSend){
   else{
     perror("messageToSend == 0, MAINCON");
   }
-  printf("Wir senden: \"%s\" MAINCON\n", &messageToSend);
+  printf("Wir senden: \"%s\" MAINCON\n", messageToSend);
   //messageToSend = "";
   return 0; //TODO wegtun
 }
@@ -69,7 +69,7 @@ char* readConMess(int sockfd){
   char *messageToRead;
   char messageBuffer[MES_LENGTH_SERVER];
 
-  messageToRead=malloc(sizeof(messageToRead)); //&messageToRead ???
+  messageToRead=malloc(sizeof(messageToRead)); //messageToRead ???
   short attempts = 0;
   short testifvalid = -1;
 
@@ -78,7 +78,7 @@ char* readConMess(int sockfd){
     attempts++;
     if(attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response");
-      //printf("%sfehlertest",&messageBuffer);
+      printf("%sfehlertest",messageBuffer);
       messageToRead =  "ERROR";
       return messageToRead;
     }
