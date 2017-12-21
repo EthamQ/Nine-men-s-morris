@@ -46,7 +46,7 @@ int sendConMess(int sockfd, char messageToSend){
   if(strcmp(messageToSend, "") != 0){
     //Siehe perfCon
     while(testifvalid < 0){
-      testifvalid = write(sockfd, messageToSend, (int)strlen(messageToSend));
+      testifvalid = write(sockfd, &messageToSend, (int)strlen(&messageToSend));
       attempts++;
       if(attempts >= ATTEMPTS_INVALID){
           //messageToSend = "";
