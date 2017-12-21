@@ -15,15 +15,15 @@
 
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
-short maintainConnection(int sockfd){
+short maintainConnection(int sockfd, char* firstServerList){
   char *serverResponse=malloc(sizeof(char)*1048);
 
    //if((read(sockfd,serverResponse,sizeof(serverResponse)))<0){
-   if((read(sockfd,serverResponse,1048))<0){
+   /*if((read(sockfd,serverResponse,1048))<0){
       perror("read bei maintainConnection");
     }
     printf("Server antwort:\"%s\" , MAINCON \n",serverResponse);
-
+*/
     if(strstr(serverResponse,"+WAIT")){
       free(serverResponse);
       return 0;
@@ -33,6 +33,7 @@ short maintainConnection(int sockfd){
       return 1;
     }
     if(strstr(serverResponse,"+MOVE")){
+      printf("yay move, MAINCON");
       free(serverResponse);
       return 2;
     }
