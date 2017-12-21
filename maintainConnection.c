@@ -18,10 +18,11 @@
 short maintainConnection(int sockfd){
   char *serverResponse=malloc(sizeof(char)*1048);
 
-   if((read(sockfd,serverResponse,sizeof(serverResponse)))<0){
+   //if((read(sockfd,serverResponse,sizeof(serverResponse)))<0){
+   if((read(sockfd,serverResponse,1048))<0){
       perror("read bei maintainConnection");
     }
-    printf("Server antwort, maintainConnection %s\n",serverResponse);
+    printf("Server antwort:\"%s\" , MAINCON \n",serverResponse);
 
     if(strstr(serverResponse,"+WAIT")){
       free(serverResponse);

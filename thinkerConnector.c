@@ -211,7 +211,7 @@ int fork_thinker_connector(){
         }
 
       }
-      printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
+      //printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
       break;
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
