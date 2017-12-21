@@ -24,6 +24,7 @@ short maintainConnection(int sockfd, char* firstServerList){
     }
     printf("Server antwort:\"%s\" , MAINCON \n",serverResponse);
 */
+  printf("sockfd:\"%i\", firstServerList: \"%s\" ",sockfd, firstServerList);
     if(strstr(serverResponse,"+WAIT")){
       free(serverResponse);
       return 0;
