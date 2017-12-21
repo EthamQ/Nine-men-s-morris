@@ -106,7 +106,13 @@ short conGAMEOVER(int sockfd){
 }
 
 short conMOVE(int sockfd){
-
+  //messageToSend = "OKWAIT\n";
+  char* messageCon = (char*)malloc(sizeof(char)*BUF);
+  messageCon = "OKWAIT\n";
+  if(sendConMess(sockfd, messageCon)<0){
+    perror("conMove fehler, MAINCON");
+  }
+  free(messageCon);
   return sockfd;
 }
 

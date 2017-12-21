@@ -174,16 +174,19 @@ int fork_thinker_connector(){
       while(1){
         switch(maintainConnection(sockfd)){
           case 0: //WAIT
+            printf("conWait Aufruf, THINKCON");
             if(conWAIT(sockfd)<0){
               perror("conWAIT, CONNECTOR");
             }
             break;
           case 1: //GAMEOVER
+            printf("conGAMEOVER Aufruf, THINKCON");
             if(conGAMEOVER(sockfd)<0){
               perror("conGAMEOVER failure, CONNECTOR");
             }
             break;
           case 2: //MOVE
+            printf("conMOVE Aufruf, THINKCON");
             if(conMOVE(sockfd)<0){
               perror("conGAMEOVER failure, CONNECTOR");
             }
