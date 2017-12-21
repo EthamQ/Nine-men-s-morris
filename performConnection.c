@@ -144,5 +144,15 @@ int performConnection(int sockfd){
     testifvalid = -1;
 	  attempts = 0;
 
+    //C: THINKING
+    while(testifvalid < 0){
+        testifvalid = write(sockfd, "THINKING", 8);
+        attempts++;
+        if(attempts >= ATTEMPTS_INVALID){
+            return -1;
+        }
+    }
+    testifvalid = -1;
+    attempts = 0;
     return sockfd;
 }
