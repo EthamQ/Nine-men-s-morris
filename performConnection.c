@@ -133,6 +133,10 @@ int performConnection(int sockfd){
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
+      if(strstr(serverResponse,"ENDPLAYERS")){
+        printf("ENDPLAYERS ERKANNT; PERFCON";)
+        return sockfd;
+      }
       return -1;
       }
     }

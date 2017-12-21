@@ -106,6 +106,7 @@ short conGAMEOVER(int sockfd){
 }
 
 short conMOVE(int sockfd){
+  printf("yay move MAINCON");
   //messageToSend = "OKWAIT\n";
   char* messageCon = (char*)malloc(sizeof(char)*BUF);
   messageCon = "OKWAIT\n";
