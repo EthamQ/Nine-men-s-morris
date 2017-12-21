@@ -203,7 +203,7 @@ int fork_thinker_connector(){
             break;
           default:
             perror("Switch failure CONNECTOR");
-            endCon = -1
+            endCon = -1;
             break;
         }
         if(endCon == -1){
