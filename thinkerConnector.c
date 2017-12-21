@@ -114,6 +114,13 @@ int fork_thinker_connector(){
 	  
 	  //Shared memory erstellen und attachen
 	int shmid = createSHM();
+	struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	if(shm_pointer==(void*)-1){
+		perror("\nshmat fehlgeschlagen\n");
+	}
+	else{
+		printf("\nshmat erfolgreich\n");
+	}
 	
 
 	  //Fork Variablen
@@ -146,6 +153,9 @@ int fork_thinker_connector(){
       break;
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
       //Connector
+	  
+	  //in die shared memory schreiben
+	  writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
 
 			//Schreibseite der Pipe schliessen
       close(pipeFd[1]);
@@ -207,20 +217,6 @@ int fork_thinker_connector(){
 			else{
 				perror("sigaction groesser Null, Fehler ???");
 			}
-
-
-	
-	//Ab hier Testaufruf der shared memory Methoden
-		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-	if(shm_pointer==(void*)-1){
-		perror("\nshmat fehlgeschlagen\n");
-	}
-	else{
-		printf("\nshmat erfolgreich\n");
-	}
-	writeSHM(shm_pointer, "HALLO", SPIELNAME);
-	readSHM(shm_pointer, SPIELNAME);
-	//Ende Testaufruf
 
 
 			wait(NULL);

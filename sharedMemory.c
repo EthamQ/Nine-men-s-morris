@@ -22,13 +22,13 @@ int createSHM(){
 	//shared memory löschen wenn Thinker und Connector beendet wurden
 	//shmctl(shmid, IPC_RMID, 0);
 	}
-	shmat(shmid, NULL, 0);
+	
 	
 	return shmid;
 }
 
 
-int writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
+void writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
 	printf("\nStarte writeSHM\n");
 	printf("\nwrite: Übergabeparameter Pointer zu: %p\n", shm_pointer);
 	//struct SHM_data d = *shm_pointer;
@@ -37,18 +37,18 @@ int writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
 		printf("\nwrite: Im struct SHM_data wurde folgender Spielname reingeschrieben: %s\n", data);
 		printf("write: AUSLESEN spielname: %s", shm_pointer->spielname);
 	}
-return 0;
 }
 
-void readSHM(struct SHM_data* shm_pointer, int flag){
+//Auskommentiert, da es hier Fehler gibt
+/*void readSHM(struct SHM_data* shm_pointer){
 	printf("\nStarte readSHM\n");
 	printf("\nread: Übergabeparameter Pointer zu: %p\n", shm_pointer);
-	printf("Flag: %i", flag);
+	
 	printf("read: AUSLESEN spielname: %s", shm_pointer->spielname);
 	
 	
 	
 
-}
+}*/
 
 

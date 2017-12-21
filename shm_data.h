@@ -21,7 +21,7 @@ int pid_connector;
 
 extern int createSHM();
 extern int attachSHM();
-extern int writeSHM(struct SHM_data* shm_pointer, char* data, int flag);
-extern void readSHM(struct SHM_data* shm_pointer, int flag);
+extern void writeSHM(struct SHM_data* shm_pointer, char* data, int flag);
+extern void readSHM(struct SHM_data* shm_pointer);
 
 #endif
