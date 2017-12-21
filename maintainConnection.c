@@ -40,13 +40,13 @@ short maintainConnection(int sockfd){
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
-int sendConMess(int sockfd, char messageToSend){
+int sendConMess(int sockfd, char* messageToSend){
   const char* uselessChar;
   uselessChar = "";
   short attempts = 0;
   short testifvalid = -1; //TODO deklaration dieser Variable verschieben ?
   //char messageToSend = message;
-  if(strcmp(&messageToSend, "uselessChar") != 0){
+  if(strcmp(&messageToSend, &uselessChar) != 0){
     //Siehe perfCon
     while(testifvalid < 0){
       testifvalid = write(sockfd, &messageToSend, (int)strlen(&messageToSend));
@@ -79,7 +79,8 @@ char* readConMess(int sockfd){
     if(attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response");
       //printf("%sfehlertest",&messageBuffer);
-      return -1;
+      messageToRead =  "ERROR";
+      return messageToRead;
     }
   }
   printf("Server sendet: \"%s\" MAINCON\n", messageBuffer);
