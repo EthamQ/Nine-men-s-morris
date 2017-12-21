@@ -163,7 +163,7 @@ int fork_thinker_connector(){
 			}
 
 			//Prologphase
-      *char uselessChar2 = "ERROR";
+      char* uselessChar2 = "ERROR";
       if(strcmp(performConnection(sockfd),uselessChar2)!=0) {
       	  printf("%i",sockfd);
           perror("Fehler bei performConnection");
