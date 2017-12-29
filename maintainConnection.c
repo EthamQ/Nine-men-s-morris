@@ -32,14 +32,16 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 	
 	 if(firstServerCommand == MOVE){
       printf("\nmaintainConnectionFIRST(): received MOVE from performConnection()\n");
-	  if(conMOVE(sockfd) < 0){
+	  if(send_message(sockfd, MOVE) == ERROR){
+		  perror("\nmaintainConnectionFIRST(): Error in send_message\n");
 		  return ERROR;
 	  }
     }
 	
 	if(firstServerCommand == WAIT){
       printf("\nmaintainConnectionFIRST(): received WAIT from performConnection()\n");
-      if(conWAIT(sockfd) < 0){
+       if(send_message(sockfd, WAIT) == ERROR){
+		   perror("\nmaintainConnectionFIRST(): Error in send_message\n");
 		  return ERROR;
 	  }
     }
@@ -48,7 +50,7 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 
 //TODO: adjust return values
 short maintainConnection(int sockfd){
-	char *serverResponse=malloc(sizeof(char)*1048);
+	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
    if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){
       perror("\nmaintainConnection(): read error");
@@ -98,6 +100,7 @@ int send_message(int sockfd, int type){
 	return sockfd;
 }
 
+/*
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
 int sendConMess(int sockfd, char* messageToSend){
   const char* uselessChar;
@@ -123,6 +126,7 @@ int sendConMess(int sockfd, char* messageToSend){
   //messageToSend = "";
   return 0; //TODO wegtun
 }
+
 
 char* readConMess(int sockfd){
   char *messageToRead;
@@ -152,6 +156,7 @@ short conWAIT(int sockfd){
   sendConMess(sockfd, WAIT_MESSAGE);
   return sockfd;
 }
+*/
 
 short conGAMEOVER(int sockfd){
   return sockfd;

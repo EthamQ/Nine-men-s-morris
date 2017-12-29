@@ -38,12 +38,7 @@ static bool serverResponseValid(const char r[]){
 
 /*
 reads and returns the first server command
-return values:
--1: ERROR
- 0: MOVE
- 1: WAIT
- 
- Information important for short maintainConnection(int sockfd, char* firstServerList) in maintainConnection.c
+Information important for int maintainConnectionFIRST(int sockfd, char* firstServerList) in maintainConnection.c
 */
 
 int performConnection(int sockfd){
@@ -178,4 +173,6 @@ int performConnection(int sockfd){
       printf("perform Connection tells maintainConnection.c that the Server sent +WAIT");
       return WAIT;
 	 }
+	 
+	 return sockfd;
 }
