@@ -19,6 +19,9 @@
 #define BUF_SIZE 256
 #define MES_LENGTH_SERVER 1048
 #define ATTEMPTS_INVALID 20
+#define ERROR -1
+#define MOVE 0
+#define WAIT 1
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
@@ -33,13 +36,23 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-char* performConnection(int sockfd){
+/*
+reads and returns the first server command
+return values:
+-1: ERROR
+ 0: MOVE
+ 1: WAIT
+ 
+ Information important for short maintainConnection(int sockfd, char* firstServerList) in maintainConnection.c
+*/
+
+int performConnection(int sockfd){
     //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
       close(sockfd);
-      return "ERROR";
+      return ERROR;
     }
     else{
       printf("Good to go?!");
@@ -57,7 +70,7 @@ char* performConnection(int sockfd){
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
         perror("Invalid server response2");
         printf("%sfehlertest",dataPRS);
-        return "ERROR";
+        return -1;
       }
     }
     printf("%s\n",dataPRS);
@@ -69,7 +82,7 @@ char* performConnection(int sockfd){
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return "ERROR";
+            return -1;
         }
     }
     printf("%s\n",versionPRC);
@@ -83,7 +96,7 @@ char* performConnection(int sockfd){
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
             perror("Invalid server response3");
             printf("%s\n",dataPRS);
-            return "ERROR";
+            return -1;
         }
     }
     printf("%s\n",dataPRS);
@@ -95,7 +108,7 @@ char* performConnection(int sockfd){
         testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return "ERROR";
+            return -1;
         }
     }
     printf("%s\n",game_idPRC);
@@ -107,7 +120,7 @@ char* performConnection(int sockfd){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
             perror("Invalid server response4");
-            return "ERROR";
+            return -1;
         }
     }
     printf("%s\n",dataPRS);
@@ -119,7 +132,7 @@ char* performConnection(int sockfd){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return "ERROR";
+            return -1;
         }
     }
     testifvalid = -1;
@@ -138,7 +151,7 @@ char* performConnection(int sockfd){
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
-      return "ERROR";
+      return -1;
       }
     }
 
@@ -150,10 +163,19 @@ char* performConnection(int sockfd){
         testifvalid = write(sockfd, "THINKING", 8);
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return "ERROR";
+            return -1;
         }
     }
     testifvalid = -1;
     attempts = 0;
-    return dataPRS;
+	
+	 if(strstr(dataPRS,"+MOVE")){
+      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
+      return MOVE;
+	 }
+	 
+	  if(strstr(dataPRS,"+WAIT")){
+      printf("perform Connection tells maintainConnection.c that the Server sent +WAIT");
+      return WAIT;
+	 }
 }

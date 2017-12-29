@@ -10,37 +10,92 @@
 
 #define BUF 256
 #define MES_LENGTH_SERVER 1048
+#define MES_LENGTH_CLIENT 200
+#define ATTEMPTS_INVALID 20
+#define ERROR -1
+#define MOVE 0
+#define WAIT 1
+#define WAIT_MESSAGE "OKWAIT\n"
+#define MOVE_MESSAGE "THINKING\n"
 #define ATTEMPTS_INVALID 20
 
 
 //static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
 
-short maintainConnection(int sockfd, char* firstServerList){
-  char *serverResponse=malloc(sizeof(char)*1048);
 
-   //if((read(sockfd,serverResponse,sizeof(serverResponse)))<0){
-   /*if((read(sockfd,serverResponse,1048))<0){
-      perror("read bei maintainConnection");
+//Will only be used once after performConnection(), after that only maintainConnection()
+int maintainConnectionFIRST(int sockfd, int firstServerCommand){
+	if(firstServerCommand == ERROR){
+      perror("\nmaintainConnectionFIRST(): Error in performConnection\n");
+      return ERROR;
     }
-    printf("Server antwort:\"%s\" , MAINCON \n",serverResponse);
-*/
-  printf("sockfd:\"%i\", firstServerList: \"%s\" ",sockfd, firstServerList);
-    if(strstr(serverResponse,"+WAIT")){
+	
+	 if(firstServerCommand == MOVE){
+      printf("\nmaintainConnectionFIRST(): received MOVE from performConnection()\n");
+	  if(conMOVE(sockfd) < 0){
+		  return ERROR;
+	  }
+    }
+	
+	if(firstServerCommand == WAIT){
+      printf("\nmaintainConnectionFIRST(): received WAIT from performConnection()\n");
+      if(conWAIT(sockfd) < 0){
+		  return ERROR;
+	  }
+    }
+	return sockfd;
+}
+
+//TODO: adjust return values
+short maintainConnection(int sockfd){
+	char *serverResponse=malloc(sizeof(char)*1048);
+
+   if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){
+      perror("\nmaintainConnection(): read error");
+	  free(serverResponse);
+	  return -1;
+   }
+   printf("maintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+   
+    if(strstr(serverResponse,"+GAMEOVER")){
+		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+		//TODO: React to GAMEOVER command
       free(serverResponse);
       return 0;
     }
-    if(strstr(serverResponse,"+GAMEOVER")){
+	
+	if(strstr(serverResponse,"+MOVE")){
+		printf("\nmaintainConnection(): received +MOVE from the server\n");
+		//TODO: React to MOVE command
+		send_message(sockfd, MOVE)
       free(serverResponse);
-      return 1;
+      return 0;
     }
-    if(strstr(serverResponse,"+MOVE")){
-      printf("yay move, MAINCON");
+	
+	if(strstr(serverResponse,"+WAIT")){
+		printf("\nmaintainConnection(): received +WAIT from the server\n");
+		//TODO: React to WAIT command
+		send_message(sockfd, WAIT)
       free(serverResponse);
-      return 2;
+      return 0;
     }
-  //  printf("Serverantwort: %s , MAINCON", serverResponse);
     free(serverResponse);
-      return -1;
+      return sockfd;
+}
+
+
+int send_message(int sockfd, int type){
+	char *command;
+	switch(type){
+		case MOVE: command = MOVE_MESSAGE; break;
+		case WAIT: command = WAIT_MESSAGE; break;
+	}
+	
+	if(write(sockfd, command, sizeof(command) < 0){
+		perror("\nsend_message(): write error");
+		return ERROR;
+	}
+	return sockfd;
 }
 
 //ACHTUNG: MESSAGE VORHER IN messageToSend SCHREIBEN !
@@ -94,12 +149,7 @@ char* readConMess(int sockfd){
 }
 
 short conWAIT(int sockfd){
-
-  //messageToSend = "OKWAIT\n";
-  char* messageCon = (char*)malloc(sizeof(char)*BUF);
-  messageCon = "OKWAIT\n";
-  sendConMess(sockfd, messageCon);
-  free(messageCon);
+  sendConMess(sockfd, WAIT_MESSAGE);
   return sockfd;
 }
 
