@@ -156,7 +156,7 @@ short conWAIT(int sockfd){
   sendConMess(sockfd, WAIT_MESSAGE);
   return sockfd;
 }
-*/
+
 
 short conGAMEOVER(int sockfd){
   return sockfd;
@@ -173,6 +173,7 @@ short conMOVE(int sockfd){
   free(messageCon);
   return sockfd;
 }
+*/
 
 
 /*
