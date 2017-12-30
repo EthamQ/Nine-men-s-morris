@@ -10,18 +10,12 @@
 #include<stdbool.h>
 
 #include"performConnection.h"
+#include "constants.h"
 
 #define PIPE_BUF 24
-#define BUF 256
-#define GAMEKINDNAME "NMMORRIS"
-#define PORTNUMBER 1357
-#define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
-#define BUF_SIZE 256
-#define MES_LENGTH_SERVER 1048
-#define ATTEMPTS_INVALID 20
-#define ERROR -1
-#define MOVE 0
-#define WAIT 1
+
+
+
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
@@ -38,9 +32,8 @@ static bool serverResponseValid(const char r[]){
 
 /*
 reads and returns the first server command
-Information important for int maintainConnectionFIRST(int sockfd, char* firstServerList) in maintainConnection.c
+Information important for int maintainConnectionFIRST(int sockfd, int firstServerCommand) in maintainConnection.c
 */
-
 int performConnection(int sockfd){
     //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
@@ -65,7 +58,7 @@ int performConnection(int sockfd){
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
         perror("Invalid server response2");
         printf("%sfehlertest",dataPRS);
-        return -1;
+        return ERROR;
       }
     }
     printf("%s\n",dataPRS);
@@ -77,7 +70,7 @@ int performConnection(int sockfd){
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return ERROR;
         }
     }
     printf("%s\n",versionPRC);

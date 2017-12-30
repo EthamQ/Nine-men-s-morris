@@ -7,21 +7,21 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+#include "constants.h"
 
-#define BUF 256
-#define MES_LENGTH_SERVER 1048
-#define MES_LENGTH_CLIENT 200
-#define ATTEMPTS_INVALID 20
-#define ERROR -1
-#define MOVE 0
-#define WAIT 1
-#define WAIT_MESSAGE "OKWAIT\n"
-#define MOVE_MESSAGE "THINKING\n"
-#define ATTEMPTS_INVALID 20
+int send_message(int sockfd, int type){
+	char *command;
+	switch(type){
+		case MOVE: command = MOVE_MESSAGE; break;
+		case WAIT: command = WAIT_MESSAGE; break;
+	}
 
-
-//static char messageToSend[1048]; //= ""; //test, "" spaeter entfernen ??
-
+	if(write(sockfd, command, sizeof(command) < 0)){
+		perror("\nsend_message(): write error");
+		return ERROR;
+	}
+	return sockfd;
+}
 
 //Will only be used once after performConnection(), after that only maintainConnection()
 int maintainConnectionFIRST(int sockfd, int firstServerCommand){
@@ -36,6 +36,7 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 		  perror("\nmaintainConnectionFIRST(): Error in send_message\n");
 		  return ERROR;
 	  }
+	  else return MOVE;
     }
 
 	if(firstServerCommand == WAIT){
@@ -44,18 +45,19 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 		   perror("\nmaintainConnectionFIRST(): Error in send_message\n");
 		  return ERROR;
 	  }
+	  else return WAIT;
     }
 	return sockfd;
 }
 
-//TODO: adjust return values
-short maintainConnection(int sockfd){
+
+int maintainConnection(int sockfd){
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
    if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){
       perror("\nmaintainConnection(): read error");
 	  free(serverResponse);
-	  return -1;
+	  return ERROR;
    }
    printf("maintainConnection(): Server antwort:\"%s\"\n",serverResponse);
 
@@ -63,42 +65,29 @@ short maintainConnection(int sockfd){
 		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
 		//TODO: React to GAMEOVER command
       free(serverResponse);
-      return 0;
+      return GAMEOVER;
     }
 
 	if(strstr(serverResponse,"+MOVE")){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		//TODO: React to MOVE command
-		send_message(sockfd, MOVE)
+		send_message(sockfd, MOVE);
       free(serverResponse);
-      return 0;
+      return MOVE;
     }
 
 	if(strstr(serverResponse,"+WAIT")){
 		printf("\nmaintainConnection(): received +WAIT from the server\n");
 		//TODO: React to WAIT command
-		send_message(sockfd, WAIT)
+		send_message(sockfd, WAIT);
       free(serverResponse);
-      return 0;
+      return WAIT;
     }
     free(serverResponse);
-      return sockfd;
+      return ERROR;
 }
 
 
-int send_message(int sockfd, int type){
-	char *command;
-	switch(type){
-		case MOVE: command = MOVE_MESSAGE; break;
-		case WAIT: command = WAIT_MESSAGE; break;
-	}
 
-	if(write(sockfd, command, sizeof(command) < 0){
-		perror("\nsend_message(): write error");
-		return ERROR;
-	}
-	return sockfd;
-}
 
 //TODO readmessage ?
 

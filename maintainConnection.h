@@ -1,7 +1,8 @@
 #ifndef maintainConnection_H
 #define maintainConnection_H
 
-short maintainConnection(int sockfd, char* firstServerList);
+int maintainConnection(int sockfd);
+int maintainConnectionFIRST(int sockfd, int firstServerCommand);
 
 short conWAIT(int sockfd);
 

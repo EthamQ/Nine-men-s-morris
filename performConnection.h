@@ -2,6 +2,6 @@
 #define performConnection_H
 
 
-char* performConnection(int sockfd);
+int performConnection(int sockfd);
 
 #endif
