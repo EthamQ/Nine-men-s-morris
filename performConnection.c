@@ -12,11 +12,6 @@
 #include"performConnection.h"
 #include "constants.h"
 
-#define PIPE_BUF 24
-
-
-
-
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
 static char game_idPRC []= "ID 02pobsvmluimp\n";
@@ -142,7 +137,6 @@ int performConnection(int sockfd){
       return -1;
       }
     }
-
     testifvalid = -1;
 	  attempts = 0;
 
@@ -156,25 +150,21 @@ int performConnection(int sockfd){
     }
     testifvalid = -1;
     attempts = 0;
-	
+
 	 if(strstr(dataPRS,"+ MOVE")){
       printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
       return MOVE;
 	 }
-	 
-	 
-	 
+
 	  if(strstr(dataPRS,"+ WAIT")){
       printf("perform Connection tells maintainConnection.c that the Server sent +WAIT");
       return WAIT;
 	 }
-	 
+
 	  if(strstr(dataPRS,"+ GAMEOVER")){
       printf("perform Connection tells maintainConnection.c that the Server sent +GAMEOVER");
       return GAMEOVER;
 	 }
-	 
-	 
-	 
-	 return sockfd;
+
+	 return ERROR;
 }
