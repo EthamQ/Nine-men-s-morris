@@ -166,7 +166,7 @@ int fork_thinker_connector(){
         printf("\nfork_thinker_connector(): performConnection success \n");
     }
     //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein MOVE folgen
-    conMOVE();
+    conMOVE(sockfd);
 
     //Jetzt koennen wir in den normalen SPielverlauf uebergehen
       while(1){
@@ -204,7 +204,7 @@ int fork_thinker_connector(){
             break;
           default:
             perror("\nSwitch failure CONNECTOR\n");
-			printf("\nConnector: In switch case wurde folgender Wert gesucht: %i\n", test);
+			//printf("\nConnector: In switch case wurde folgender Wert gesucht: %i\n", test);
             endCon = -1;
             break;
         }
