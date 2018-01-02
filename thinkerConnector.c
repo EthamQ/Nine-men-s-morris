@@ -178,9 +178,9 @@ int fork_thinker_connector(){
       else{
         perror("Spielzug konnte nicht aus der Pipe gelesen werden");
       }
-      if(conPlay(sockfd, movePipe) == ERROR){
-        perror("conplay failure, THINKCON");
-      }
+      //temp: if(conPlay(sockfd, movePipe) == ERROR){
+        //perror("conplay failure, THINKCON");
+      //}
 	  
 	  maintainConnection(sockfd);
 	  
