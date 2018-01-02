@@ -17,6 +17,7 @@
   #define WAIT 1
   #define GAMEOVER 2
   #define OKTHINK 3
+  #define OKWAIT 4
   //maincon
   //#define MOVETHINKING 4
 

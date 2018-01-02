@@ -157,7 +157,7 @@ int performConnection(int sockfd){
     memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("thinking sollte gesendet sein, PERFCON");
 
-  //S:+ OKTHINK
+  //S:+ OKTHINK oder + WAIT
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
     printf("\nOKthink ???\n\n");
@@ -170,8 +170,10 @@ int performConnection(int sockfd){
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
+ 
  return ERROR;
 }

@@ -8,7 +8,7 @@
 char* think(){
 	char *move;
 	move=malloc(sizeof(move));
-  	strcpy(move,"A1 A2");
+  	strcpy(move,"PLAY A2\n");
   //Spielfeld einlesen
     //TODO
 
