@@ -55,7 +55,7 @@ int initConnect(){
 
       if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
 	  perror("fehler bei connect");
-          printf("Socketzahl:%d\n",sockfd);
+          printf("\nSocket filedescriptor:%d\n",sockfd);
           close(sockfd);
           continue;
 
@@ -86,11 +86,13 @@ short sendMove(){
 
   //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
+  
   if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))>0){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
   }
   printf("Spielzug in die Pipe geschrieben, BRAIN \n");
+
   //sleep(0.5);
   return 0;
 }
@@ -104,6 +106,7 @@ static void signalHandlerThinker(int signalNum){
 }
 
 int fork_thinker_connector(){
+<<<<<<< HEAD
   printf("\nStarte fork_thinker_connector\n");
 
   //Fork Variablen
@@ -132,12 +135,51 @@ int fork_thinker_connector(){
 	}
 
 	//FORK
+=======
+
+	printf("\nStarte fork_thinker_connector\n");
+	//Fork Variablen
+	pid_t pid;
+	int sockfd;
+
+	//Pipe BUFFER
+	char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
+
+	//Erstellung der Pipe, muss vor Fork geschehen
+	if (pipe(pipeFd) < 0) {
+	  perror ("Fehler bei Erstellung der Pipe");
+	  return -1;
+	}
+  else{
+    printf("pipe erstellt, success");
+  }
+
+	  //Shared memory erstellen und attachen
+	int shmid = createSHM();
+	struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	if(shm_pointer==(void*)-1){
+		perror("\nshmat fehlgeschlagen\n");
+	}
+	else{
+		printf("\nshmat erfolgreich\n");
+	}
+
+
+
+>>>>>>> 43dc6733d5fd936b84328a432a7f0536391a631a
   switch(pid = fork()){
     case -1: perror("fork_thinker_connector(): Fehler bei fork\n");
       return -1;
       break;
 	  //CONNECTOR
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
+<<<<<<< HEAD
+=======
+      //Connector
+	  
+	  //in die shared memory schreiben
+	  writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
+>>>>>>> 43dc6733d5fd936b84328a432a7f0536391a631a
 
 		short endCon = 0;
 		//Schreibseite der Pipe schliessen
@@ -235,10 +277,11 @@ int fork_thinker_connector(){
 				perror("sigaction groesser Null, Fehler ???");
 			}
 
+
     	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-      shmat(shmid, NULL, 0);
       printf("THINKER: jetzt beginnt das warten\n");
     	wait(NULL);
+
       break;
     }
     free(movePipe);
@@ -246,8 +289,11 @@ int fork_thinker_connector(){
 }
 
 int main(){
+	
 	drawField();
+
 	read_configfile(CONFIG_DEFAULT);
+
 	fork_thinker_connector();
 return 0;
 }
