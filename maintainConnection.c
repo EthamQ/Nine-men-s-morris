@@ -10,7 +10,7 @@
 #include "constants.h"
 
 int send_message(int sockfd, int type){
-	printf("\nStart method maintainConnectionFIRST()\n");
+	printf("\nStart method send_message\n");
 	char *command;
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
@@ -23,6 +23,7 @@ int send_message(int sockfd, int type){
 		perror("\nsend_message(): write error");
 		return ERROR;
 	}
+	printf("\nC: %s\n", command);
 	return sockfd;
 }
 
@@ -60,7 +61,7 @@ int maintainConnection(int sockfd){
 	printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
-   if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){
+   if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
       perror("\nmaintainConnection(): read error\n");
 	  free(serverResponse);
 	  return ERROR;
