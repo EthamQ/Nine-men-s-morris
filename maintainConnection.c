@@ -61,6 +61,7 @@ int maintainConnection(int sockfd){
 	printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
+	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
    if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
       perror("\nmaintainConnection(): read error\n");
 	  free(serverResponse);
