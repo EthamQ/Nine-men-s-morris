@@ -204,7 +204,7 @@ int fork_thinker_connector(){
             break;
           default:
             perror("\nSwitch failure CONNECTOR\n");
-			printf("\Connector: In switch case wurde folgender Wert gesucht: %i\n", test);
+			printf("\nConnector: In switch case wurde folgender Wert gesucht: %i\n", test);
             endCon = -1;
             break;
         }
