@@ -10,11 +10,15 @@
 
 
 //Flags
-#define ERROR -1
-#define MOVE 0
-#define WAIT 1
-#define GAMEOVER 2
-#define OKTHINK 3
+  //Rueckgabe
+  #define ERROR -1
+  //Prolog, perfcon und maincon
+  #define MOVE 0 //vllt define success und move = 1 , wait = 2, etc. ?
+  #define WAIT 1
+  #define GAMEOVER 2
+  #define OKTHINK 3
+  //maincon
+  //#define MOVETHINKING 4
 
 //Client messages
 #define MES_LENGTH_CLIENT 200

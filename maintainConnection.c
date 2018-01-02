@@ -16,6 +16,7 @@ int send_message(int sockfd, int type){
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
 		case WAIT: command = WAIT_MESSAGE; break;
+		//TODO add play command,z.b PLAY A1
 	}
 	printf("\nsend_message(): the variable command has the following value: %s\n", command);
 
@@ -24,27 +25,27 @@ int send_message(int sockfd, int type){
 		return ERROR;
 	}
 	printf("\nC: %s\n", command);
-	return sockfd;
+	return 0;
 }
 
 int maintainConnection(int sockfd){
-	printf("\nStart method maintainConnection()\n");
+	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
 	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
-   if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
-      perror("\nmaintainConnection(): read error\n");
-	  free(serverResponse);
-	  return ERROR;
-   }
-   printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
+	  perror("\nmaintainConnection(): read error, MAINCON\n");
+		free(serverResponse);
+		return ERROR;
+	}
+  printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
 
-    if(strstr(serverResponse,"+ GAMEOVER")){
-		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-		//TODO: React to GAMEOVER command
-      free(serverResponse);
-      return GAMEOVER;
-    }
+  if(strstr(serverResponse,"+ GAMEOVER")){
+	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+	//TODO: React to GAMEOVER command
+    free(serverResponse);
+    return GAMEOVER;
+  }
 
 	if(strstr(serverResponse,"+ MOVE")){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
@@ -80,8 +81,20 @@ short conGAMEOVER(int sockfd){ //TODO
 }
 
 short conMOVE(int sockfd){//, char *array){
+	printf("Conmove aufgerufen \n");
+
   if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
     printf("nothing");
   }
   return 0;
+}
+
+short conPlay(int sockfd, char* move){
+	printf("conplay aufgerufen, MAINCON\n")
+	if(write(sockfd, move, sizeof(command) < 0)){
+		perror("send_message(): write error, MAINCON");
+		return ERROR;
+	}
+	printf("\nC: %s\n", command);
+	return 0;
 }

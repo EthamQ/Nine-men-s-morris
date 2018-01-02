@@ -83,17 +83,15 @@ short sendMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
   pipeBuffer=think();
   printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
-  //free(move);
+
   printf("pipebuffer: %s \n", pipeBuffer);
 
-  //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
-
-  if( (write (pipeFd[1], pipeBuffer, sizeof(pipeBuffer))) >0) {
+  if((write (pipeFd[1], pipeBuffer, sizeof(pipeBuffer))) >0) {
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
-  printf("Spielzug in die Pipe geschrieben, BRAIN \n");
-  //sleep(0.5);
+  printf("Spielzug in die Pipe geschrieben, THINKER \n");
+  free(pipeBuffer);
   return 0;
 }
 
@@ -163,8 +161,26 @@ int fork_thinker_connector(){
     else {
         printf("\nfork_thinker_connector(): performConnection success \n");
     }
-    //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein MOVE folgen
-    conMOVE(sockfd);
+    //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein PLAY folgen
+    //#############################
+    //HIER PLAY WICHTIG TODO !!!!!!
+    //#############################
+    //Signal an Thinker senden, erster spielzug des spiels
+      if(kill(getppid(),SIGUSR1)<0){
+          perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+      }
+      printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
+      sleep(1); //TODO ist sleep hier notwendig ?
+      //Aus der Pipe den Spielzug lesen
+      if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+        printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+      }
+      else{
+        perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+      }
+      if(conPlay(sockfd, movePipe) == ERROR){
+        perror("conplay failure, THINKCON")
+      }
 
     //Jetzt koennen wir in den normalen SPielverlauf uebergehen
       while(1){
