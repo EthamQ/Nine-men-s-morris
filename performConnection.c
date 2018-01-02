@@ -155,6 +155,7 @@ int performConnection(int sockfd){
     }
     testifvalid = -1;
     attempts = 0;
+    dataPRS = "";
     printf("thinking sollte gesendet sein, PERFCON");
 
   //S:+ OKTHINK
