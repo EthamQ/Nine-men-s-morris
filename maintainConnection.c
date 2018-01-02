@@ -29,6 +29,7 @@ int send_message(int sockfd, int type){
 //Will only be used once after performConnection(), after that only maintainConnection()
 int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 	printf("\nStart method maintainConnectionFIRST()\n");
+	printf("\nmaintainConnectionFIRST(): value of firstServerCommand: %i\n", firstServerCommand);
 	if(firstServerCommand == ERROR){
       perror("\nmaintainConnectionFIRST(): Error in performConnection\n");
       return ERROR;
