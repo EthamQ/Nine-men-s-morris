@@ -97,7 +97,7 @@ short conMOVE(int sockfd){//, char *array){
 	fgets(move,20,stdin); 
 	printf("\nIn move steht: %s", move);
 	printf("Testzeile um zu sehen ob ein Zeilenumbruch da ist");
-	write(sockfd, move, sizeof(move));
+	write(sockfd, "PLAY A1\n", sizeof(move));
 		return 0;
 	}
 short conPlay(int sockfd, char* move){
