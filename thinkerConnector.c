@@ -20,7 +20,6 @@
 #include "config_header.h"
 #include "brain.h"
 #include <sys/shm.h>
-
 #define PIPE_BUF 24
 #define BUF 256
 #define GAMEKINDNAME "NMMORRIS"
@@ -152,7 +151,7 @@ int fork_thinker_connector(){
       //Connector
 	  
 	  //in die shared memory schreiben
-	  writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
+	 // writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
 
 			//Schreibseite der Pipe schliessen
       close(pipeFd[1]);
