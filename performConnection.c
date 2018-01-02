@@ -155,7 +155,12 @@ int performConnection(int sockfd){
     }
     testifvalid = -1;
     attempts = 0;
-    dataPRS[0] = '\0';
+    /*dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
+      TODO Spaeter sollten wir vllt den Inahlt von dataPRS in eine anderes charray schreiben
+      und das dann nach "C: THINKING" ins shared memeory schreiben, wobei das vllt gar nicht noetig ist,
+      weil die intialpositionen und PIECELIST eh immer gleich ist
+    */
+    memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("thinking sollte gesendet sein, PERFCON");
 
   //S:+ OKTHINK
@@ -172,7 +177,7 @@ int performConnection(int sockfd){
   attempts = 0;
 
     if(strstr(dataPRS,"+ OKTHINK")){
-       printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
+       printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
        return OKTHINK;
    }
 
