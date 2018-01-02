@@ -142,12 +142,12 @@ int fork_thinker_connector(){
       break;
 	  //>>=======CONNECTOR=======<<
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-	
+
 		short endCon = 0;
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
-      
+
 		//>>=======SERVERVERBINDUNG=======<<
       if((sockfd = initConnect()) < 0){
         perror("\nfork_thinker_connector(): Fehler bei initConnect");
@@ -166,8 +166,11 @@ int fork_thinker_connector(){
       else {
           printf("\nfork_thinker_connector(): performConnection success \n");
       }
-	  
-	  maintainConnectionFIRST(sockfd, first_command);
+
+	  if(maintainConnectionFIRST(sockfd, first_command) == ERROR){
+      printf("Fehler in maintainConnectionFIRST, CONNECTOR\n");
+      return ERROR;
+    }
 	  int test;
       while(1){
         switch(test = maintainConnection(sockfd)){

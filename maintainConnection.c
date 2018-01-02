@@ -18,7 +18,7 @@ int send_message(int sockfd, int type){
 	}
 	printf("\nsend_message(): the variable command has the following value: %s\n", command);
 
-	
+
 	if(write(sockfd, command, sizeof(command) < 0)){
 		perror("\nsend_message(): write error");
 		return ERROR;
@@ -30,9 +30,9 @@ int send_message(int sockfd, int type){
 //Will only be used once after performConnection(), after that only maintainConnection()
 int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 	printf("\nStart method maintainConnectionFIRST()\n");
-	printf("\nmaintainConnectionFIRST(): value of firstServerCommand: %i\n", firstServerCommand);
+	printf("\nmaintainConnectionFIRST(): value of firstServerCommand: %i (0=Move,1=Wait,2=Gameover,-1=Error)\n", firstServerCommand);
 	if(firstServerCommand == ERROR){
-      perror("\nmaintainConnectionFIRST(): Error in performConnection\n");
+      perror("\nfehlerhaftes firstServerCommand, MAINCONFIRST\n");
       return ERROR;
     }
 
