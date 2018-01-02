@@ -126,15 +126,14 @@ int performConnection(int sockfd){
     //S: <<Mitspieleranzahl>>
     //S: <<Mitspielernummer>> <<Mitspielername>> <<Bereit>>
     //S: ENDPLAYERS
+    //S:+MOVE 3000
+    //S:CAPTURE 0
+    //S:<<PIECELIST>>
+    //S:+ENDPIECELIST
+
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-      if(strstr(dataPRS,"ENDPLAYERS")){
-        printf("ENDPLAYERS ERKANNT\n");
-        printf("%s\n",dataPRS);
-        testifvalid = -1;
-        //return dataPRS;
-      }
-      //printf("%s\n",dataPRS);
+      printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
       return -1;
@@ -143,19 +142,6 @@ int performConnection(int sockfd){
     testifvalid = -1;
 	  attempts = 0;
 
-    //+MOVE 3000
-    //CAPTURE 0
-    //PIECLIST
-    while(testifvalid < 0){
-      testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-      printf("Piecelist: \"%s \n",dataPRS);
-      if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response5");
-      return -1;
-      }
-    }
-    testifvalid = -1;
-    attempts = 0;
 
     //C: THINKING
     printf("anfang thinken senden, PERFCON \n");
