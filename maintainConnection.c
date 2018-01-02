@@ -91,10 +91,10 @@ short conMOVE(int sockfd){//, char *array){
 
 short conPlay(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
-	if(write(sockfd, move, sizeof(command) < 0)){
+	if(write(sockfd, move, sizeof(move) < 0)){
 		perror("send_message(): write error, MAINCON");
 		return ERROR;
 	}
-	printf("\nC: %s\n", command);
+	printf("\nC: %s\n", move);
 	return 0;
 }
