@@ -14,30 +14,22 @@
 #include<unistd.h>
 #include<string.h>
 #include<stdbool.h>
-#include"performConnection.h"
+#include <sys/shm.h>
+
+#include "performConnection.h"
 #include "shm_data.h"
 #include "debugging.h"
 #include "config_header.h"
 #include "brain.h"
-#include <sys/shm.h>
-
-#define PIPE_BUF 24
-#define BUF 256
-#define GAMEKINDNAME "NMMORRIS"
-#define PORTNUMBER 1357
-#define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
-#define BUF_SIZE 256
-#define MES_LENGTH_SERVER 100
-#define ATTEMPTS_INVALID 20
-
-#define CONFIG_DEFAULT "client.conf"
+#include "maintainConnection.h"
+#include "constants.h"
 
 short gotSignal = 0;
 short gameOver = 0;
 char moveDest[5] = "Test";
 int pipeFd[2];
 
-//initConnect uebernimmt die Aufgabe von main() zur Besserung Kapselung
+//Connect to the server and return the socket file descriptor
 int initConnect(){
       int sockfd;
       int rv;
@@ -112,81 +104,118 @@ static void signalHandlerThinker(int signalNum){
 }
 
 int fork_thinker_connector(){
-	printf("\nStarte fork_thinker_connector\n");
-	//Fork Variablen
-	pid_t pid;
-	int sockfd;
+  printf("\nStarte fork_thinker_connector\n");
 
-	//Pipe BUFFER
-	char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
+  //Fork Variablen
+  pid_t pid;
+  int sockfd;
 
-	//Erstellung der Pipe, muss vor Fork geschehen
-	if (pipe(pipeFd) < 0) {
-	  perror ("Fehler bei Erstellung der Pipe");
-	  return -1;
-	}
-  else{
-    printf("pipe erstellt, success");
-  }
+  //Pipe BUFFER
+  char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
+
+  //Erstellung der Pipe, muss vor Fork geschehen
+  if (pipe(pipeFd) < 0) {
+      perror ("fork_thinker_connector(): Fehler bei Erstellung der Pipe");
+      return -1;
+   }
+   else{
+     printf("fork_thinker_connector(): Created pipe successfully");
+   }
 
 	int shmid;
 	if((shmid = createSHM()) < 0){
-	   perror("Fehler bei Erstellung der shared memory");
-	    return -1;
+	   perror("fork_thinker_connector(): Fehler bei Erstellung der shared memory");
+	   return -1;
 	}
 	else{
-	   printf("shared memory success");
+	   printf("fork_thinker_connector(): shared memory success");
 	}
 
-
+	//FORK
   switch(pid = fork()){
-    case -1: perror("Fehler bei fork\n");
+    case -1: perror("fork_thinker_connector(): Fehler bei fork\n");
       return -1;
       break;
+	  //CONNECTOR
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-      //Connector
 
-			//Schreibseite der Pipe schliessen
-      close(pipeFd[1]);
+		short endCon = 0;
+		//Schreibseite der Pipe schliessen
+		close(pipeFd[1]);
 
-			//Verbindsaufbau zum Server
+		//SERVERVERBINDUNG
       if((sockfd = initConnect()) < 0){
-        perror("Fehler bei initConnect");
+        perror("\nfork_thinker_connector(): Fehler bei initConnect, THINKCON");
         return -1;
 			}
       else{
-        printf("initConnect success\n");
+        printf("\nfork_thinker_connector(): initConnect success\n");
 			}
 
-			//Prologphase
-      if(performConnection(sockfd) < 0) {
-      	  printf("%i",sockfd);
-          perror("Fehler bei performConnection");
-      return -1;
-			}
-      else {
-          printf("performConnection success");
+  	//PROLOG
+  	//int first_command = (int)performConnection(sockfd);
+    if(performConnection(sockfd) < 0) {
+        perror("\nfork_thinker_connector(): Fehler bei performConnection");
+        return -1;
+  	}
+    else {
+        printf("\nfork_thinker_connector(): performConnection success \n");
+    }
+    //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein MOVE folgen
+    conMOVE(sockfd);
+
+    //Jetzt koennen wir in den normalen SPielverlauf uebergehen
+      while(1){
+        switch(maintainConnection(sockfd)){
+          case WAIT:
+            printf("conWait Aufruf, THINKCON");
+            if(conWAIT(sockfd)<0){
+              perror("conWAIT, CONNECTOR");
+            }
+            break;
+          case GAMEOVER:
+            printf("conGAMEOVER Aufruf, THINKCON");
+            if(conGAMEOVER(sockfd)<0){
+              perror("conGAMEOVER failure, CONNECTOR");
+            }
+            break;
+          case MOVE:
+            printf("conMOVE Aufruf, THINKCON");
+            if(conMOVE(sockfd)<0){
+              perror("conGAMEOVER failure, CONNECTOR");
+            }
+            //Signal an Thinker senden
+            if(kill(getppid(),SIGUSR1)<0){
+                perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+            }
+            printf("Signal an Thinker gesendet, CONNECTOR \n");
+            sleep(1); //TODO ist sleep hier notwendig ?
+            //Aus der Pipe den Spielzug lesen
+            if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+              printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+            }
+            else{
+              perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+            }
+            break;
+          default:
+            perror("\nSwitch failure CONNECTOR\n");
+			//printf("\nConnector: In switch case wurde folgender Wert gesucht: %i\n", test);
+            endCon = -1;
+            break;
+        }
+        if(endCon == -1){
+          break;
+        }
+
       }
-			//Signal an Thinker senden
-			if(kill(getppid(),SIGUSR1)<0){
-					perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
-			}
-			printf("Signal an Thinker gesendet, CONNECTOR \n");
-
-			sleep(1);
-      //Aus der Pipe den Spielzug lesen
-
-     // fgets(stdout, )
-			if((read(pipeFd[0], movePipe, sizeof(movePipe)))>0){//&&(movePipe != "")){
-				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
-			}
-			else{
-				perror("Spielzug konnte nicht aus der Pipe gelesen werden");
-			}
+      //printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
       break;
-    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
-      //Code for Thinker
+
+    default:
+      //THINKER
+      printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
@@ -212,6 +241,7 @@ int fork_thinker_connector(){
     	wait(NULL);
       break;
     }
+    free(movePipe);
     return 0;
 }
 

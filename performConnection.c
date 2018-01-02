@@ -9,36 +9,29 @@
 #include<string.h>
 #include<stdbool.h>
 
-#include"performConnection.h"
-
-#define PIPE_BUF 24
-#define BUF 256
-#define GAMEKINDNAME "NMMORRIS"
-#define PORTNUMBER 1357
-#define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
-#define BUF_SIZE 256
-#define MES_LENGTH_SERVER 1048
-#define ATTEMPTS_INVALID 20
+#include "constants.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
 static char game_idPRC []= "ID 02pobsvmluimp\n";
-static char  numberOfPlayersPRC []= "PLAYER\n";
+static char numberOfPlayersPRC []= "PLAYER\n";
+static char thinkingPRC []= "THINKING\n";
 
-    //ARGS: server message, if it begins with "+" return true
-    static bool serverResponseValid(const char r[]){
+//ARGS: server message, if it begins with "+" return true
+static bool serverResponseValid(const char r[]){
     if(strncmp(r, "+",1) == 0){
         return true;
     }
       return false;
-    }
+}
 
-    int performConnection(int sockfd){
+int performConnection(int sockfd){
+    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
       close(sockfd);
-      return -1;
+      return ERROR;
     }
     else{
       printf("Good to go?!");
@@ -56,7 +49,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
         perror("Invalid server response2");
         printf("%sfehlertest",dataPRS);
-        return -1;
+        return ERROR;
       }
     }
     printf("%s\n",dataPRS);
@@ -68,7 +61,7 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return ERROR;
         }
     }
     printf("%s\n",versionPRC);
@@ -128,6 +121,11 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
     //S: <<Mitspieleranzahl>>
     //S: <<Mitspielernummer>> <<Mitspielername>> <<Bereit>>
     //S: ENDPLAYERS
+    //S:+MOVE 3000
+    //S:CAPTURE 0
+    //S:<<PIECELIST>>
+    //S:+ENDPIECELIST
+
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       printf("%s\n",dataPRS);
@@ -136,9 +134,43 @@ static char  numberOfPlayersPRC []= "PLAYER\n";
       return -1;
       }
     }
-
     testifvalid = -1;
 	  attempts = 0;
 
-    return sockfd;
+    //C: THINKING
+    while(testifvalid < 0){
+        testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
+        attempts++;
+        if(attempts >= ATTEMPTS_INVALID){
+            printf("Fehler beim senden von THINKING, PERFCON");
+            return -1;
+        }
+    }
+    testifvalid = -1;
+    attempts = 0;
+    /*dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
+      TODO Spaeter sollten wir vllt den Inahlt von dataPRS in eine anderes charray schreiben
+      und das dann nach "C: THINKING" ins shared memeory schreiben, wobei das vllt gar nicht noetig ist,
+      weil die intialpositionen und PIECELIST eh immer gleich ist
+    */
+    memset(&dataPRS[0], 0, sizeof(dataPRS));
+    printf("thinking sollte gesendet sein, PERFCON");
+
+  //S:+ OKTHINK
+  while(testifvalid < 0){
+    testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+    printf("\nOKthink ???\n\n");
+    printf("%s\n",dataPRS);
+    if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
+      perror("Invalid server response5");
+      return -1;
+    }
+  }
+
+  //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
+  if(strstr(dataPRS,"+ OKTHINK")){
+     printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     return OKTHINK;
+ }
+ return ERROR;
 }

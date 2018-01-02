@@ -8,27 +8,75 @@
 #include<stdio.h>
 #include<string.h>
 
+#include "constants.h"
 
-short maintainConnection(int sockfd){
-  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
-    printf("nothing");
-  }
-  return 0;
+int send_message(int sockfd, int type){
+	printf("\nStart method send_message\n");
+	char *command;
+	switch(type){
+		case MOVE: command = MOVE_MESSAGE; break;
+		case WAIT: command = WAIT_MESSAGE; break;
+	}
+	printf("\nsend_message(): the variable command has the following value: %s\n", command);
+
+	if(write(sockfd, command, sizeof(command) < 0)){
+		perror("send_message(): write error, MAINCON");
+		return ERROR;
+	}
+	printf("\nC: %s\n", command);
+	return sockfd;
 }
+
+int maintainConnection(int sockfd){
+	printf("\nStart method maintainConnection()\n");
+	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+
+	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
+   if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
+      perror("\nmaintainConnection(): read error\n");
+	  free(serverResponse);
+	  return ERROR;
+   }
+   printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+
+    if(strstr(serverResponse,"+ GAMEOVER")){
+		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+		//TODO: React to GAMEOVER command
+      free(serverResponse);
+      return GAMEOVER;
+    }
+
+	if(strstr(serverResponse,"+ MOVE")){
+		printf("\nmaintainConnection(): received +MOVE from the server\n");
+		send_message(sockfd, MOVE);
+      free(serverResponse);
+      return MOVE;
+    }
+
+	if(strstr(serverResponse,"+ WAIT")){
+		printf("\nmaintainConnection(): received +WAIT from the server\n");
+		//TODO: React to WAIT command
+		send_message(sockfd, WAIT);
+      free(serverResponse);
+      return WAIT;
+    }
+    free(serverResponse);
+      return ERROR;
+}
+
+//TODO readmessage ?
 
 short conWAIT(int sockfd){
-  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
-    printf("nothing");
-  }
-  return 0;
+  if((send_message(sockfd, WAIT))==0){
+		return 0;
+	}
+	else{
+		return -1;
+	}
 }
 
-short conGAMEOVER(int sockfd){
-  if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
-    printf("nothing");
-  }
-
-  return 0;
+short conGAMEOVER(int sockfd){ //TODO
+  return sockfd;
 }
 
 short conMOVE(int sockfd){//, char *array){
