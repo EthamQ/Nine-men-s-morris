@@ -93,7 +93,8 @@ short conMOVE(int sockfd){//, char *array){
 		//char *move;
 		char *move=malloc(sizeof(char)*20);
 	printf("\nGIB EINEN SPIELZUG EIN: ");
-	scanf("%s", move);
+	//scanf("%s", move);
+	fgets(move,20,stdin); 
 	printf("\nIn move steht: %s", move);
 	printf("Testzeile um zu sehen ob ein Zeilenumbruch da ist");
 	write(sockfd, move, sizeof(move));
