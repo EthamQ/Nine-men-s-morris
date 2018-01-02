@@ -30,10 +30,8 @@ int send_message(int sockfd, int type){
 
 int maintainConnection(int sockfd){
 	//printf("\nStart method maintainConnection()\n");
-	char* testc = "PLAY A1\n";
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
-	printf("\nTestweise übermitteln Spielzug A1\n");
-	write(sockfd, testc, sizeof(testc));
+	
 	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
 	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
 	  perror("\nmaintainConnection(): read error, MAINCON\n");
@@ -91,8 +89,19 @@ short conMOVE(int sockfd){//, char *array){
   return 0;
 }
 
+	int testplay(int sockfd){
+		//char *move;
+		char *move=malloc(sizeof(char)*20);
+	printf("\nGIB EINEN SPIELZUG EIN: ");
+	scanf("%s", move);
+	printf("\nIn move steht: %s", move);
+	printf("Testzeile um zu sehen ob ein Zeilenumbruch da ist");
+	write(sockfd, move, sizeof(move));
+		return 0;
+	}
 short conPlay(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
+	
 	if(write(sockfd, move, sizeof(move) < 0)){
 		perror("send_message(): write error, MAINCON");
 		return ERROR;

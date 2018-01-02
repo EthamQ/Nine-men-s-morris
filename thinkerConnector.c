@@ -182,6 +182,7 @@ int fork_thinker_connector(){
         //perror("conplay failure, THINKCON");
       //}
 	  
+	  testplay(sockfd);
 	  maintainConnection(sockfd);
 	  
 
