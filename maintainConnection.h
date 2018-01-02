@@ -10,4 +10,5 @@ short conGAMEOVER(int sockfd);
 
 short conMOVE(int sockfd);
 
+short conPlay(int sockfd, char* move);
 #endif
