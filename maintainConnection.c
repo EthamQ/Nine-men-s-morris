@@ -52,6 +52,7 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 
 
 int maintainConnection(int sockfd){
+	printf("Start method maintainConnection()");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
    if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){

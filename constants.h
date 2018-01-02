@@ -22,7 +22,7 @@
 #define MOVE_MESSAGE "THINKING\n"
 
 //Server messages
-#define MES_LENGTH_SERVER 1048
+#define MES_LENGTH_SERVER 2000
 
 //Pipe
 #define PIPE_BUF 24
