@@ -157,6 +157,24 @@ int performConnection(int sockfd){
     attempts = 0;
     printf("thinking sollte gesendet sein, PERFCON");
 
+  //S:+ OKTHINK
+  while(testifvalid < 0){
+    testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+    printf("\nOKthink ???\n\n")
+    printf("%s\n",dataPRS);
+    if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
+      perror("Invalid server response5");
+      return -1;
+    }
+  }
+  testifvalid = -1;
+  attempts = 0;
+
+    if(strstr(dataPRS,"+ OKTHINK")){
+       printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
+       return OKTHINK;
+   }
+
 	 if(strstr(dataPRS,"+ MOVE")){
       printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
       return MOVE;

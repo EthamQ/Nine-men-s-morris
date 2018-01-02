@@ -14,7 +14,7 @@
 #define MOVE 0
 #define WAIT 1
 #define GAMEOVER 2
-
+#define OKTHINK 3
 
 //Client messages
 #define MES_LENGTH_CLIENT 200
