@@ -9,7 +9,6 @@
 #include<string.h>
 #include<stdbool.h>
 
-#include"performConnection.h"
 #include "constants.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
@@ -26,10 +25,6 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-/*
-reads and returns the first server command
-Information important for int maintainConnectionFIRST(int sockfd, int firstServerCommand) in maintainConnection.c
-*/
 int performConnection(int sockfd){
     //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
@@ -142,9 +137,7 @@ int performConnection(int sockfd){
     testifvalid = -1;
 	  attempts = 0;
 
-
     //C: THINKING
-    printf("anfang thinken senden, PERFCON \n");
     while(testifvalid < 0){
         testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
         attempts++;
@@ -173,28 +166,11 @@ int performConnection(int sockfd){
       return -1;
     }
   }
-  testifvalid = -1;
-  attempts = 0;
 
-    if(strstr(dataPRS,"+ OKTHINK")){
-       printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
-       return OKTHINK;
-   }
-
-	 if(strstr(dataPRS,"+ MOVE")){
-      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
-      return MOVE;
-	 }
-
-	  if(strstr(dataPRS,"+ WAIT")){
-      printf("perform Connection tells maintainConnection.c that the Server sent +WAIT");
-      return WAIT;
-	 }
-
-	  if(strstr(dataPRS,"+ GAMEOVER")){
-      printf("perform Connection tells maintainConnection.c that the Server sent +GAMEOVER");
-      return GAMEOVER;
-	 }
-
-	 return ERROR;
+  //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
+  if(strstr(dataPRS,"+ OKTHINK")){
+     printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     return OKTHINK;
+ }
+ return ERROR;
 }

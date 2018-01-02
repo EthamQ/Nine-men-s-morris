@@ -7,6 +7,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+
 #include "constants.h"
 
 int send_message(int sockfd, int type){
@@ -18,44 +19,13 @@ int send_message(int sockfd, int type){
 	}
 	printf("\nsend_message(): the variable command has the following value: %s\n", command);
 
-
 	if(write(sockfd, command, sizeof(command) < 0)){
-		perror("\nsend_message(): write error");
+		perror("send_message(): write error, MAINCON");
 		return ERROR;
 	}
 	printf("\nC: %s\n", command);
 	return sockfd;
 }
-
-//Will only be used once after performConnection(), after that only maintainConnection()
-int maintainConnectionFIRST(int sockfd, int firstServerCommand){
-	printf("\nStart method maintainConnectionFIRST()\n");
-	printf("\nmaintainConnectionFIRST(): value of firstServerCommand: %i (0=Move,1=Wait,2=Gameover,-1=Error)\n", firstServerCommand);
-	if(firstServerCommand == ERROR){
-      perror("\nfehlerhaftes firstServerCommand, MAINCONFIRST\n");
-      return ERROR;
-    }
-
-	 if(firstServerCommand == MOVE){
-      printf("\nmaintainConnectionFIRST(): received MOVE from performConnection()\n");
-	  if(send_message(sockfd, MOVE) == ERROR){
-		  perror("\nmaintainConnectionFIRST(): Error in send_message\n");
-		  return ERROR;
-	  }
-	  else return MOVE;
-    }
-
-	if(firstServerCommand == WAIT){
-      printf("\nmaintainConnectionFIRST(): received WAIT from performConnection()\n");
-       if(send_message(sockfd, WAIT) == ERROR){
-		   perror("\nmaintainConnectionFIRST(): Error in send_message\n");
-		  return ERROR;
-	  }
-	  else return WAIT;
-    }
-	return sockfd;
-}
-
 
 int maintainConnection(int sockfd){
 	printf("\nStart method maintainConnection()\n");
@@ -94,9 +64,6 @@ int maintainConnection(int sockfd){
       return ERROR;
 }
 
-
-
-
 //TODO readmessage ?
 
 short conWAIT(int sockfd){
@@ -107,7 +74,6 @@ short conWAIT(int sockfd){
 		return -1;
 	}
 }
-
 
 short conGAMEOVER(int sockfd){ //TODO
   return sockfd;

@@ -135,20 +135,19 @@ int fork_thinker_connector(){
 	   printf("fork_thinker_connector(): shared memory success");
 	}
 
-	//>>=======FORK=======<<
+	//FORK
   switch(pid = fork()){
     case -1: perror("fork_thinker_connector(): Fehler bei fork\n");
       return -1;
       break;
-	  //>>=======CONNECTOR=======<<
+	  //CONNECTOR
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
 		short endCon = 0;
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
-
-		//>>=======SERVERVERBINDUNG=======<<
+		//SERVERVERBINDUNG
       if((sockfd = initConnect()) < 0){
         perror("\nfork_thinker_connector(): Fehler bei initConnect");
         return -1;
@@ -157,23 +156,21 @@ int fork_thinker_connector(){
         printf("\nfork_thinker_connector(): initConnect success\n");
 			}
 
-			//>>=======PROLOG=======<<
-			int first_command = (int)performConnection(sockfd);
-      if(first_command < 0) {
-          perror("\nfork_thinker_connector(): Fehler bei performConnection");
-          return -1;
-			}
-      else {
-          printf("\nfork_thinker_connector(): performConnection success \n");
-      }
-
-	  if(maintainConnectionFIRST(sockfd, first_command) == ERROR){
-      printf("Fehler in maintainConnectionFIRST, CONNECTOR\n");
-      return ERROR;
+  	//PROLOG
+  	//int first_command = (int)performConnection(sockfd);
+    if(performConnection(sockfd) < 0) {
+        perror("\nfork_thinker_connector(): Fehler bei performConnection");
+        return -1;
+  	}
+    else {
+        printf("\nfork_thinker_connector(): performConnection success \n");
     }
-	  int test;
+    //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein MOVE folgen
+    conMOVE();
+
+    //Jetzt koennen wir in den normalen SPielverlauf uebergehen
       while(1){
-        switch(test = maintainConnection(sockfd)){
+        switch(maintainConnection(sockfd)){
           case WAIT:
             printf("conWait Aufruf, THINKCON");
             if(conWAIT(sockfd)<0){
