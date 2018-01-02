@@ -10,12 +10,16 @@
 #include "constants.h"
 
 int send_message(int sockfd, int type){
+	printf("Start method maintainConnectionFIRST()");
+	if(firstServerCommand == ERROR){
 	char *command;
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
 		case WAIT: command = WAIT_MESSAGE; break;
 	}
+	printf("send_message(): the variable command has the following value: %s", command);
 
+	
 	if(write(sockfd, command, sizeof(command) < 0)){
 		perror("\nsend_message(): write error");
 		return ERROR;
@@ -25,6 +29,7 @@ int send_message(int sockfd, int type){
 
 //Will only be used once after performConnection(), after that only maintainConnection()
 int maintainConnectionFIRST(int sockfd, int firstServerCommand){
+	printf("Start method maintainConnectionFIRST()");
 	if(firstServerCommand == ERROR){
       perror("\nmaintainConnectionFIRST(): Error in performConnection\n");
       return ERROR;
