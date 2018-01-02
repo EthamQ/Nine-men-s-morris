@@ -242,7 +242,7 @@ int fork_thinker_connector(){
 			wait(NULL);
       break;
   }
-  free(movePipe)
+  free(movePipe);
   return 0;
 }
 
