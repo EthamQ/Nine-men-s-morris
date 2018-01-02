@@ -157,15 +157,17 @@ int performConnection(int sockfd){
     testifvalid = -1;
     attempts = 0;
 	
-	 if(strstr(dataPRS,"MOVE")){
-      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
+	 if(strstr(dataPRS,"+ MOVE")){
+      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE, looked for + Move");
       return MOVE;
 	 }
 	 
-	  if(strstr(dataPRS,"+ MOVE")){
-      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
+	 if(strstr(dataPRS,"MOVE")){
+      printf("perform Connection tells maintainConnection.c that the Server sent +MOVE, looked for move");
       return MOVE;
 	 }
+	 
+	 
 	 
 	  if(strstr(dataPRS,"+WAIT")){
       printf("perform Connection tells maintainConnection.c that the Server sent +WAIT");
