@@ -15,7 +15,8 @@
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
 static char game_idPRC []= "ID 02pobsvmluimp\n";
-static char  numberOfPlayersPRC []= "PLAYER\n";
+static char numberOfPlayersPRC []= "PLAYER\n";
+static char thinkingPRC []= "THINKING\n";
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -128,10 +129,12 @@ int performConnection(int sockfd){
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       if(strstr(dataPRS,"ENDPLAYERS")){
-        printf("ENDPLAYERS ERKANNT;gesendet: \"%s\" PERFCON \n",dataPRS);
+        printf("ENDPLAYERS ERKANNT\n");
+        printf("%s\n",dataPRS);
+        testifvalid = -1;
         //return dataPRS;
       }
-      printf("%s\n",dataPRS);
+      //printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
       return -1;
@@ -140,16 +143,33 @@ int performConnection(int sockfd){
     testifvalid = -1;
 	  attempts = 0;
 
-    //C: THINKING
+    //+MOVE 3000
+    //CAPTURE 0
+    //PIECLIST
     while(testifvalid < 0){
-        testifvalid = write(sockfd, "THINKING", 8);
+      testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+      printf("Piecelist: \"%s \n",dataPRS);
+      if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
+      perror("Invalid server response5");
+      return -1;
+      }
+    }
+    testifvalid = -1;
+    attempts = 0;
+
+    //C: THINKING
+    printf("anfang thinken senden, PERFCON \n");
+    while(testifvalid < 0){
+        testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
+            printf("Fehler beim senden von THINKING, PERFCON");
             return -1;
         }
     }
     testifvalid = -1;
     attempts = 0;
+    printf("thinking sollte gesendet sein, PERFCON");
 
 	 if(strstr(dataPRS,"+ MOVE")){
       printf("perform Connection tells maintainConnection.c that the Server sent +MOVE");
