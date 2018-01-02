@@ -4,16 +4,16 @@
 #include <stdlib.h>
 
 #include <sys/wait.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <netdb.h>
-#include<arpa/inet.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
 #include <signal.h>
-#include<unistd.h>
-#include<string.h>
-#include<stdbool.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdbool.h>
 #include <sys/shm.h>
 
 #include "performConnection.h"
@@ -72,8 +72,10 @@ int initConnect(){
       //exit(2);
       return -1;
     }
+
   freeaddrinfo(servinfo); // all done with this structure // Brauche ich addrinfop fuer ahcfolgende funktionen ???
-  return sockfd;
+
+return sockfd;
 }
 
 //Spielzug an Connector schicken / in die Pipe schreiben
@@ -86,10 +88,10 @@ short sendMove(){
 
   //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))>0){
+  if( (write (pipeFd[1], pipeBuffer, sizeof(pipeBuffer))) >0) {
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
-  }
+    }
   printf("Spielzug in die Pipe geschrieben, BRAIN \n");
   //sleep(0.5);
   return 0;
@@ -99,7 +101,7 @@ static void signalHandlerThinker(int signalNum){
   printf("Signalhandler go?\n");
   if(signalNum==SIGUSR1){
     printf("Signal SIGUSR1 angekommen\n");
-	  sendMove();
+	sendMove();
   }
 }
 
@@ -132,22 +134,20 @@ int fork_thinker_connector(){
 	}
 
 	//FORK
-witch(pid = fork()){
+  switch(pid = fork()){
     case -1: perror("fork_thinker_connector(): Fehler bei fork\n");
       return -1;
       break;
 	  //CONNECTOR
-    case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid()      //Connector
+    case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
-	  //in die shared memory schreiben
-	  writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
 		short endCon = 0;
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
 		//SERVERVERBINDUNG
       if((sockfd = initConnect()) < 0){
-        perror("\nfork_thinker_connector(): Fehler bei initConnect, THINKCON");
+        perror("\nfork_thinker_connector(): Fehler bei initConnect");
         return -1;
 			}
       else{
@@ -214,10 +214,8 @@ witch(pid = fork()){
       //printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
       break;
-
-    default:
-      //THINKER
-      printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
+	  //>>=======THINKER=======<<
+    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
@@ -237,14 +235,15 @@ witch(pid = fork()){
 				perror("sigaction groesser Null, Fehler ???");
 			}
 
-    	//Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
+	    //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
       shmat(shmid, NULL, 0);
       printf("THINKER: jetzt beginnt das warten\n");
-    	wait(NULL);
+
+			wait(NULL);
       break;
-    }
-    free(movePipe);
-    return 0;
+  }
+  free(movePipe)
+  return 0;
 }
 
 int main(){
