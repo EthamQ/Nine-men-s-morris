@@ -11,7 +11,6 @@
 
 int send_message(int sockfd, int type){
 	printf("Start method maintainConnectionFIRST()");
-	if(firstServerCommand == ERROR){
 	char *command;
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
