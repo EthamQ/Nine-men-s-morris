@@ -139,7 +139,7 @@ int fork_thinker_connector(){
 	  //CONNECTOR
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
-		short endCon = 0;
+		//temporary: short endCon = 0;
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
@@ -181,9 +181,12 @@ int fork_thinker_connector(){
       if(conPlay(sockfd, movePipe) == ERROR){
         perror("conplay failure, THINKCON");
       }
+	  
+	  maintainConnection(sockfd);
+	  
 
     //Jetzt koennen wir in den normalen SPielverlauf uebergehen
-      while(1){
+      /*while(1){
         switch(maintainConnection(sockfd)){
           case WAIT:
             printf("conWait Aufruf, THINKCON");
@@ -230,6 +233,7 @@ int fork_thinker_connector(){
       //printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
       break;
+	  */
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 
