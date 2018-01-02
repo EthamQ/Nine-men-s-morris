@@ -168,9 +168,9 @@ int fork_thinker_connector(){
       }
 	  
 	  maintainConnectionFIRST(sockfd, first_command);
-	  
+	  int test;
       while(1){
-        switch(maintainConnection(sockfd)){
+        switch(test = maintainConnection(sockfd)){
           case WAIT:
             printf("conWait Aufruf, THINKCON");
             if(conWAIT(sockfd)<0){
@@ -203,7 +203,8 @@ int fork_thinker_connector(){
             }
             break;
           default:
-            perror("Switch failure CONNECTOR");
+            perror("\nSwitch failure CONNECTOR\n");
+			printf("\Connector: In switch case wurde folgender Wert gesucht: %i\n", test);
             endCon = -1;
             break;
         }
