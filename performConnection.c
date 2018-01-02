@@ -160,7 +160,7 @@ int performConnection(int sockfd){
   //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-    printf("\nOKthink ???\n\n")
+    printf("\nOKthink ???\n\n");
     printf("%s\n",dataPRS);
     if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
