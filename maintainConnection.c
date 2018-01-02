@@ -10,13 +10,13 @@
 #include "constants.h"
 
 int send_message(int sockfd, int type){
-	printf("Start method maintainConnectionFIRST()");
+	printf("\nStart method maintainConnectionFIRST()\n");
 	char *command;
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
 		case WAIT: command = WAIT_MESSAGE; break;
 	}
-	printf("send_message(): the variable command has the following value: %s", command);
+	printf("\nsend_message(): the variable command has the following value: %s\n", command);
 
 	
 	if(write(sockfd, command, sizeof(command) < 0)){
@@ -28,7 +28,7 @@ int send_message(int sockfd, int type){
 
 //Will only be used once after performConnection(), after that only maintainConnection()
 int maintainConnectionFIRST(int sockfd, int firstServerCommand){
-	printf("Start method maintainConnectionFIRST()");
+	printf("\nStart method maintainConnectionFIRST()\n");
 	if(firstServerCommand == ERROR){
       perror("\nmaintainConnectionFIRST(): Error in performConnection\n");
       return ERROR;
@@ -56,15 +56,15 @@ int maintainConnectionFIRST(int sockfd, int firstServerCommand){
 
 
 int maintainConnection(int sockfd){
-	printf("Start method maintainConnection()");
+	printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
    if((read(sockfd, serverResponse, sizeof(serverResponse)))<0){
-      perror("\nmaintainConnection(): read error");
+      perror("\nmaintainConnection(): read error\n");
 	  free(serverResponse);
 	  return ERROR;
    }
-   printf("maintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+   printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
 
     if(strstr(serverResponse,"+GAMEOVER")){
 		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
