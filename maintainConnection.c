@@ -30,9 +30,10 @@ int send_message(int sockfd, int type){
 
 int maintainConnection(int sockfd){
 	//printf("\nStart method maintainConnection()\n");
+	char* testc = "PLAY A1\n";
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
-	printf("\nTestweise übermitteln Spielzug A1");
-	write(sockfd, "PLAY A1\n", 15*sizeof(char));
+	printf("\nTestweise übermitteln Spielzug A1\n");
+	write(sockfd, testc, sizeof(testc));
 	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
 	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
 	  perror("\nmaintainConnection(): read error, MAINCON\n");
