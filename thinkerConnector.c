@@ -170,7 +170,7 @@ int fork_thinker_connector(){
           perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
       }
       printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
-      sleep(1); //TODO ist sleep hier notwendig ?
+      //sleep(1); //TODO ist sleep hier notwendig ?
       //Aus der Pipe den Spielzug lesen
       if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
         printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
@@ -183,6 +183,7 @@ int fork_thinker_connector(){
       }
 	  
 	  maintainConnection(sockfd);
+	  
 	  
 
     //Jetzt koennen wir in den normalen SPielverlauf uebergehen
