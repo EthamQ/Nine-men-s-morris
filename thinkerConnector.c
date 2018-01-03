@@ -94,7 +94,7 @@ short sendMove(){
   //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
   
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<0){
+  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))==0){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
   }
