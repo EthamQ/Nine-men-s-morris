@@ -18,11 +18,11 @@ char line[256];
 char* ptr;
 char delimiter[] = "=";
 while (fgets(line, sizeof(line), file)){
-	ptr = strtok(line," ");
+	ptr = strtok(line,delimiter);
        
 	 while(ptr != NULL) {
 	 	printf("Ausgelesen:%s\n",ptr);
-	 	ptr = strtok(NULL," ");
+	 	ptr = strtok(NULL,delimiter);
 		}
     }
 	printf("\n");
