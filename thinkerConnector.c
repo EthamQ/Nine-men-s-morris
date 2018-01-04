@@ -182,6 +182,10 @@ int fork_thinker_connector(){
         perror("conplay failure, THINKCON");
       }
 	  
+	  struct SHM_data* a = shmat(shmid, NULL, 0);
+	  writeSHM(a, "HELLO", SPIELNAME);
+	  readSHM(a);
+	  
 	  char* wai = "OKWAIT";
 	//int n = 200;
 	  while(1){
