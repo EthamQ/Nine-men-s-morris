@@ -28,7 +28,7 @@
 #define MOVE_MESSAGE "THINKING\n"
 
 //Server messages
-#define MES_LENGTH_SERVER 2000
+#define MES_LENGTH_SERVER 3000
 
 //Pipe
 #define PIPE_BUF 24
@@ -37,6 +37,33 @@
 //Other
 #define ATTEMPTS_INVALID 20
 #define BUFF_SIZE_SMALL 256
+
+//Field
+#define A0 0
+#define A1 1
+#define A2 2
+#define B0 3
+#define B1 4
+#define B3 5
+#define C0 6
+#define C1 7
+#define C2 8
+#define A7 9
+#define B7 10
+#define C7 11
+#define C3 12
+#define B3 13
+#define A3 14
+#define C6 15
+#define C5 16
+#define C4 17
+#define B6 18
+#define B5 19
+#define B4 20
+#define A6 21
+#define A5 22
+#define A4 23
+int spielfeld[24];
 
 
 #endif

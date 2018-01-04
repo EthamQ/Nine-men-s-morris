@@ -32,13 +32,15 @@ int maintainConnection(int sockfd){
 	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	
-	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
+	
 	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
 	  perror("\nmaintainConnection(): read error, MAINCON\n");
 		free(serverResponse);
 		return ERROR;
 	}
-  printf("\nmaintainConnection():\n S: %s\n",serverResponse);
+  printf("%s",serverResponse);
+  printf("\nmaintainConnection():\nS: %s",serverResponse);
+  printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
  
   
@@ -49,24 +51,7 @@ int maintainConnection(int sockfd){
     return GAMEOVER;
   }
 
-	//if(strstr(serverResponse,"+ MOVE")){
-		if(strcmp(serverResponse, "+ MOVE")==0){
-		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		//send_message(sockfd, MOVE);
-      free(serverResponse);
-      return MOVE;
-    }
-
-	if(strcmp(serverResponse, "+ WAIT")==0){
-	//if(strstr(serverResponse,"+ WAIT")){
-		printf("\nmaintainConnection(): received +WAIT from the server\n");
-		//TODO: React to WAIT command
-		//send_message(sockfd, WAIT);
-      free(serverResponse);
-      return WAIT;
-    }
-	
-	if(strcmp(serverResponse, "+ MOVEOK")==0){
+  if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	//if(strstr(serverResponse,"+ MOVEOK")){
 		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
 		//TODO: React to WAIT command
@@ -74,6 +59,25 @@ int maintainConnection(int sockfd){
       free(serverResponse);
       return MOVEOK;
     }
+	
+	if(strstr(serverResponse,"+ MOVE")){
+		//if(strcmp(serverResponse, "+ MOVE\n")==0){
+		printf("\nmaintainConnection(): received +MOVE from the server\n");
+		//send_message(sockfd, MOVE);
+      free(serverResponse);
+      return MOVE;
+    }
+
+	//if(strcmp(serverResponse, "+ WAIT\n")==0){
+	if(strstr(serverResponse,"+ WAIT")){
+		printf("\nmaintainConnection(): received +WAIT from the server\n");
+		//TODO: React to WAIT command
+		//send_message(sockfd, WAIT);
+      free(serverResponse);
+      return WAIT;
+    }
+	
+	
 	
     free(serverResponse);
       return ERROR;

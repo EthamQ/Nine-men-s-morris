@@ -182,9 +182,11 @@ int fork_thinker_connector(){
         perror("conplay failure, THINKCON");
       }
 	  
-	  int n = 5;
-	  while(n>0){
-		  n--;
+	  char* wai = "OKWAIT";
+	//int n = 200;
+	  while(1){
+		 // n--;
+		 printf("v");
 		  switch(maintainConnection(sockfd)){
 			  case MOVE:
 			   if(kill(getppid(),SIGUSR1)<0){
@@ -207,12 +209,14 @@ int fork_thinker_connector(){
 			
 			case WAIT:
 				//Send OKWAIT
-				write(sockfd, "OKWAIT\n", sizeof(char)*MES_LENGTH_SERVER);
-				printf("\nC: OKWAIT\n");
+				write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
+				printf("C: OKWAIT");
+				sleep(1);
 				break; 
 
-			case MOVEOK:
-			break;
+			case MOVEOK: break;
+			case ERROR: printf("CASE ERROR"); break;
+			case GAMEOVER: printf("S: GAMEOVER");break;
 		  }
 		  
 	  }

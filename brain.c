@@ -19,3 +19,5 @@ char* think(){
  return move;
  //TODO MEMORYLEAK VERHINDERN
 }
+
+
