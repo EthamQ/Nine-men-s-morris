@@ -88,7 +88,10 @@ short sendMove(){
 
   //int gesendeteBytes = sizeof(pipeBuffer); //der return wert von write ist die anzahl der gesendeten bytes, falls das != der zu sendenden bytes PANIK !
 
-  if( (write (pipeFd[1], pipeBuffer, sizeof(pipeBuffer))) >0) {
+
+  
+  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))=<0){
+
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
@@ -140,6 +143,11 @@ int fork_thinker_connector(){
       break;
 	  //CONNECTOR
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
+
+      //Connector
+	  
+	  //in die shared memory schreiben
+	 // writeSHM(shm_pointer, "NMMORRIS", SPIELNAME);
 
 		short endCon = 0;
 		//Schreibseite der Pipe schliessen
