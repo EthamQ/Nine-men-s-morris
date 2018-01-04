@@ -182,7 +182,56 @@ int fork_thinker_connector(){
         perror("conplay failure, THINKCON");
       }
 	  
+	  int n = 5;
+	  while(n>0){
+		  n--;
+		  switch(maintainConnection(sockfd)){
+			  case MOVE:
+			   if(kill(getppid(),SIGUSR1)<0){
+				perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
+				}
+				printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
+				//sleep(1); //TODO ist sleep hier notwendig ?
+				//Aus der Pipe den Spielzug lesen
+				if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+				}
+				else{
+					perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+				}
+				//Spielzug an den Server senden
+				if(conPlay(sockfd, movePipe) == ERROR){
+				perror("conplay failure, THINKCON");
+				}	
+				break;
+			
+			case WAIT:
+				//Send OKWAIT
+				write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
+				printf("\nC: OKWAIT\n");
+				break; 
+
+			case MOVEOK:
+		  }
+		  
+	  }
+	  
+	  /*
 	  maintainConnection(sockfd);
+	  char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+	  read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
+	  printf("S: %s", serverResponse);
+	  
+	  
+	  write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
+	  printf("C: OKWAIT");
+	  
+	  read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
+	  printf("S: %s", serverResponse);
+	  */
+	  
+	  
+	  
 	  
 	  
 

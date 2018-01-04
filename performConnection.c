@@ -14,7 +14,10 @@
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
 //static char game_idPRC []= "ID 02pobsvmluimp\n";
-static char game_idPRC []= "ID 2uiyd4c9217om\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+static char game_idPRC []= "ID 2bc6ykyei19uy\n";
+
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
 
@@ -157,7 +160,7 @@ int performConnection(int sockfd){
     memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("thinking sollte gesendet sein, PERFCON");
 
-  //S:+ OKTHINK oder + WAIT
+  //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
     printf("\nOKthink ???\n\n");

@@ -49,7 +49,7 @@ int maintainConnection(int sockfd){
 
 	if(strstr(serverResponse,"+ MOVE")){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		send_message(sockfd, MOVE);
+		//send_message(sockfd, MOVE);
       free(serverResponse);
       return MOVE;
     }
@@ -57,7 +57,7 @@ int maintainConnection(int sockfd){
 	if(strstr(serverResponse,"+ WAIT")){
 		printf("\nmaintainConnection(): received +WAIT from the server\n");
 		//TODO: React to WAIT command
-		send_message(sockfd, WAIT);
+		//send_message(sockfd, WAIT);
       free(serverResponse);
       return WAIT;
     }
@@ -103,7 +103,7 @@ short conMOVE(int sockfd){//, char *array){
 short conPlay(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
 	
-	if(write(sockfd, move, sizeof(move) < 0)){
+	if(write(sockfd, move, sizeof(move)) < 0){
 		perror("send_message(): write error, MAINCON");
 		return ERROR;
 	}
