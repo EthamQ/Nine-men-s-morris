@@ -38,8 +38,10 @@ int maintainConnection(int sockfd){
 		free(serverResponse);
 		return ERROR;
 	}
-  printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+  printf("\nmaintainConnection():\n S: %s\n",serverResponse);
 
+ 
+  
   if(strstr(serverResponse,"+ GAMEOVER")){
 	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
 	//TODO: React to GAMEOVER command
@@ -47,20 +49,32 @@ int maintainConnection(int sockfd){
     return GAMEOVER;
   }
 
-	if(strstr(serverResponse,"+ MOVE")){
+	//if(strstr(serverResponse,"+ MOVE")){
+		if(strcmp(serverResponse, "+ MOVE")==0){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
 		//send_message(sockfd, MOVE);
       free(serverResponse);
       return MOVE;
     }
 
-	if(strstr(serverResponse,"+ WAIT")){
+	if(strcmp(serverResponse, "+ WAIT")==0){
+	//if(strstr(serverResponse,"+ WAIT")){
 		printf("\nmaintainConnection(): received +WAIT from the server\n");
 		//TODO: React to WAIT command
 		//send_message(sockfd, WAIT);
       free(serverResponse);
       return WAIT;
     }
+	
+	if(strcmp(serverResponse, "+ MOVEOK")==0){
+	//if(strstr(serverResponse,"+ MOVEOK")){
+		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
+		//TODO: React to WAIT command
+		//send_message(sockfd, WAIT);
+      free(serverResponse);
+      return MOVEOK;
+    }
+	
     free(serverResponse);
       return ERROR;
 }

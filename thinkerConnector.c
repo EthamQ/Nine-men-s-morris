@@ -207,11 +207,12 @@ int fork_thinker_connector(){
 			
 			case WAIT:
 				//Send OKWAIT
-				write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
+				write(sockfd, "OKWAIT\n", sizeof(char)*MES_LENGTH_SERVER);
 				printf("\nC: OKWAIT\n");
 				break; 
 
 			case MOVEOK:
+			break;
 		  }
 		  
 	  }
