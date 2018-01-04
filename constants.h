@@ -10,11 +10,17 @@
 
 
 //Flags
-#define ERROR -1
-#define MOVE 0
-#define WAIT 1
-#define GAMEOVER 2
-#define OKTHINK 3
+  //Rueckgabe
+  #define ERROR -1
+  //Prolog, perfcon und maincon
+  #define MOVE 0 //vllt define success und move = 1 , wait = 2, etc. ?
+  #define WAIT 1
+  #define GAMEOVER 2
+  #define OKTHINK 3
+  #define OKWAIT 4
+  #define MOVEOK 5
+  //maincon
+  //#define MOVETHINKING 4
 
 //Client messages
 #define MES_LENGTH_CLIENT 200
@@ -22,7 +28,7 @@
 #define MOVE_MESSAGE "THINKING\n"
 
 //Server messages
-#define MES_LENGTH_SERVER 2000
+#define MES_LENGTH_SERVER 3000
 
 //Pipe
 #define PIPE_BUF 24
@@ -31,6 +37,11 @@
 //Other
 #define ATTEMPTS_INVALID 20
 #define BUFF_SIZE_SMALL 256
+
+//Field
+
+
+
 
 
 #endif

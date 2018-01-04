@@ -8,12 +8,15 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdbool.h>
-
 #include "constants.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 02pobsvmluimp\n";
+//static char game_idPRC []= "ID 02pobsvmluimp\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+static char game_idPRC []= "ID 1oa9sm2mvjwsk\n";
+
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
 
@@ -169,8 +172,10 @@ int performConnection(int sockfd){
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
+ 
  return ERROR;
 }

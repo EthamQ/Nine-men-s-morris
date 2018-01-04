@@ -16,6 +16,7 @@ int send_message(int sockfd, int type){
 	switch(type){
 		case MOVE: command = MOVE_MESSAGE; break;
 		case WAIT: command = WAIT_MESSAGE; break;
+		//TODO add play command,z.b PLAY A1
 	}
 	printf("\nsend_message(): the variable command has the following value: %s\n", command);
 
@@ -24,42 +25,60 @@ int send_message(int sockfd, int type){
 		return ERROR;
 	}
 	printf("\nC: %s\n", command);
-	return sockfd;
+	return 0;
 }
 
 int maintainConnection(int sockfd){
-	printf("\nStart method maintainConnection()\n");
+	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+	
+	
+	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
+	  perror("\nmaintainConnection(): read error, MAINCON\n");
+		free(serverResponse);
+		return ERROR;
+	}
+  printf("%s",serverResponse);
+  printf("\nmaintainConnection():\nS: %s",serverResponse);
+  printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
-	//Hier tritt der Fehler auf, TIMEOUT wird vom Server gelesen
-   if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
-      perror("\nmaintainConnection(): read error\n");
-	  free(serverResponse);
-	  return ERROR;
-   }
-   printf("\nmaintainConnection(): Server antwort:\"%s\"\n",serverResponse);
+ 
+  
+  if(strstr(serverResponse,"+ GAMEOVER")){
+	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+	//TODO: React to GAMEOVER command
+    free(serverResponse);
+    return GAMEOVER;
+  }
 
-    if(strstr(serverResponse,"+ GAMEOVER")){
-		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-		//TODO: React to GAMEOVER command
+  if(strcmp(serverResponse, "+ MOVEOK\n")==0){
+	//if(strstr(serverResponse,"+ MOVEOK")){
+		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
+		//TODO: React to WAIT command
+		//send_message(sockfd, WAIT);
       free(serverResponse);
-      return GAMEOVER;
+      return MOVEOK;
     }
-
+	
 	if(strstr(serverResponse,"+ MOVE")){
+		//if(strcmp(serverResponse, "+ MOVE\n")==0){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		send_message(sockfd, MOVE);
+		//send_message(sockfd, MOVE);
       free(serverResponse);
       return MOVE;
     }
 
+	//if(strcmp(serverResponse, "+ WAIT\n")==0){
 	if(strstr(serverResponse,"+ WAIT")){
 		printf("\nmaintainConnection(): received +WAIT from the server\n");
 		//TODO: React to WAIT command
-		send_message(sockfd, WAIT);
+		//send_message(sockfd, WAIT);
       free(serverResponse);
       return WAIT;
     }
+	
+	
+	
     free(serverResponse);
       return ERROR;
 }
@@ -80,8 +99,32 @@ short conGAMEOVER(int sockfd){ //TODO
 }
 
 short conMOVE(int sockfd){//, char *array){
+	printf("Conmove aufgerufen \n");
+
   if(sockfd == 0){ //Nur temrporaer um compile fhelrer zu verhindern
     printf("nothing");
   }
   return 0;
+}
+
+	int testplay(int sockfd){
+		//char *move;
+		char *move= "PLAY A1\n";
+	printf("\nGIB EINEN SPIELZUG EIN: ");
+	//scanf("%s", move);
+	//fgets(move,20,stdin); 
+	//printf("\nIn move steht: %s", move);
+	//printf("Testzeile um zu sehen ob ein Zeilenumbruch da ist");
+	write(sockfd, move, sizeof(move));
+		return 0;
+	}
+short conPlay(int sockfd, char* move){
+	printf("conplay aufgerufen, MAINCON\n");
+	
+	if(write(sockfd, move, sizeof(move)) < 0){
+		perror("send_message(): write error, MAINCON");
+		return ERROR;
+	}
+	printf("\nC: %s\n", move);
+	return 0;
 }
