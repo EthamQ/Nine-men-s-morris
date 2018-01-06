@@ -88,7 +88,7 @@ short sendMove(){
 
 
   
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))=<0){
+  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
 
 
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");

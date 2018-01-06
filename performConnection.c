@@ -15,7 +15,7 @@ static char versionPRC []= "VERSION 2.0\n";
 //static char game_idPRC []= "ID 02pobsvmluimp\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
-static char game_idPRC []= "ID 1oa9sm2mvjwsk\n";
+static char game_idPRC []= "ID 00xb19ijkq3ls\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
