@@ -39,6 +39,15 @@ int stones;
 int stonesA = 0;
 int stonesB;
 
+char buchstabe(int b){
+	switch(b){
+		case A: return 'A'; break;
+		case B: return 'B'; break;
+		case C: return 'C'; break;
+}
+return 'E';
+}
+
 //returned 1 wenn PLAYER_CLIENT eine Mühle auf einem der jeweiligen Ringe hat, sonst 0
 int check_rings(int field[ZEILEN][SPALTEN]){
 	int counter;
@@ -46,12 +55,16 @@ int check_rings(int field[ZEILEN][SPALTEN]){
 	//Testen der Ringe A, B und C
 	//Stellen 0, 1, 2
 	for(x = 0; x<ZEILEN; x++){
+		counter = 0;
 		//Stellen 0, 1, 2
 		for(y = 0; y<3; y++){
 			if(field[x][y] == PLAYER_CLIENT){
+				//printf("check field[%i][%i] == PLAYER_CLIENT true\n", x, y);
 				counter++;
+				//printf("counter: %i\n", counter);
 			}
 			if(counter == 3){
+				printf("\n Mühle gefunden auf einem Ring bei %c 0,1,2\n", buchstabe(x));
 				return 1;
 			}
 		}
@@ -59,9 +72,13 @@ int check_rings(int field[ZEILEN][SPALTEN]){
 		//Stellen 2, 3, 4
 		for(y = 2; y<5; y++){
 			if(field[x][y] == PLAYER_CLIENT){
+				//printf("check field[%i][%i] == PLAYER_CLIENT true\n", x, y);
 				counter++;
+				//printf("counter: %i\n", counter);
 			}
 			if(counter == 3){
+				//printf("\n Mühle gefunden auf einem Ring bei [%i][%i]\n", x, y);
+				printf("\n Mühle gefunden auf einem Ring bei %c 2,3,4 \n", buchstabe(x));
 				return 1;
 			}
 		}
@@ -69,9 +86,13 @@ int check_rings(int field[ZEILEN][SPALTEN]){
 		//Stellen 4, 5, 6
 		for(y = 4; y<7; y++){
 			if(field[x][y] == PLAYER_CLIENT){
+				//printf("check field[%i][%i] == PLAYER_CLIENT true\n", x, y);
 				counter++;
+				//printf("counter: %i\n", counter);
 			}
 			if(counter == 3){
+				//printf("\n Mühle gefunden auf einem Ring bei [%i][%i]\n", x, y);
+				printf("\n Mühle gefunden auf einem Ring bei %c 4,5,6\n", buchstabe(x));
 				return 1;
 			}
 		}
@@ -79,10 +100,14 @@ int check_rings(int field[ZEILEN][SPALTEN]){
 		//Stellen 6, 7, 0
 		for(y = 6; y<8; y++){
 			if(field[x][y] == PLAYER_CLIENT){
+				//printf("check field[%i][%i] == PLAYER_CLIENT true\n", x, y);
 				counter++;
+				//printf("counter: %i\n", counter);
 			}
 			if(counter == 2){
 				if(field[x][0] == PLAYER_CLIENT){
+				//printf("\n Mühle gefunden auf einem Ring bei [%i][%i]\n", x, y);
+				printf("\n Mühle gefunden auf einem Ring bei %c 6,7,0\n", buchstabe(x));
 				return 1;
 				}
 			}
@@ -102,6 +127,7 @@ int check_between_rings(int field[ZEILEN][SPALTEN]){
 			counter++;
 			}
 		if(counter == 3){
+			printf("\n Mühle gefunden zwischen den Ringen bei [%i][%i]\n", x, y);
 			return 1;
 		}	
 	}
@@ -110,6 +136,7 @@ int check_between_rings(int field[ZEILEN][SPALTEN]){
 }
 
 //returned 1 wenn eine Mühle von PLAYER_CLIENT gefunden wurde
+//wahrscheinlich am besten in conPlay aufrufen nach think und dann ggf noch capture befehl senden
 int check_muehle(int field[ZEILEN][SPALTEN]){
 	if(check_rings(field) || check_between_rings(field)){
 		return 1;
@@ -339,6 +366,7 @@ void init(int field[ZEILEN][SPALTEN]){
 	}
 	}
 }
+
 
 
 
