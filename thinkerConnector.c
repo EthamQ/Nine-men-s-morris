@@ -190,7 +190,6 @@ int fork_thinker_connector(){
 	  writeSHM(a, "HELLO", SPIELNAME);
 	  readSHM(a);
 	  
-	  char* wai = "OKWAIT";
 	//int n = 200;
 	  while(1){
 		 // n--;
