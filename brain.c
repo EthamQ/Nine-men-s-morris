@@ -39,6 +39,83 @@ int stones;
 int stonesA = 0;
 int stonesB;
 
+//returned 1 wenn PLAYER_CLIENT eine Mühle auf einem der jeweiligen Ringe hat, sonst 0
+int check_rings(int field[ZEILEN][SPALTEN]){
+	int counter;
+	int x, y;
+	//Testen der Ringe A, B und C
+	//Stellen 0, 1, 2
+	for(x = 0; x<ZEILEN; x++){
+		//Stellen 0, 1, 2
+		for(y = 0; y<3; y++){
+			if(field[x][y] == PLAYER_CLIENT){
+				counter++;
+			}
+			if(counter == 3){
+				return 1;
+			}
+		}
+		counter = 0;
+		//Stellen 2, 3, 4
+		for(y = 2; y<5; y++){
+			if(field[x][y] == PLAYER_CLIENT){
+				counter++;
+			}
+			if(counter == 3){
+				return 1;
+			}
+		}
+		counter = 0;
+		//Stellen 4, 5, 6
+		for(y = 4; y<7; y++){
+			if(field[x][y] == PLAYER_CLIENT){
+				counter++;
+			}
+			if(counter == 3){
+				return 1;
+			}
+		}
+		counter = 0;
+		//Stellen 6, 7, 0
+		for(y = 6; y<8; y++){
+			if(field[x][y] == PLAYER_CLIENT){
+				counter++;
+			}
+			if(counter == 2){
+				if(field[x][0] == PLAYER_CLIENT){
+				return 1;
+				}
+			}
+		}
+		}
+	return 0;
+}
+
+int check_between_rings(int field[ZEILEN][SPALTEN]){
+	int counter;
+	int x;
+	int y;
+	for(y = 1; y<SPALTEN; y+=2){
+		counter = 0;
+	for(x = 0; x<ZEILEN; x++){
+		if(field[x][y] == PLAYER_CLIENT){
+			counter++;
+			}
+		if(counter == 3){
+			return 1;
+		}	
+	}
+	}
+	return 0;
+}
+
+//returned 1 wenn eine Mühle von PLAYER_CLIENT gefunden wurde
+int check_muehle(int field[ZEILEN][SPALTEN]){
+	if(check_rings(field) || check_between_rings(field)){
+		return 1;
+	}
+	else return 0;	
+}
 
 //"Spielfeld" ausgeben
 void print(int field[ZEILEN][SPALTEN]){
@@ -227,7 +304,7 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 				create_PLAY_command(play_command, x, y);
 				printf("\n%s\n", play_command);
 				print(field);
-				printf("\n");
+				printf("Muehle?: %i\n", check_muehle(field));
 				return play_command;
 			}
 			}
@@ -241,6 +318,7 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 			move(field, FROM, TO);
 			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
 			printf("\n%s\n", play_command);
+			printf("Muehle?: %i\n", check_muehle(field));
 			return play_command;
 		}
 		else{
@@ -261,6 +339,7 @@ void init(int field[ZEILEN][SPALTEN]){
 	}
 	}
 }
+
 
 
 //Testaufruf wenn man brain einzeln kompiliert und ausführt
