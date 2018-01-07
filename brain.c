@@ -39,6 +39,8 @@ int stones;
 int stonesA = 0;
 int stonesB;
 
+
+//Hilfsfunktion um zu sehen wo man sich befindet wenn man Zwischenergebnisse ausprintet
 char buchstabe(int b){
 	switch(b){
 		case A: return 'A'; break;
@@ -116,6 +118,7 @@ int check_rings(int field[ZEILEN][SPALTEN]){
 	return 0;
 }
 
+//returned 1 wenn PLAYER_CLIENT eine Mühle zwischen den Ringen hat, sonst 0
 int check_between_rings(int field[ZEILEN][SPALTEN]){
 	int counter;
 	int x;
