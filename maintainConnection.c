@@ -40,7 +40,7 @@ int maintainConnection(int sockfd){
 	}
   printf("%s",serverResponse);
   printf("\nmaintainConnection():\nS: %s",serverResponse);
-  printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
+  //printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
  
   
