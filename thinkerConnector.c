@@ -88,7 +88,7 @@ short sendMove(){
 
 
   
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))=<0){
+  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
 
 
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
@@ -190,7 +190,7 @@ int fork_thinker_connector(){
 	  writeSHM(a, "HELLO", SPIELNAME);
 	  readSHM(a);
 	  
-	  char* wai = "OKWAIT";
+	  //char* wai = "OKWAIT";
 	//int n = 200;
 	  while(1){
 		 // n--;
