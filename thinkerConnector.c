@@ -331,6 +331,11 @@ int fork_thinker_connector(){
 
 int main(){
 	drawField();
+	parseMove("A1:A2",0);
+   parseMove("A3:A4",1);
+   parseMove("B1:C1",0);
+   parseMove("C3:C2",1);
+   parseMove("C1:C2",0);
 	read_configfile(CONFIG_DEFAULT);
 	fork_thinker_connector();
 return 0;
