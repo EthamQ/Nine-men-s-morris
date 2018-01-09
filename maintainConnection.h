@@ -12,5 +12,5 @@ short conMOVE(int sockfd);
 
 int testplay(int sockfd);
 
-short conPlay(int sockfd, char* move);
+short send_move_to_server(int sockfd, char* move);
 #endif

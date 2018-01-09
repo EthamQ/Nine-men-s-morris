@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "constants.h"
 #include "drawfield.h" //Siehe Meilenstein 3
 
 char* think(){
@@ -23,18 +24,6 @@ char* think(){
 
 //Ab hier neue Version von Raphael
 
-#define NUMBER_FIELDS 24
-#define NUMBER_STONES 9
-#define ZEILEN 3
-#define SPALTEN 8
-#define EMPTY 0
-#define PLAYER_CLIENT 1
-#define PLAYER_OPPONENT 2
-#define A 0
-#define B 1
-#define C 2
-#define SIZE_PLAY_COMMAND 15
-
 int stones;
 int stonesA = 0;
 int stonesB;
@@ -50,6 +39,7 @@ char buchstabe(int b){
 return 'E';
 }
 
+//EDIT: CAPTURE Aufforderung des Servers macht Mühlen finden evtl überflüssig
 //returned 1 wenn PLAYER_CLIENT eine Mühle auf einem der jeweiligen Ringe hat, sonst 0
 int check_rings(int field[ZEILEN][SPALTEN]){
 	int counter;
@@ -328,8 +318,8 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 			while(1){
 			int x = (rand() % ZEILEN);
 			int y = (rand() % SPALTEN);
-			if(field[x][y] == 0){
-				field[x][y] = 1;
+			if(field[x][y] == EMPTY){
+				field[x][y] = PLAYER_CLIENT;
 				stonesA++;
 				create_PLAY_command(play_command, x, y);
 				printf("\n%s\n", play_command);
@@ -356,6 +346,22 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 	}
 	return play_command;
 }
+
+	//Wird aufgerufen wenn ein Stein des Gegner geschmissen werden soll
+	char* capture(int field[ZEILEN][SPALTEN]){
+		char* play_command = malloc(SIZE_PLAY_COMMAND);
+		while(1){
+			int x = (rand() % ZEILEN);
+			int y = (rand() % SPALTEN);
+			if(field[x][y] == PLAYER_OPPONENT){
+				field[x][y] = EMPTY;
+				create_PLAY_command(play_command, x, y);
+				printf("\n%s\n", play_command);
+				print(field);
+				return play_command;
+			}
+			}
+	}
 
 
 

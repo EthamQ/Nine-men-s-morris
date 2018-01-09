@@ -78,23 +78,33 @@ int initConnect(){
 return sockfd;
 }
 
-//Spielzug an Connector schicken / in die Pipe schreiben
+//Normalen Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
   pipeBuffer=think();
+  //pipeBuffer=think_new(field);
   printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
-
   printf("pipebuffer: %s \n", pipeBuffer);
-
-
-  
   if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
-
-
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
   printf("Spielzug in die Pipe geschrieben, THINKER \n");
+  free(pipeBuffer);
+  return 0;
+}
+
+//Capture Spielzug an Connector schicken / in die Pipe schreiben
+short sendCaptureMove(){
+  char *pipeBuffer= malloc(sizeof(char)*(256));
+  //pipeBuffer=capture(field);
+  printf(" Thinker berechneter capture Zug: %s\n ",pipeBuffer);
+  printf("pipebuffer: %s \n", pipeBuffer);
+  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
+       perror("Fehler beim schreiben des CAPTURE Spielzugs in die pipe, BRAIN");
+       return -1;
+    }
+  printf("CAPTURE Spielzug in die Pipe geschrieben, THINKER \n");
   free(pipeBuffer);
   return 0;
 }
@@ -105,8 +115,60 @@ static void signalHandlerThinker(int signalNum){
     printf("Signal SIGUSR1 angekommen\n");
 	sendMove();
   }
+  if(signalNum==SIGUSR2){
+    printf("Signal SIGUSR2 angekommen\n");
+	sendCaptureMove();
+  }
 }
 
+
+	//task: entweder MOVE für SIGUSR1 oder CAPTURE für SIGUSR2
+	//Sendet entsprechendes Signal an den Thinker und liest dann den Spielzug aus der pipe 
+	//und sendet ihn an conPlay, der die passende Nachricht an den Server sendet
+	void send_signal(int sockfd, int task, char* movePipe){
+	if(task == MOVE){
+			//SIGUSR1 Signal an den thinker
+			if(kill(getppid(),SIGUSR1)<0){
+			perror("Fehler bei senden von SIGUSR1 an den Thinker, CONNECTOR");
+			}	
+			printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
+			//sleep(1); //TODO ist sleep hier notwendig ?
+			//Aus der Pipe den Spielzug lesen
+			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+			printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+			}
+			else{
+			perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+			}
+			//Spielzug an den Server senden
+			if(send_move_to_server(sockfd, movePipe) == ERROR){
+			perror("conplay failure, THINKCON");
+			}	
+		}
+		
+	if(task == CAPTURE){
+			//SIGUSR2 Signal an den thinker
+			if(kill(getppid(),SIGUSR2)<0){
+			perror("Fehler bei senden von SIGUSR2 an den Thinker, CONNECTOR");
+			}
+			printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
+			//sleep(1); //TODO ist sleep hier notwendig ?
+			//Aus der Pipe den Spielzug lesen
+			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+			printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
+			}
+			else{
+			perror("Spielzug konnte nicht aus der Pipe gelesen werden");
+			}
+			//Spielzug an den Server senden
+			if(send_move_to_server(sockfd, movePipe) == ERROR){
+			perror("conplay failure, THINKCON");
+			}	
+		}
+		
+	}
+				
+				
 int fork_thinker_connector(){
   printf("\nStarte fork_thinker_connector\n");
 
@@ -170,22 +232,9 @@ int fork_thinker_connector(){
     //HIER PLAY WICHTIG TODO !!!!!!
     //#############################
     //Signal an Thinker senden, erster spielzug des spiels
-      if(kill(getppid(),SIGUSR1)<0){
-          perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
-      }
-      printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
-      //sleep(1); //TODO ist sleep hier notwendig ?
-      //Aus der Pipe den Spielzug lesen
-      if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
-        printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
-      }
-      else{
-        perror("Spielzug konnte nicht aus der Pipe gelesen werden");
-      }
-      if(conPlay(sockfd, movePipe) == ERROR){
-        perror("conplay failure, THINKCON");
-      }
+     send_signal(sockfd, MOVE, movePipe);
 	  
+	  //shm test
 	  struct SHM_data* a = shmat(shmid, NULL, 0);
 	  writeSHM(a, "HELLO", SPIELNAME);
 	  readSHM(a);
@@ -193,37 +242,25 @@ int fork_thinker_connector(){
 	//int n = 200;
 	  while(1){
 		 // n--;
-		 printf("v");
 		  switch(maintainConnection(sockfd)){
-			  case MOVE:
-			   if(kill(getppid(),SIGUSR1)<0){
-				perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
-				}
-				printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
-				//sleep(1); //TODO ist sleep hier notwendig ?
-				//Aus der Pipe den Spielzug lesen
-				if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
-				printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
-				}
-				else{
-					perror("Spielzug konnte nicht aus der Pipe gelesen werden");
-				}
-				//Spielzug an den Server senden
-				if(conPlay(sockfd, movePipe) == ERROR){
-				perror("conplay failure, THINKCON");
-				}	
+			case MOVE:
+				//sends SIGUSR1
+				send_signal(sockfd, MOVE, movePipe);
+				break;
+				
+			case CAPTURE:
+				//sends SIGUSR2
+				send_signal(sockfd, CAPTURE, movePipe);
 				break;
 			
 			case WAIT:
-				//Send OKWAIT
 				write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
 				printf("C: OKWAIT");
-				sleep(1);
 				break; 
-
+				
 			case MOVEOK: break;
-			case ERROR: printf("CASE ERROR"); break;
 			case GAMEOVER: printf("S: GAMEOVER");break;
+			case ERROR: printf("CASE ERROR"); break;
 		  }
 		  
 	  }
@@ -311,6 +348,12 @@ int fork_thinker_connector(){
 			printf("Signalhandler definiert THINKER \n");
 
 			if(sigaction(SIGUSR1, &sa , NULL ) == 0){ //Bei success 0, sonst -1
+				printf("sigaction sucess THINKER\n");
+			}
+			else{
+				perror("sigaction groesser Null, Fehler ???");
+			}
+			if(sigaction(SIGUSR2, &sa , NULL ) == 0){ //Bei success 0, sonst -1
 				printf("sigaction sucess THINKER\n");
 			}
 			else{

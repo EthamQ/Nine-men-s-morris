@@ -46,16 +46,19 @@ int maintainConnection(int sockfd){
   
   if(strstr(serverResponse,"+ GAMEOVER")){
 	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-	//TODO: React to GAMEOVER command
     free(serverResponse);
     return GAMEOVER;
+  }
+  
+   if(strstr(serverResponse,"CAPTURE")){
+	printf("\nmaintainConnection(): received CAPTURE from the server\n");
+    free(serverResponse);
+    return CAPTURE;
   }
 
   if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	//if(strstr(serverResponse,"+ MOVEOK")){
 		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
-		//TODO: React to WAIT command
-		//send_message(sockfd, WAIT);
       free(serverResponse);
       return MOVEOK;
     }
@@ -118,7 +121,7 @@ short conMOVE(int sockfd){//, char *array){
 	write(sockfd, move, sizeof(move));
 		return 0;
 	}
-short conPlay(int sockfd, char* move){
+short send_move_to_server(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
 	
 	if(write(sockfd, move, sizeof(move)) < 0){
