@@ -1,7 +1,7 @@
 #ifndef maintainConnection_H
 #define maintainConnection_H
 
-int maintainConnection(int sockfd);
+int maintainConnection(int sockfd, struct SHM_data* shm_pointer);
 int maintainConnectionFIRST(int sockfd, int firstServerCommand);
 
 short conWAIT(int sockfd);

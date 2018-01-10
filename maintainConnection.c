@@ -9,6 +9,7 @@
 #include<string.h>
 
 #include "constants.h"
+#include "shm_data.h"
 
 int send_message(int sockfd, int type){
 	printf("\nStart method send_message\n");
@@ -28,7 +29,7 @@ int send_message(int sockfd, int type){
 	return 0;
 }
 
-int maintainConnection(int sockfd){
+int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	
@@ -67,6 +68,7 @@ int maintainConnection(int sockfd){
 		//if(strcmp(serverResponse, "+ MOVE\n")==0){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
 		//send_message(sockfd, MOVE);
+		read_piecelist(shm_pointer, serverResponse);
       free(serverResponse);
       return MOVE;
     }

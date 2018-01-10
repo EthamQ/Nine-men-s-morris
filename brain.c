@@ -6,6 +6,7 @@
 
 #include "constants.h"
 #include "drawfield.h" //Siehe Meilenstein 3
+#include "shm_data.h"
 
 char* think(){
 	char *move;
@@ -306,7 +307,7 @@ void create_MOVE_command(char* pos, int x, int y, int x_new, int y_new){
 //Wenn weniger als 9 Steine gelegt auf beliebiges freies Feld einen Stein legen
 //ansonsten auf ein beliebeiges freies Feld ziehen
 //returned passenden PLAY command 
-char* think_new(int field[ZEILEN][SPALTEN]){
+char* think_new(struct SHM_data* shm_pointer){
 	//play_command den man returned
 	char* play_command = malloc(SIZE_PLAY_COMMAND);
 	//TODO: field = parse MOVE server message
@@ -318,13 +319,13 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 			while(1){
 			int x = (rand() % ZEILEN);
 			int y = (rand() % SPALTEN);
-			if(field[x][y] == EMPTY){
-				field[x][y] = PLAYER_CLIENT;
+			if(shm_pointer->field[x][y] == EMPTY){
+				shm_pointer->field[x][y] = PLAYER_CLIENT;
 				stonesA++;
 				create_PLAY_command(play_command, x, y);
 				printf("\n%s\n", play_command);
-				print(field);
-				printf("Muehle?: %i\n", check_muehle(field));
+				print(shm_pointer->field);
+				printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
 				return play_command;
 			}
 			}
@@ -335,10 +336,10 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 		int FROM[2];
 		int TO[2];
 		if(stonesA >= 3){
-			move(field, FROM, TO);
+			move(shm_pointer->field, FROM, TO);
 			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
 			printf("\n%s\n", play_command);
-			printf("Muehle?: %i\n", check_muehle(field));
+			printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
 			return play_command;
 		}
 		else{
@@ -348,16 +349,16 @@ char* think_new(int field[ZEILEN][SPALTEN]){
 }
 
 	//Wird aufgerufen wenn ein Stein des Gegner geschmissen werden soll
-	char* capture(int field[ZEILEN][SPALTEN]){
+	char* capture(struct SHM_data* shm_pointer){
 		char* play_command = malloc(SIZE_PLAY_COMMAND);
 		while(1){
 			int x = (rand() % ZEILEN);
 			int y = (rand() % SPALTEN);
-			if(field[x][y] == PLAYER_OPPONENT){
-				field[x][y] = EMPTY;
+			if(shm_pointer->field[x][y] == PLAYER_OPPONENT){
+				shm_pointer->field[x][y] = EMPTY;
 				create_PLAY_command(play_command, x, y);
 				printf("\n%s\n", play_command);
-				print(field);
+				print(shm_pointer->field);
 				return play_command;
 			}
 			}

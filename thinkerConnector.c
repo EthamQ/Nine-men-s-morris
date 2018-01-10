@@ -28,6 +28,8 @@ short gotSignal = 0;
 short gameOver = 0;
 char moveDest[5] = "Test";
 int pipeFd[2];
+int *shmptr_global;
+int shmid_g;
 
 //Connect to the server and return the socket file descriptor
 int initConnect(){
@@ -81,8 +83,10 @@ return sockfd;
 //Normalen Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
-  pipeBuffer=think();
-  //pipeBuffer=think_new(field);
+  //pipeBuffer=think();
+  //printf("SPeicheradresse von shm global: %p",shmptr_global); 
+  struct SHM_data* shm_pointer = shmat(shmid_g, NULL, 0);
+  pipeBuffer=think_new(shm_pointer);
   printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
   printf("pipebuffer: %s \n", pipeBuffer);
   if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
@@ -195,7 +199,9 @@ int fork_thinker_connector(){
 	}
 	else{
 	   printf("fork_thinker_connector(): shared memory success");
+	   shmid_g = shmid;
 	}
+	//*shmptr_global = shmat(shmid, NULL, 0);
 
 	//FORK
   switch(pid = fork()){
@@ -218,9 +224,15 @@ int fork_thinker_connector(){
         printf("\nfork_thinker_connector(): initConnect success\n");
 			}
 
+			
+	//shm test
+	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	  //writeSHM(a, "HELLO", SPIELNAME);
+	  //readSHM(a);
+	  
   	//PROLOG
   	//int first_command = (int)performConnection(sockfd);
-    if(performConnection(sockfd) < 0) {
+    if(performConnection(sockfd, shm_pointer) < 0) {
         perror("\nfork_thinker_connector(): Fehler bei performConnection");
         return -1;
   	}
@@ -234,15 +246,12 @@ int fork_thinker_connector(){
     //Signal an Thinker senden, erster spielzug des spiels
      send_signal(sockfd, MOVE, movePipe);
 	  
-	  //shm test
-	  struct SHM_data* a = shmat(shmid, NULL, 0);
-	  writeSHM(a, "HELLO", SPIELNAME);
-	  readSHM(a);
+	  
 	  
 	//int n = 200;
 	  while(1){
 		 // n--;
-		  switch(maintainConnection(sockfd)){
+		  switch(maintainConnection(sockfd, shm_pointer)){
 			case MOVE:
 				//sends SIGUSR1
 				send_signal(sockfd, MOVE, movePipe);
