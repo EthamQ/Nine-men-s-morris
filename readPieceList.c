@@ -35,7 +35,7 @@ int read_piecelist_hidden(char* piecelist, char *search, int startposition, char
         }
     }
     // gefunden, man befindet sich beim T von PIECELIST
-    printf("Position text = %i, an dieser Stelle steht ein [%c][%c][%c][%c]\n", pos_text, testread[pos_text], testread[pos_text+1], testread[pos_text+2], testread[pos_text+3]);
+    printf("Position text = %i, an dieser Stelle steht ein [%c][%c][%c][%c]\n", pos_text, piecelist[pos_text], piecelist[pos_text+1], piecelist[pos_text+2], testread[pos_text+3]);
 	//status[0] = testread[pos_text+3];
 	//status[1] = testread[pos_text+4];
 	status[0] = piecelist[pos_text+3];
@@ -77,7 +77,6 @@ void printt(int fieldd[3][8]){
 			if(status[0] == 'C'){
 				shm_pointer->field[2][zahl] = player;
 			}
-			printt(shm_pointer->field);
 			return;
 		}
 		printf("2. Zeichen leer\n");
@@ -85,7 +84,18 @@ void printt(int fieldd[3][8]){
 	}
 	
 	
+	void resetArray(struct SHM_data* shm_pointer){
+		int i, j;
+		for(i = 0; i<3 ; i++){
+			for(j = 0; j<8 ; j++){
+			shm_pointer->field[i][j] = 0;
+		}
+	}
+	}
+	
 	void read_piecelist(struct SHM_data* shm_pointer, char* piecelist){
+		resetArray(shm_pointer);
+					printt(shm_pointer->field);
 	int pos = 0;
 	int n = 0;
 	char status[2];
@@ -106,6 +116,7 @@ void printt(int fieldd[3][8]){
 	printf("PIECE %c status: %c%c\n", piecelist[pos+1], status[0], status[1]);
 	n++;
 	}
+				printt(shm_pointer->field);
 	
 	}
 /*int main(){

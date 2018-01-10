@@ -39,7 +39,7 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 		free(serverResponse);
 		return ERROR;
 	}
-  printf("%s",serverResponse);
+  //printf("%s",serverResponse);
   printf("\nmaintainConnection():\nS: %s",serverResponse);
   //printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
@@ -59,7 +59,7 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 
   if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	//if(strstr(serverResponse,"+ MOVEOK")){
-		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
+		printf("maintainConnection(): received + MOVEOK from the server\n");
       free(serverResponse);
       return MOVEOK;
     }
@@ -127,7 +127,7 @@ short send_move_to_server(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
 	
 	if(write(sockfd, move, sizeof(move)) < 0){
-		perror("send_message(): write error, MAINCON");
+		perror("write error, MAINCON");
 		return ERROR;
 	}
 	printf("\nC: %s\n", move);

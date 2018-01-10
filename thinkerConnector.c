@@ -268,13 +268,13 @@ int fork_thinker_connector(){
 				break;
 			
 			case WAIT:
-				write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
+				write(sockfd, "OKWAIT", sizeof(char)*10);
 				printf("C: OKWAIT");
 				break; 
 				
 			case MOVEOK: break;
 			case GAMEOVER: printf("S: GAMEOVER");break;
-			case ERROR: printf("CASE ERROR"); break;
+			case ERROR: printf("CASE ERROR"); sleep(1); break;
 		  }
 		  
 	  }
