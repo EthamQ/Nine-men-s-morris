@@ -1,9 +1,17 @@
-Der Status momentan. Yunus Cobanoglu 19:23 23.11.
-| => /Users/YunusCobanoglu/MuehleGruppe13/sysprak-client 
-connected
-- TIMEOUT Be faster next time
-g connections
-Invalid server respone: No route to host
-Fehler bei performConnection: No route to host
-Good to go?!
+Status 10.1
 
+TODO:
+
+GameID aus Configfile Lesen
+
+Speicherfehler bei play senden ausbessern (pointerfehler ?)
+
+KI weitermachen + funktionen verkapseln
+ =>Spiel fortsetzen 
+ =>Zweites Move Command, ueber wait phase herauskommen
+
+Sharedmem verwenden, nicht ueberall drin
+
+Draw (?)
+
+unnoetige dateien + branchen weg
