@@ -101,7 +101,7 @@ short sendMove(){
 //Capture Spielzug an Connector schicken / in die Pipe schreiben
 short sendCaptureMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
-  //pipeBuffer=capture(field);
+  //ppipeBuffer=think_new(shm_pointer);
   printf(" Thinker berechneter capture Zug: %s\n ",pipeBuffer);
   printf("pipebuffer: %s \n", pipeBuffer);
   if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
