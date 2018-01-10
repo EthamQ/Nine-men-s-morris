@@ -15,8 +15,15 @@ return -1;
 }
 //in line werden die einzelnen Zeilen zwischengespeichert
 char line[256];
-while (fgets(line, sizeof(line), file)) {
-        printf("%s", line); 
+char* ptr;
+char delimiter[] = "=";
+while (fgets(line, sizeof(line), file)){
+	ptr = strtok(line,delimiter);
+       
+	 while(ptr != NULL) {
+	 	printf("Ausgelesen:%s\n",ptr);
+	 	ptr = strtok(NULL,delimiter);
+		}
     }
 	printf("\n");
 

@@ -40,7 +40,7 @@ void writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
 }
 
 //Auskommentiert, da es hier Fehler gibt
-/*void readSHM(struct SHM_data* shm_pointer){
+void readSHM(struct SHM_data* shm_pointer){
 	printf("\nStarte readSHM\n");
 	printf("\nread: Übergabeparameter Pointer zu: %p\n", shm_pointer);
 	
@@ -49,6 +49,6 @@ void writeSHM(struct SHM_data* shm_pointer, char* data, int flag){
 	
 	
 
-}*/
+}
 
 
