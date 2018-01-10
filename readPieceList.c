@@ -95,7 +95,10 @@ void printt(int fieldd[3][8]){
 	
 	void read_piecelist(struct SHM_data* shm_pointer, char* piecelist){
 		resetArray(shm_pointer);
-					printt(shm_pointer->field);
+		printf("Field wurde resettet: \n");
+		printt(shm_pointer->field);
+		printf("\n");
+		
 	int pos = 0;
 	int n = 0;
 	char status[2];
@@ -116,7 +119,10 @@ void printt(int fieldd[3][8]){
 	printf("PIECE %c status: %c%c\n", piecelist[pos+1], status[0], status[1]);
 	n++;
 	}
-				printt(shm_pointer->field);
+	
+	printf("Jetzt wurde die Servernachricht eingelesen: \n");
+	printt(shm_pointer->field);
+	printf("\n");
 	
 	}
 /*int main(){

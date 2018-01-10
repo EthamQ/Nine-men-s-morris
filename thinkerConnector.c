@@ -84,11 +84,11 @@ return sockfd;
 short sendMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
   //pipeBuffer=think();
-  //printf("SPeicheradresse von shm global: %p",shmptr_global); 
+  printf("SPeicheradresse von shmat: %p\n",shmat(shmid_g, NULL, 0)); 
   struct SHM_data* shm_pointer = shmat(shmid_g, NULL, 0);
   pipeBuffer=think_new(shm_pointer);
   printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
-  printf("pipebuffer: %s \n", pipeBuffer);
+  //printf("pipebuffer: %s \n", pipeBuffer);
 
 
 
@@ -253,18 +253,29 @@ int fork_thinker_connector(){
 	  
 	  
 
+	  //int get_spielfeld = 0;
 	//int n = 200;
+	char thinkingPRC []= "THINKING\n";
 	  while(1){
 		 // n--;
 		  switch(maintainConnection(sockfd, shm_pointer)){
 			case MOVE:
+				write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
+				printf("C: THINKING\n");
+				if(maintainConnection(sockfd, shm_pointer)==OKTHINK){
 				//sends SIGUSR1
 				send_signal(sockfd, MOVE, movePipe);
+				}
+			
+			
 				break;
 				
 			case CAPTURE:
 				//sends SIGUSR2
-				send_signal(sockfd, CAPTURE, movePipe);
+				
+				//sends SIGUSR1
+				send_signal(sockfd, MOVE, movePipe);
+				
 				break;
 			
 			case WAIT:

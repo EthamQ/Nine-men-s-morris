@@ -16,7 +16,7 @@ static char versionPRC []= "VERSION 2.0\n";
 //static char game_idPRC []= "ID 02pobsvmluimp\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
-static char game_idPRC []= "ID 14spjulp86wvu\n";
+static char game_idPRC []= "ID 1eeno1v0yf6vo\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
@@ -162,7 +162,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
       weil die intialpositionen und PIECELIST eh immer gleich ist
     */
     memset(&dataPRS[0], 0, sizeof(dataPRS));
-    printf("thinking sollte gesendet sein, PERFCON");
+    printf("\nC: THINKING\n");
 
   //S:+ OKTHINK
   while(testifvalid < 0){
