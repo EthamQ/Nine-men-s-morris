@@ -9,6 +9,7 @@
 #include<string.h>
 
 #include "constants.h"
+#include "shm_data.h"
 
 int send_message(int sockfd, int type){
 	printf("\nStart method send_message\n");
@@ -28,7 +29,7 @@ int send_message(int sockfd, int type){
 	return 0;
 }
 
-int maintainConnection(int sockfd){
+int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	
@@ -46,16 +47,19 @@ int maintainConnection(int sockfd){
   
   if(strstr(serverResponse,"+ GAMEOVER")){
 	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-	//TODO: React to GAMEOVER command
     free(serverResponse);
     return GAMEOVER;
+  }
+  
+   if(strstr(serverResponse,"CAPTURE")){
+	printf("\nmaintainConnection(): received CAPTURE from the server\n");
+    free(serverResponse);
+    return CAPTURE;
   }
 
   if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	//if(strstr(serverResponse,"+ MOVEOK")){
 		printf("\nmaintainConnection(): received + MOVEOK from the server\n");
-		//TODO: React to WAIT command
-		//send_message(sockfd, WAIT);
       free(serverResponse);
       return MOVEOK;
     }
@@ -64,6 +68,7 @@ int maintainConnection(int sockfd){
 		//if(strcmp(serverResponse, "+ MOVE\n")==0){
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
 		//send_message(sockfd, MOVE);
+		read_piecelist(shm_pointer, serverResponse);
       free(serverResponse);
       return MOVE;
     }
@@ -118,7 +123,7 @@ short conMOVE(int sockfd){//, char *array){
 	write(sockfd, move, sizeof(move));
 		return 0;
 	}
-short conPlay(int sockfd, char* move){
+short send_move_to_server(int sockfd, char* move){
 	printf("conplay aufgerufen, MAINCON\n");
 	
 	if(write(sockfd, move, sizeof(move)) < 0){

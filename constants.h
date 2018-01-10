@@ -19,8 +19,22 @@
   #define OKTHINK 3
   #define OKWAIT 4
   #define MOVEOK 5
+  #define CAPTURE 6
   //maincon
   //#define MOVETHINKING 4
+  
+//Zugberechnungen in brain.c
+#define NUMBER_FIELDS 24
+#define NUMBER_STONES 9
+#define ZEILEN 3
+#define SPALTEN 8
+#define EMPTY 0
+#define PLAYER_CLIENT 1
+#define PLAYER_OPPONENT 2
+#define A 0
+#define B 1
+#define C 2
+#define SIZE_PLAY_COMMAND 15
 
 //Client messages
 #define MES_LENGTH_CLIENT 200
