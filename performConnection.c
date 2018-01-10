@@ -28,6 +28,9 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
+
+
+
 int performConnection(int sockfd){
     //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
