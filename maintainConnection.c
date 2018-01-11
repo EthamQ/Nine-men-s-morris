@@ -11,6 +11,8 @@
 #include "constants.h"
 #include "shm_data.h"
 
+char thinkingPRC []= "THINKING\n";
+
 
 
 int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
@@ -28,34 +30,38 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
   //printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
  
-  
-  if(strstr(serverResponse,"+ GAMEOVER")){
-	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-    free(serverResponse);
-    return GAMEOVER;
-  }
-  
+
   
 
-  if(strcmp(serverResponse, "+ MOVEOK\n")==0){
+	
+  	if(strstr(serverResponse,"+ MOVE 3000")){
+		//if(strcmp(serverResponse, "+ MOVE\n")==0){
+		printf("\nmaintainConnection(): received +MOVE from the server\n");
+		
+		if(write(sockfd, thinkingPRC, (int)strlen(thinkingPRC)) <0){
+			perror("Fehler beim senden von THINKING");
+		}
+		
+		printf("C: %s", thinkingPRC);
+		
+		if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
+			perror("Fehler beim empfangen von OKTHINK");
+		};
+
+		printf("\nS: %s\n",serverResponse);
+		
+		read_piecelist(shm_pointer, serverResponse);
+      free(serverResponse);
+      return MOVE;
+    }
+	
+	 if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	//if(strstr(serverResponse,"+ MOVEOK")){
 		printf("maintainConnection(): received + MOVEOK from the server\n");
       free(serverResponse);
       return MOVEOK;
     }
-	
-	if(strstr(serverResponse,"+ MOVE")){
-		//if(strcmp(serverResponse, "+ MOVE\n")==0){
-		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		read_piecelist(shm_pointer, serverResponse);
-      free(serverResponse);
-      return MOVE;
-    }
-	 if(strstr(serverResponse,"CAPTURE")){
-	printf("\nmaintainConnection(): received CAPTURE from the server\n");
-    free(serverResponse);
-    return CAPTURE;
-  }
+  
 
 	//if(strcmp(serverResponse, "+ WAIT\n")==0){
 	if(strstr(serverResponse,"+ WAIT")){
@@ -70,6 +76,18 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
       free(serverResponse);
       return OKTHINK;
     }
+	
+			if(strstr(serverResponse,"CAPTURE") && strstr(serverResponse,"+ MOVE")){
+    free(serverResponse);
+    return CAPTURE;
+  }
+	
+  if(strstr(serverResponse,"+ GAMEOVER")){
+	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+    free(serverResponse);
+    return GAMEOVER;
+  }
+  
 	
     free(serverResponse);
       return ERROR;

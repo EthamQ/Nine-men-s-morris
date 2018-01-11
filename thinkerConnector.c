@@ -255,17 +255,25 @@ int fork_thinker_connector(){
 
 	  //int get_spielfeld = 0;
 	//int n = 200;
+	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	char thinkingPRC []= "THINKING\n";
 	  while(1){
 		 // n--;
 		  switch(maintainConnection(sockfd, shm_pointer)){
 			case MOVE:
-				write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
-				printf("C: THINKING\n");
-				if(maintainConnection(sockfd, shm_pointer)==OKTHINK){
+				
+				/*if(maintainConnection(sockfd, shm_pointer)==OKTHINK){
 				//sends SIGUSR1
-				send_signal(sockfd, MOVE, movePipe);
+				write(sockfd, "PLAY C7\n", 15);
+				//send_signal(sockfd, MOVE, movePipe);
 				}
+				
+				read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
+				printf("\nS: %s\n",serverResponse);
+				//write(sockfd, "PLAY C7\n", 15);
+				*/
+				send_signal(sockfd, MOVE, movePipe);
+				
 			
 			
 				break;
@@ -285,7 +293,7 @@ int fork_thinker_connector(){
 				
 			case MOVEOK: break;
 			case GAMEOVER: printf("S: GAMEOVER");break;
-			case ERROR: printf("CASE ERROR"); sleep(1); break;
+			case ERROR: printf("CASE ERROR"); sleep(3); break;
 		  }
 		  
 	  }
