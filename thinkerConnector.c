@@ -232,6 +232,7 @@ int fork_thinker_connector(){
 			
 	//shm test
 	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	  printf("Adresse shmat im Connector: %p:", shmat(shmid, NULL, 0));
 	  //writeSHM(a, "HELLO", SPIELNAME);
 	  //readSHM(a);
 	  
