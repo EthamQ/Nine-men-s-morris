@@ -16,7 +16,7 @@ static char versionPRC []= "VERSION 2.0\n";
 //static char game_idPRC []= "ID 02pobsvmluimp\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
 //static char game_idPRC []= "ID 2uiyd4c9217om\n";
-static char game_idPRC []= "ID 2soidy4q3hcvx\n";
+static char game_idPRC []= "ID 052j3mkakfco2\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
@@ -167,8 +167,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
   //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-    printf("\nOKthink ???\n\n");
-    printf("%s\n",dataPRS);
+    //printf("\nOKthink ???\n\n");
+    printf("S: %s\n",dataPRS);
     if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
       return -1;
@@ -177,7 +177,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     //printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }

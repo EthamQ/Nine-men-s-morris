@@ -12,6 +12,7 @@
 #include "shm_data.h"
 
 char thinkingPRC []= "THINKING\n";
+char okwait []= "OKWAIT\n";
 
 
 
@@ -26,13 +27,16 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 		return ERROR;
 	}
   //printf("%s",serverResponse);
-  printf("\nmaintainConnection():\nS: %s",serverResponse);
+  //printf("\nmaintainConnection() read:\nS: %s",serverResponse);
+  printf("\nS: %s",serverResponse);
   //printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
 
  
 
   
 
+	//if(strcmp(serverResponse, "+ WAIT\n")==0){
+	
 	
   	if(strstr(serverResponse,"+ MOVE 3000")){
 		//if(strcmp(serverResponse, "+ MOVE\n")==0){
@@ -47,28 +51,30 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 		if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
 			perror("Fehler beim empfangen von OKTHINK");
 		};
-
-		printf("\nS: %s\n",serverResponse);
-		
+		printf("\nS: %s",serverResponse);
 		read_piecelist(shm_pointer, serverResponse);
       free(serverResponse);
       return MOVE;
     }
 	
-	 if(strcmp(serverResponse, "+ MOVEOK\n")==0){
-	//if(strstr(serverResponse,"+ MOVEOK")){
+	if(strstr(serverResponse,"+ WAIT")){
+		printf("\nmaintainConnection(): received +WAIT from the server\n");
+		write(sockfd, okwait, (int)strlen(okwait));
+				printf("C: %s", okwait);
+      free(serverResponse);
+      return WAIT;
+    }
+	
+	
+	 //if(strcmp(serverResponse, "+ MOVEOK\n")==0){
+	if(strstr(serverResponse,"+ MOVEOK")){
 		printf("maintainConnection(): received + MOVEOK from the server\n");
       free(serverResponse);
       return MOVEOK;
     }
   
 
-	//if(strcmp(serverResponse, "+ WAIT\n")==0){
-	if(strstr(serverResponse,"+ WAIT")){
-		printf("\nmaintainConnection(): received +WAIT from the server\n");
-      free(serverResponse);
-      return WAIT;
-    }
+	
 	
 	if(strstr(serverResponse,"OKTHINK")){
 		//if(strcmp(serverResponse, "+ MOVE\n")==0){
@@ -95,7 +101,7 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 
 
 short send_move_to_server(int sockfd, char* move){
-	printf("conplay aufgerufen, MAINCON\n");
+	//printf("conplay aufgerufen, MAINCON\n");
 	
 	if(write(sockfd, move, sizeof(move)) < 0){
 		perror("write error, MAINCON");

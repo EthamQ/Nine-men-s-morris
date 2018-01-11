@@ -155,11 +155,11 @@ void print(int field[ZEILEN][SPALTEN]){
 void swap(int field[ZEILEN][SPALTEN], int x, int y, int x_new, int y_new){
 	printf("\nFunction swap: [%i][%i] with [%i][%i]\n", x, y, x_new, y_new);
 	printf("\nVor swap: \n");
-	print(field);
-	field[x][y] = EMPTY;
-	field[x_new][y_new] = PLAYER_CLIENT;
-	printf("\n\nNach swap: \n");
-	print(field);
+	//print(field);
+	//field[x][y] = EMPTY;
+	//field[x_new][y_new] = PLAYER_CLIENT;
+	//printf("\n\nNach swap: \n");
+	//print(field);
 }
 
 //speichert den x und y Wert einer neuen freien Position zu der man ziehen kann in dem Übergabearray newPos
@@ -204,7 +204,7 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 		if(x == B && y != 0 && (y%2 != 0)){
 			//A Ring
 			check_x = x-1;
-			printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
+			//printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
 			if(field[check_x][y] == EMPTY){
 			newPos[0] = check_x;
 			newPos[1] = y;
@@ -212,7 +212,7 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 			}
 			//C Ring
 			check_x = x+1;
-			printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
+			//printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
 			if(field[check_x][y] == EMPTY){
 			newPos[0] = check_x;
 			newPos[1] = y;
@@ -223,7 +223,7 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 		//C sucht nach Platz in B Ring
 		if(x == C && y != 0 && (y%2 != 0)){
 			check_x = x-1;
-			printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
+			//printf("check if field[%i][%i] == EMPTY | %i\n", check_x, y, (field[check_x][y] == EMPTY));
 			if(field[check_x][y] == EMPTY){
 			newPos[0] = check_x;
 			newPos[1] = y;
@@ -308,6 +308,7 @@ void create_MOVE_command(char* pos, int x, int y, int x_new, int y_new){
 //ansonsten auf ein beliebeiges freies Feld ziehen
 //returned passenden PLAY command 
 char* think_new(struct SHM_data* shm_pointer){
+	printf("think new hat folgenden Pointer erhalten: %p", shm_pointer);
 	//play_command den man returned
 	char* play_command = malloc(SIZE_PLAY_COMMAND);
 	//TODO: field = parse MOVE server message
@@ -320,12 +321,14 @@ char* think_new(struct SHM_data* shm_pointer){
 			int x = (rand() % ZEILEN);
 			int y = (rand() % SPALTEN);
 			if(shm_pointer->field[x][y] == EMPTY){
-				shm_pointer->field[x][y] = PLAYER_CLIENT;
-				stonesA++;
-				create_PLAY_command(play_command, x, y);
-				printf("\n%s\n", play_command);
+				//shm_pointer->field[x][y] = PLAYER_CLIENT;
+				printf("Bei betreten von think sieht das Feld folgendermaßen aus: \n");
 				print(shm_pointer->field);
-				printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
+				printf("KI schaut ob das Feld [%i][%i] leer ist | %i", x, y, shm_pointer->field[x][y] == EMPTY);
+				create_PLAY_command(play_command, x, y);
+				//printf("\n%s\n", play_command);
+				//print(shm_pointer->field);
+				//printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
 				return play_command;
 			}
 			}
@@ -338,8 +341,8 @@ char* think_new(struct SHM_data* shm_pointer){
 		if(stonesA >= 3){
 			move(shm_pointer->field, FROM, TO);
 			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
-			printf("\n%s\n", play_command);
-			printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
+			//printf("\n%s\n", play_command);
+			//printf("Muehle?: %i\n", check_muehle(shm_pointer->field));
 			return play_command;
 		}
 		else{
@@ -358,7 +361,7 @@ char* think_new(struct SHM_data* shm_pointer){
 				shm_pointer->field[x][y] = EMPTY;
 				create_PLAY_command(play_command, x, y);
 				printf("\n%s\n", play_command);
-				print(shm_pointer->field);
+				//print(shm_pointer->field);
 				return play_command;
 			}
 			}
