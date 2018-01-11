@@ -14,4 +14,6 @@ Sharedmem verwenden, nicht ueberall drin
 
 Draw (?)
 
-unnoetige dateien + branchen weg
+unnoetige dateien 
+
+GameID als kommandozeilenparameter
