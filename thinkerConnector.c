@@ -30,6 +30,7 @@ char moveDest[5] = "Test";
 int pipeFd[2];
 int *shmptr_global;
 int shmid_g;
+int shmid;
 
 //Connect to the server and return the socket file descriptor
 int initConnect(){
@@ -85,16 +86,11 @@ short sendMove(){
   char *pipeBuffer= malloc(sizeof(char)*(256));
   //pipeBuffer=think();
   //printf("SPeicheradresse von shmat: %p\n",shmat(shmid_g, NULL, 0)); 
-  struct SHM_data* shm_pointer = shmat(shmid_g, NULL, 0);
+  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
   pipeBuffer=think_new(shm_pointer);
   //printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
   //printf("pipebuffer: %s \n", pipeBuffer);
-
-
-
-  
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
-
+	if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
@@ -197,7 +193,8 @@ int fork_thinker_connector(){
      //printf("fork_thinker_connector(): Created pipe successfully");
    }
 
-	int shmid; 	size_t shm_size = sizeof(struct SHM_data); 	
+	//int shmid; 	
+	size_t shm_size = sizeof(struct SHM_data); 	
 	shmid = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | 0666); 	
 	if (shmid >= 0) { 	struct playerStruct *SHM_data = shmat(shmid,  0, 0); 	
 	if (SHM_data==(void *)-1) { 	perror("shmat failed"); 	} 	
