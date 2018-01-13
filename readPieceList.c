@@ -5,6 +5,8 @@
 
 #include "shm_data.h"
 
+int available_pieces = 0;
+
 
 
 
@@ -67,6 +69,9 @@ void printt(int fieldd[3][8]){
 		//printf("value of empty: %i\n", status[1]);
 		//printf("value of char 5: %i\n", '5');
 		int zahl = status[1] - '0';
+		if(player == 1 && status[0] == 'A' && (zahl < 0 || zahl > 8)){
+			available_pieces++;
+		}
 		if(zahl >= 0 && zahl <= 8){
 			if(status[0] == 'A'){
 				shm_pointer->field[0][zahl] = player;
@@ -80,7 +85,7 @@ void printt(int fieldd[3][8]){
 				shm_pointer->field[2][zahl] = player;
 				printf("Player: %i - set[C][%i]",player, zahl);
 			}
-			return;
+			
 		}
 		//printf("2. Zeichen leer\n");
 		
@@ -114,7 +119,10 @@ void printt(int fieldd[3][8]){
 	//printf("PIECE %c status: %c%c\n", testread[pos+1], status[0], status[1]);
 	//printf("PIECE %c status: 1:[%c] 2:[%c]\n", piecelist[pos+1], status[0], status[1]);
 	n++;
+	
 	}
+	printf("\nAvailable pieces: %i\n", available_pieces);
+	available_pieces = 0;
 	n = 0;
 	while(n<9){
 	//pos = read_piecelist_hidden(testread, "PIECE1,",sizeof("PIECE1,")-1, pos, status);
