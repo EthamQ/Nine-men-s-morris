@@ -28,12 +28,11 @@ char* filepath = configFileName;
 	file = fopen(filepath, "r");
 	if(file == NULL){
 		printf("\ninvalid configfilename or path, opening client.conf instead\n\n");
-		fflush(file);
-		if((file=fopen("client.conf","r"))==NULL){
+		file=fopen("client.conf","r")
+		if(file == NULL){
 			perror("client.conf does not exist either D: , READCONF");
 			return -1;
 		}
-		printf("test");
 		else{
 			//printf("opened client.conf successfully, woohoo \n");
 		}
