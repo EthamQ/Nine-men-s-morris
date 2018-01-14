@@ -20,7 +20,8 @@ char* cleanBlankspace(char* toClean){
 	char* toReturn;
 	//char* BlankDeli = " ";
 
-		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
+		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
+			printf("\nabgefangen\n");
 			return " ";
 		}
 		/*
