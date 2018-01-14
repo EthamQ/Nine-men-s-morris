@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "constants.h"
+
 #define paraHOSTNAME 1
 #define paraPORT 2
 #define paraGAMEKINDNAME 3

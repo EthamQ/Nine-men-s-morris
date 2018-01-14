@@ -7,6 +7,20 @@
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define CONFIG_DEFAULT "client.conf"
 
+//performConnection
+#define BUFFER_SIZE 256
+//Configstruct
+struct configConstants{
+  char   gameKindName[BUFFER_SIZE];
+  char   hostName[BUFFER_SIZE];
+  char   gameID[BUFFER_SIZE];
+  char   playerName[BUFFER_SIZE];
+  char   gameVersion[BUFFER_SIZE];
+  int    playerNumber;
+  int    portNumber; //uint16_t portNumber;
+};
+
+struct configConstants confiConst;
 
 
 //Flags
@@ -22,7 +36,7 @@
   #define CAPTURE 6
   //maincon
   //#define MOVETHINKING 4
-  
+
 //Zugberechnungen in brain.c
 #define NUMBER_FIELDS 24
 #define NUMBER_STONES 9
