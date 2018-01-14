@@ -5,7 +5,7 @@
 
 int read_configfile(char* gameID, char* playerNumber, char* configFileName){
 FILE* file;
-char* filepath = configname;
+char* filepath = configFileName;
 
 file = fopen(filepath, "r");
 if(file == NULL){

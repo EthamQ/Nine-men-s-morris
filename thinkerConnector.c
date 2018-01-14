@@ -385,7 +385,7 @@ int fork_thinker_connector(){
   return 0;
 }
 
-int main(){
+int main(int argc, char *argv[]){
   short paras;
   char* parGameId;
   char* parPlayerNumber;
