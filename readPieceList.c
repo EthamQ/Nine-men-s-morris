@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "shm_data.h"
+#include "constants.h"
 
 int available_pieces = 0;
 
@@ -54,6 +55,32 @@ int read_capture_status(char* piecelist){
 	int pos_text;
 	int pos_search = 0;
     for (pos_text = 0; pos_text < array_length; pos_text++){
+		//printf("Check if %c and %c is the same | %i\n", piecelist[pos_text], search[pos_search], (piecelist[pos_text] == search[pos_search]));
+		//printf("pos text: %i, pos_search: %i\n", pos_text, pos_search);
+        if(piecelist[pos_text] == search[pos_search]){
+            pos_search++;
+            if(pos_search == search_length){
+                // match
+                //printf("match from %d to %d\n",pos_text,pos_text);
+				break;
+            }
+		}
+        else{
+           pos_text -= pos_search;
+           pos_search = 0;
+        }
+    }
+	return piecelist[pos_text+1] - '0';
+}
+
+int read_player_number(char* piecelist){
+	int array_length = strlen(piecelist);
+	char *search = "YOU ";
+	int search_length = strlen(search);
+	//printf("array_length: %i\n", array_length);
+	int pos_text;
+	int pos_search = 0;
+    for (pos_text = 0; pos_text < array_length-1; pos_text++){
 		//printf("Check if %c and %c is the same | %i\n", piecelist[pos_text], search[pos_search], (piecelist[pos_text] == search[pos_search]));
 		//printf("pos text: %i, pos_search: %i\n", pos_text, pos_search);
         if(piecelist[pos_text] == search[pos_search]){
@@ -145,10 +172,27 @@ void printt(int fieldd[3][8]){
 		status[0] = 'E';
 		status[1] = 'E';
 	
-		//9 Pieces Spieler 1
+		//which player are we?
+		 int plNR = read_player_number(piecelist);
+		 if(plNR == 0 || plNR == 1){
+		 shm_pointer->player = plNR; 
+		 }
+		 printf("\nYOU: %i\n", shm_pointer->player);
+		 
+		 int playerA;
+		 int playerB;
+		 if(shm_pointer->player == 0){
+			 playerA = PLAYER_CLIENT;
+			 playerB = PLAYER_OPPONENT;
+		 }
+		 else if(shm_pointer->player == 1){
+			 playerA = PLAYER_OPPONENT;
+			 playerB = PLAYER_CLIENT;
+		 }
+		//9 Pieces Spieler CLIENT
 		while(n<9){
 		pos = read_piecelist_hidden(piecelist, "PIECE0,", pos, status);
-		fill_array(1, status, shm_pointer);
+		fill_array(playerA, status, shm_pointer);
 		n++;
 		}
 	
@@ -158,11 +202,11 @@ void printt(int fieldd[3][8]){
 		shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
 		available_pieces = 0;
 	
-		//9 Pieces Spieler 2
+		//9 Pieces Spieler OPPONENT
 		n = 0;
 		while(n<9){
 		pos = read_piecelist_hidden(piecelist, "PIECE1,", pos, status);
-		fill_array(2, status, shm_pointer);
+		fill_array(playerB, status, shm_pointer);
 		n++;
 		}
 	
@@ -170,8 +214,9 @@ void printt(int fieldd[3][8]){
 		int capture = read_capture_status(piecelist);
 		printf("\nCapture: %i\n", capture);
 		shm_pointer->capture_status = capture;
+		printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);
 	
-		printf("Jetzt wurde die Servernachricht eingelesen: \n");
+		printf("\nJetzt wurde die Servernachricht eingelesen: \n");
 		printt(shm_pointer->field);
 		printf("\n");
 	}

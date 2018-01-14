@@ -23,6 +23,7 @@ int pid_connector;
 int field[ZEILEN][SPALTEN];
 int used_pieces;
 int capture_status;
+int player;
 };
 
 

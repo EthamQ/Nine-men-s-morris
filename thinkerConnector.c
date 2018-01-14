@@ -236,20 +236,17 @@ int fork_thinker_connector(){
 	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);;
 	  printf("-Start performConnection-\n");
 	  
-	//Prologphase und senden des ersten THINKING Befehls
-    if(performConnection(sockfd, shm_pointer) < 0) {
-        perror("\nfork_thinker_connector(): Fehler bei performConnection");
-        return -1;
+	//Prologphase und senden des ersten THINKING Befehls falls Server move sendet
+    if(performConnection(sockfd, shm_pointer) == OKTHINK) {
+      //Signal an Thinker senden, erster spielzug des spiels
+     send_signal(sockfd, MOVE, movePipe);
   	}
     
-    //Signal an Thinker senden, erster spielzug des spiels
-     send_signal(sockfd, MOVE, movePipe);
+   
 	  
 	  
 printf("-Ab hier switch case-\n");
 
-	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
-	char thinkingPRC []= "THINKING\n";
 	  while(1){
 		 // n--;
 		  switch(maintainConnection(sockfd, shm_pointer)){
@@ -271,19 +268,19 @@ printf("-Ab hier switch case-\n");
 			
 			case GAMEOVER: 
 			printf("S: GAMEOVER"); 
-			close(pipeFd);
+			close(close(pipeFd[0]));
 			exit(0); 
 			break;
 			
 			case ERROR: 
 			printf("CASE ERROR");  
-			close(pipeFd);
+			close(close(pipeFd[0]));
 			exit(0); 
 			break;
 		  }
 		  
 	  }
-	  close(pipeFd);
+	  close(close(pipeFd[0]));
 			exit(0);
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());

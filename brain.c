@@ -10,11 +10,6 @@
 
 
 
-//Ab hier neue Version von Raphael
-
-int stones;
-//int stonesA = 0;
-int stonesB;
 
 
 //Hilfsfunktion um zu sehen wo man sich befindet wenn man Zwischenergebnisse ausprintet
@@ -139,15 +134,7 @@ void print(int field[ZEILEN][SPALTEN]){
 	}
 }
 
-/*void swap(int field[ZEILEN][SPALTEN], int x, int y, int x_new, int y_new){
-	//printf("\nFunction swap: [%i][%i] with [%i][%i]\n", x, y, x_new, y_new);
-	//printf("\nVor swap: \n");
-	//print(field);
-	//field[x][y] = EMPTY;
-	//field[x_new][y_new] = PLAYER_CLIENT;
-	//printf("\n\nNach swap: \n");
-	//print(field);
-}*/
+
 
 //speichert den x und y Wert einer neuen freien Position zu der man ziehen kann in dem Übergabearray newPos
 //returned 1 wenn eine freie Position gefunden wurde
@@ -440,22 +427,3 @@ void init(int field[ZEILEN][SPALTEN]){
 }
 
 
-
-
-//Testaufruf wenn man brain einzeln kompiliert und ausführt
-/*
-int main(){
-	
-	int field[ZEILEN][SPALTEN];
-	init(field);
-	print(field);
-	printf("\n\n");
-	int i;
-	for(i = 0; i<15; i++){
-		think_new(field);
-		//print(field);
-	printf("\n\n");
-	}
-	
-}
-*/
