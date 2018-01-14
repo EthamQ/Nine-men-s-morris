@@ -18,7 +18,7 @@ char* isPlayernumberAlreadyDefined = " ";
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
-	//char* BlankDeli = " ";
+
 		printf("I\n");
 		if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
 			printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
@@ -34,12 +34,10 @@ char* cleanBlankspace(char* toClean){
 		}
 		bufferChar = strtok(NULL," ");
 	}
+		//return "ERROR";
 	*/
-	printf("II\n");
 	toReturn = strtok(bufferChar," ");
-	printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
 	return toReturn;
-	//return "ERROR";
 }
 
 short tellParam(char* para){
@@ -136,6 +134,21 @@ int assignParameters(char* ParameterLine){
 	return 0;
 }
 
+short checkStructurComplete(){
+	printf("check\n");
+	char bufferStructVal[255];
+	char scanVal[250];
+
+	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
+		strcpy(bufferStructVal,"gameid = ");
+		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
+		scanf("%s",scanVal);
+		strcat(bufferStructVal,scanVal);
+	}
+
+	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
+	return 0;
+}
 
 int read_configfile(char* gameID, char* playerNumber, char* configFileName){
 FILE* file;
