@@ -87,7 +87,7 @@ int assignParameters(char* ParameterLine){
 		assParameter = cleanBlankspace(assParameter);
 		assValue = cleanBlankspace(assValue);
 
-		printf("\nassParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
+		//printf("\nassParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
 
 		//Parameter erkennen und der struktur zuweisen
 		switch(tellParam(assParameter)){
@@ -96,7 +96,6 @@ int assignParameters(char* ParameterLine){
 											strcpy(confiConst.gameID, isGameidAlreadyDefined);
 										}
 										else{
-											printf("case paragameID\n");
 											strcpy(confiConst.gameID, assValue);
 										}
 										break;
@@ -144,6 +143,7 @@ short checkStructurComplete(){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
 		strcat(bufferStructVal,scanVal);
+		printf("Neue gameID: %s\n",bufferStructVal);
 	}
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
@@ -198,7 +198,7 @@ char* filepath = configFileName;
 		 	configFileParameter = strtok(NULL,delimiter);
 		}
   }
-
+	checkStructurComplete();
   fclose(file);
 return 0;
 }
