@@ -135,15 +135,13 @@ int assignParameters(char* ParameterLine){
 
 short checkStructurComplete(){
 	printf("check\n");
-	char bufferStructVal[255];
 	char scanVal[250];
 
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
-		strcpy(bufferStructVal,"gameid = ");
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
-		strcat(bufferStructVal,scanVal);
-		printf("Neue gameID: %s\n",bufferStructVal);
+		strcat(confiConst.gameID,scanVal);
+		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
