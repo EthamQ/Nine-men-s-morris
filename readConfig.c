@@ -19,10 +19,10 @@ char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
 	char* BlankDeli = " ";
-
+	/*
 		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
 			return " ";
-		}
+		}*/
 	while(bufferChar != NULL){
 		toReturn = strtok(bufferChar,BlankDeli);
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
