@@ -15,7 +15,7 @@
 char* isGameidAlreadyDefined = " ";
 char* isPlayernumberAlreadyDefined = " ";
 
-char* cleanBlankspace(char* toClean){
+/*char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
 	char* BlankDeli = " ";
@@ -32,7 +32,7 @@ char* cleanBlankspace(char* toClean){
 	}
 	return "ERROR";
 }
-
+*/
 short tellParam(char* para){
 	if( (strcmp(para,"id") == 0) || (strcmp(para,"gameid") == 0) || (strcmp(para,"gameID") == 0) || (strcmp(para,"gameId") == 0) || (strcmp(para,"GAMEID") == 0) || (strcmp(para,"g") == 0) ){
 		return paraGAMEID;
@@ -77,8 +77,8 @@ int assignParameters(char* ParameterLine){
 		paraLine = strtok(NULL,paraDelimiter);
 
 		//Parameter und Wert bereinigen
-		assParameter = cleanBlankspace(assParameter);
-		assValue = cleanBlankspace(assValue);
+		//assParameter = cleanBlankspace(assParameter);
+		//assValue = cleanBlankspace(assValue);
 
 		//printf("assParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
 
