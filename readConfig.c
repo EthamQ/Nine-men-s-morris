@@ -18,14 +18,15 @@ char* isPlayernumberAlreadyDefined = " ";
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
-	char* BlankDeli = " ";
+	//char* BlankDeli = " ";
 
 		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
 			return " ";
 		}
 	while(bufferChar != NULL){
 		printf("\nbefore strtok bufferchar: \"%s\"\n",bufferChar);
-		toReturn = strtok(bufferChar,BlankDeli);
+		toReturn = strtok(bufferChar," ");
+		printf("passed I\n");
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
 			return toReturn;
 		}
