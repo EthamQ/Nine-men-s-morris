@@ -34,6 +34,7 @@ char* cleanBlankspace(char* toClean){
 		bufferChar = strtok(NULL," ");
 	}
 	*/
+	printf("I\n");
 	toReturn = strtok(bufferChar," ");
 	printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
 	return toReturn;
