@@ -28,7 +28,7 @@ char* filepath = configFileName;
 	file = fopen(filepath, "r");
 	if(file == NULL){
 		printf("\ninvalid configfilename or path, opening client.conf instead\n\n");
-		file=fopen("client.conf","r")
+		file=fopen("client.conf","r");
 		if(file == NULL){
 			perror("client.conf does not exist either D: , READCONF");
 			return -1;
@@ -37,6 +37,7 @@ char* filepath = configFileName;
 			//printf("opened client.conf successfully, woohoo \n");
 		}
 	}
+	printf("test");
 	//in line werden die einzelnen Zeilen zwischengespeichert
 	char line[256];
 	char* ptr;
