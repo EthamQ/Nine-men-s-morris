@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "config_header.h"
 
 
-int read_configfile(char* configname){
+int read_configfile(char* gameID, char* playerNumber, char* configFileName){
 FILE* file;
 char* filepath = configname;
 

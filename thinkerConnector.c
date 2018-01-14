@@ -386,16 +386,33 @@ int fork_thinker_connector(){
 }
 
 int main(){
-  /*
-	drawField();
-	parseMove("A1:A2",0);
-   parseMove("A3:A4",1);
-   parseMove("B1:C1",0);
-   parseMove("C3:C2",1);
-   parseMove("C1:C2",0);
-	read_configfile(CONFIG_DEFAULT);
-	fork_thinker_connector();
-  */
-  read_configfile(CONFIG_DEFAULT);
+  short paras;
+  char* parGameId;
+  char* parPlayerNumber;
+  char* parConfigFileLocation;
+
+  //Auslesen der Parameter
+  while( (paras = getopt(argc, argv, "g:p:c")) != -1){
+    switch(paras){
+      case 'g':
+                parGameId = optarg;
+                if((strstr(parGameId, "-")) != NULL){
+                  parGameId = " ";
+                }
+                break;
+      case 'p':
+                parPlayerNumber = optarg;
+                printf("\nplayernumber: %s \n", parPlayerNumber);
+                break;
+      case 'c':
+                //parConfigFileLocation = optarg;
+                parConfigFileLocation = " ";
+                printf("parameter c");
+                break;
+      default:
+                perror("Fehler: ungueltiger Parameter, THINKCON");
+    }
+  }
+  read_configfile(parGameId, parPlayerNumber, parConfigFileLocation);
 return 0;
 }
