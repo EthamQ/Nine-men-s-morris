@@ -399,7 +399,7 @@ int main(int argc, char *argv[]){
                 if((strstr(parGameId, "-")) != NULL){
                   parGameId = " ";
                 }
-                printf("gameid: %s",optarg);
+                printf("\ngameid: %s",optarg);
                 break;
       case 'p':
                 parPlayerNumber = optarg;
@@ -408,12 +408,22 @@ int main(int argc, char *argv[]){
       case 'c':
                 //parConfigFileLocation = optarg;
                 parConfigFileLocation = " ";
-                printf("parameter c: ",optarg);
+                printf("\nparameter c: %s",optarg);
                 break;
       default:
                 perror("Fehler: ungueltiger Parameter, THINKCON");
     }
   }
-  read_configfile(parGameId, parPlayerNumber, parConfigFileLocation);
+  if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
+  }
+  else{
+    //printf("playernumber ist nicht 1 oder 2: %s \n", parPlayerNumber);
+    parPlayerNumber = " ";
+  }
+
+  if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
+    perror("Terrible Failure in readConfig.c , THINKCON");
+    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
+  }
 return 0;
 }
