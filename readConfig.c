@@ -20,11 +20,8 @@ char* cleanBlankspace(char* toClean){
 	char* toReturn;
 	//char* BlankDeli = " ";
 		printf("I\n");
-		if(toClean == NULL){
-			printf("\nabgefangen II\n");
-		}
-		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
-			printf("\nabgefangen\n");
+		if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
+			printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
 			return " ";
 		}
 		/*
