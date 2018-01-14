@@ -87,7 +87,7 @@ int assignParameters(char* ParameterLine){
 		assParameter = cleanBlankspace(assParameter);
 		assValue = cleanBlankspace(assValue);
 
-		//printf("assParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
+		printf("assParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
 
 		//Parameter erkennen und der struktur zuweisen
 		switch(tellParam(assParameter)){
@@ -96,6 +96,7 @@ int assignParameters(char* ParameterLine){
 											strcpy(confiConst.gameID, isGameidAlreadyDefined);
 										}
 										else{
+											printf("case paragameID\n");
 											strcpy(confiConst.gameID, assValue);
 										}
 										break;
