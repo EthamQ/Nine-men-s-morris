@@ -168,10 +168,10 @@ char* filepath = configFileName;
 			}
 			else{
 				printf("\nLine: \"%s\"\n",configFileParameter);
-				/*
+
 				if(assignParameters(configFileParameter) == -1){
 					perror("Error assigning Parameter from File to structure, READCONF");
-				}*/
+				}
 			}
 		 	configFileParameter = strtok(NULL,delimiter);
 		}
