@@ -42,7 +42,7 @@ char* filepath = configFileName;
 
 	//in line werden die einzelnen Zeilen zwischengespeichert
 	char line[256];
-	char* ptr;
+	char* configFileParameter;
 	char delimiter[] = "\n";
 
 	while (fgets(line, sizeof(line), file)){
@@ -63,6 +63,6 @@ char* filepath = configFileName;
 		}
   }
 
-    fclose(file);
+  fclose(file);
 return 0;
 }
