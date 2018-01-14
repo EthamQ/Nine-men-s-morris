@@ -122,6 +122,7 @@ void printt(int fieldd[3][8]){
 	
 	}
 	printf("\nAvailable pieces: %i\n", available_pieces);
+	shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
 	available_pieces = 0;
 	n = 0;
 	while(n<9){

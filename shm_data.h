@@ -21,6 +21,7 @@ char anzahl_spieler[BUFFER_SIZE];
 int pid_thinker;
 int pid_connector;
 int field[ZEILEN][SPALTEN];
+int used_pieces;
 };
 
 

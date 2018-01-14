@@ -313,7 +313,7 @@ char* think_new(struct SHM_data* shm_pointer){
 	char* play_command = malloc(SIZE_PLAY_COMMAND);
 	//TODO: field = parse MOVE server message
 	//stone on random empty position
-	if(stonesA < NUMBER_STONES){
+	if(shm_pointer->used_pieces < NUMBER_STONES){
 		/* Intializes random number generator */
 		time_t t;
 		srand((unsigned) time(&t));
