@@ -19,7 +19,10 @@ char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
 	//char* BlankDeli = " ";
-
+		printf("I\n");
+		if(toCLean == NULL){
+			printf("\nabgefangen II\n");
+		}
 		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
 			printf("\nabgefangen\n");
 			return " ";
@@ -35,7 +38,7 @@ char* cleanBlankspace(char* toClean){
 		bufferChar = strtok(NULL," ");
 	}
 	*/
-	printf("I\n");
+	printf("II\n");
 	toReturn = strtok(bufferChar," ");
 	printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
 	return toReturn;
