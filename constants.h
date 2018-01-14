@@ -35,11 +35,13 @@
 #define B 1
 #define C 2
 #define SIZE_PLAY_COMMAND 15
+#define RANDOM 0
+#define NEIGHBOURING 1
 
 //Client messages
 #define MES_LENGTH_CLIENT 200
-#define WAIT_MESSAGE "OKWAIT\n"
-#define MOVE_MESSAGE "THINKING\n"
+#define THINKING_MSG "THINKING\n"
+#define OKWAIT_MSG "OKWAIT\n"
 
 //Server messages
 #define MES_LENGTH_SERVER 3000

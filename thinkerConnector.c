@@ -100,18 +100,17 @@ short sendMove(){
 }
 
 //Capture Spielzug an Connector schicken / in die Pipe schreiben
-short sendCaptureMove(){
-  char *pipeBuffer= malloc(sizeof(char)*(256));
-  //ppipeBuffer=think_new(shm_pointer);
-  //printf(" Thinker berechneter capture Zug: %s\n ",pipeBuffer);
-  //printf("pipebuffer: %s \n", pipeBuffer);
-  if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
-       perror("Fehler beim schreiben des CAPTURE Spielzugs in die pipe, BRAIN");
-       return -1;
+	short sendCaptureMove(){
+		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		char *pipeBuffer = capture(shm_pointer);
+		
+	if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
+		perror("Fehler beim schreiben des CAPTURE Spielzugs in die pipe, BRAIN");
+		return -1;
     }
-  //printf("CAPTURE Spielzug in die Pipe geschrieben, THINKER \n");
-  free(pipeBuffer);
-  return 0;
+	
+	free(pipeBuffer);
+	return 0;
 }
 
 static void signalHandlerThinker(int signalNum){
@@ -204,17 +203,20 @@ int fork_thinker_connector(){
 	} 
 	else 
 	{ 
-/* shmget lief schief */ 	
-perror("shmget failed"); 		
-return -1; 			
+	/* shmget lief schief */ 	
+	perror("shmget failed"); 		
+	return -1; 			
 }	
 
 	//FORK
   switch(pid = fork()){
+	  
+	  //ERROR
     case -1: perror("fork_thinker_connector(): Fehler bei fork\n");
       return -1;
       break;
-	  //CONNECTOR
+	  
+	  //>>=======CONNECTOR=======<<
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 		//temporary: short endCon = 0;
 
@@ -230,143 +232,55 @@ return -1;
         //printf("\nfork_thinker_connector(): initConnect success\n");
 			}
 
-			
-	//shm test
-	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-	  //printf("Adresse shmat im Connector: %p:", shmat(shmid, NULL, 0));
-	  //writeSHM(a, "HELLO", SPIELNAME);
-	  //readSHM(a);
+	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);;
 	  printf("-Start performConnection-\n");
-  	//PROLOG
-  	//int first_command = (int)performConnection(sockfd);
+	  
+	//Prologphase und senden des ersten THINKING Befehls
     if(performConnection(sockfd, shm_pointer) < 0) {
         perror("\nfork_thinker_connector(): Fehler bei performConnection");
         return -1;
   	}
-    else {
-       // printf("\nfork_thinker_connector(): performConnection success \n");
-    }
-    //Perfcon endet mit einem THINKING, d.h. unmittelbar darauf muss ein PLAY folgen
-    //#############################
-    //HIER PLAY WICHTIG TODO !!!!!!
-    //#############################
+    
     //Signal an Thinker senden, erster spielzug des spiels
      send_signal(sockfd, MOVE, movePipe);
 	  
 	  
 printf("-Ab hier switch case-\n");
-	  //int get_spielfeld = 0;
-	//int n = 200;
+
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	char thinkingPRC []= "THINKING\n";
 	  while(1){
 		 // n--;
 		  switch(maintainConnection(sockfd, shm_pointer)){
 			case MOVE:
-				
-				/*if(maintainConnection(sockfd, shm_pointer)==OKTHINK){
-				//sends SIGUSR1
-				write(sockfd, "PLAY C7\n", 15);
-				//send_signal(sockfd, MOVE, movePipe);
+				if(shm_pointer->capture_status == 0){
+				send_signal(sockfd, MOVE, movePipe);
 				}
-				
-				read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
-				printf("\nS: %s\n",serverResponse);
-				//write(sockfd, "PLAY C7\n", 15);
-				*/
-				send_signal(sockfd, MOVE, movePipe);
-				
-			
-			
-				break;
-				
-			case CAPTURE:
-				//sends SIGUSR2
-				
-				//sends SIGUSR1
-				send_signal(sockfd, MOVE, movePipe);
-				
+				else if(shm_pointer->capture_status == 1){
+					send_signal(sockfd, CAPTURE, movePipe);
+				}
+				else if(shm_pointer->capture_status == 2){
+					//TODO: 2 Spielsteine werfen
+				}
 				break;
 			
-			case WAIT:
-				
-				break; 
+			case WAIT: break; 
 				
 			case MOVEOK: break;
-			case GAMEOVER: printf("S: GAMEOVER");break;
-			case ERROR: printf("CASE ERROR"); sleep(3); break;
+			
+			case GAMEOVER: 
+			printf("S: GAMEOVER"); 
+			exit(0); 
+			break;
+			
+			case ERROR: 
+			printf("CASE ERROR");  
+			exit(0); 
+			break;
 		  }
 		  
 	  }
-	  
-	  /*
-	  maintainConnection(sockfd);
-	  char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
-	  read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
-	  printf("S: %s", serverResponse);
-	  
-	  
-	  write(sockfd, "OKWAIT", sizeof(char)*MES_LENGTH_SERVER);
-	  printf("C: OKWAIT");
-	  
-	  read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER);
-	  printf("S: %s", serverResponse);
-	  */
-	  
-	  
-	  
-	  
-	  
-
-    //Jetzt koennen wir in den normalen SPielverlauf uebergehen
-      /*while(1){
-        switch(maintainConnection(sockfd)){
-          case WAIT:
-            printf("conWait Aufruf, THINKCON");
-            if(conWAIT(sockfd)<0){
-              perror("conWAIT, CONNECTOR");
-            }
-            break;
-          case GAMEOVER:
-            printf("conGAMEOVER Aufruf, THINKCON");
-            if(conGAMEOVER(sockfd)<0){
-              perror("conGAMEOVER failure, CONNECTOR");
-            }
-            break;
-          case MOVE:
-            printf("conMOVE Aufruf, THINKCON");
-            if(conMOVE(sockfd)<0){
-              perror("conGAMEOVER failure, CONNECTOR");
-            }
-            //Signal an Thinker senden
-            if(kill(getppid(),SIGUSR1)<0){
-                perror("Fehler bei senden des Signals an den Thinker, CONNECTOR");
-            }
-            printf("Signal an Thinker gesendet, CONNECTOR \n");
-            sleep(1); //TODO ist sleep hier notwendig ?
-            //Aus der Pipe den Spielzug lesen
-            if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
-              printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
-            }
-            else{
-              perror("Spielzug konnte nicht aus der Pipe gelesen werden");
-            }
-            break;
-          default:
-            perror("\nSwitch failure CONNECTOR\n");
-			//printf("\nConnector: In switch case wurde folgender Wert gesucht: %i\n", test);
-            endCon = -1;
-            break;
-        }
-        if(endCon == -1){
-          break;
-        }
-
-      }
-      //printf("Movepipe, aus compilergruenden: %s \n", movePipe); //TODO entfernen
 			exit(0);
-      break;
-	  */
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 

@@ -11,8 +11,7 @@
 #include "constants.h"
 #include "shm_data.h"
 
-char thinkingPRC []= "THINKING\n";
-char okwait []= "OKWAIT\n";
+
 
 
 
@@ -20,89 +19,72 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	//printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 	
-	
+	//Servernachricht auslesen
 	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
 	  perror("\nmaintainConnection(): read error, MAINCON\n");
 		free(serverResponse);
 		return ERROR;
 	}
-  //printf("%s",serverResponse);
-  //printf("\nmaintainConnection() read:\nS: %s",serverResponse);
-  printf("\nS: %s",serverResponse);
-  //printf("größe der nachricht: %i\n",sizeof(char)*MES_LENGTH_SERVER);
+	printf("\nS: %s",serverResponse);
 
  
-
-  
-
-	//if(strcmp(serverResponse, "+ WAIT\n")==0){
-	
-	
-  	if(strstr(serverResponse,"+ MOVE 3000")){
-		//if(strcmp(serverResponse, "+ MOVE\n")==0){
+	//Inhalt Servernachricht überprüfen
+  	if(strstr(serverResponse,"+ MOVE ")){
+		//send THINKING
 		printf("\nmaintainConnection(): received +MOVE from the server\n");
-		
-		if(write(sockfd, thinkingPRC, (int)strlen(thinkingPRC)) <0){
+		if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
 			perror("Fehler beim senden von THINKING");
 		}
+		printf("C: %s", THINKING_MSG);
 		
-		printf("C: %s", thinkingPRC);
-		
+		//receive OKTHINK
 		if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
 			perror("Fehler beim empfangen von OKTHINK");
 		};
 		printf("\nS: %s",serverResponse);
 		read_piecelist(shm_pointer, serverResponse);
-      free(serverResponse);
-      return MOVE;
+		free(serverResponse);
+		return MOVE;
     }
 	
 	if(strstr(serverResponse,"+ WAIT")){
 		printf("\nmaintainConnection(): received +WAIT from the server\n");
-		write(sockfd, okwait, (int)strlen(okwait));
-				printf("C: %s", okwait);
-      free(serverResponse);
-      return WAIT;
+		//send OKWAIT
+		write(sockfd, OKWAIT_MSG, (int)strlen(OKWAIT_MSG));
+		printf("C: %s", OKWAIT_MSG);
+		free(serverResponse);
+		return WAIT;
     }
 	
-	
-	 //if(strcmp(serverResponse, "+ MOVEOK\n")==0){
 	if(strstr(serverResponse,"+ MOVEOK")){
 		printf("maintainConnection(): received + MOVEOK from the server\n");
-      free(serverResponse);
-      return MOVEOK;
+		free(serverResponse);
+		return MOVEOK;
     }
   
-
-	
-	
 	if(strstr(serverResponse,"OKTHINK")){
-		//if(strcmp(serverResponse, "+ MOVE\n")==0){
 		printf("\nmaintainConnection(): received +OKTHINK from the server\n");
-      free(serverResponse);
-      return OKTHINK;
+		free(serverResponse);
+		return OKTHINK;
     }
 	
-			if(strstr(serverResponse,"CAPTURE") && strstr(serverResponse,"+ MOVE")){
-    free(serverResponse);
-    return CAPTURE;
-  }
+	if(strstr(serverResponse,"CAPTURE") && strstr(serverResponse,"+ MOVE")){
+		free(serverResponse);
+		return CAPTURE;
+	}
 	
-  if(strstr(serverResponse,"+ GAMEOVER")){
-	printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
-    free(serverResponse);
-    return GAMEOVER;
-  }
+	if(strstr(serverResponse,"+ GAMEOVER")){
+		printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+		free(serverResponse);
+		return GAMEOVER;
+	}
   
-	
-    free(serverResponse);
-      return ERROR;
+	free(serverResponse);
+	return ERROR;
 }
 
 
 short send_move_to_server(int sockfd, char* move){
-	//printf("conplay aufgerufen, MAINCON\n");
-	
 	if(write(sockfd, move, sizeof(move)) < 0){
 		perror("write error, MAINCON");
 		return ERROR;
