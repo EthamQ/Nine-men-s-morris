@@ -15,6 +15,118 @@
 char* isGameidAlreadyDefined = " ";
 char* isPlayernumberAlreadyDefined = " ";
 
+char* cleanBlankspace(char* toClean){
+	char* bufferChar = toClean;
+	char* toReturn;
+	char* BlankDeli = " ";
+
+		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
+			return " ";
+		}
+	while(bufferChar != NULL){
+		toReturn = strtok(bufferChar,BlankDeli);
+		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
+			return toReturn;
+		}
+		bufferChar = strtok(NULL,BlankDeli);
+	}
+	return "ERROR";
+}
+
+short tellParam(char* para){
+	if( (strcmp(para,"id") == 0) || (strcmp(para,"gameid") == 0) || (strcmp(para,"gameID") == 0) || (strcmp(para,"gameId") == 0) || (strcmp(para,"GAMEID") == 0) || (strcmp(para,"g") == 0) ){
+		return paraGAMEID;
+	}
+	if( (strcmp(para,"port") == 0) || (strcmp(para,"portnumber") == 0) || (strcmp(para,"portNumber") == 0) || (strcmp(para,"PORTNUMBER") == 0)){
+		return paraPORT;
+	}
+	if( (strcmp(para,"host") == 0) || (strcmp(para,"hostName") == 0) || (strcmp(para,"hostname") == 0) || (strcmp(para,"hostNAME") == 0) || (strcmp(para,"HOSTNAME") == 0)){
+		return paraHOSTNAME;
+	}
+	if( (strcmp(para,"gamekindname") == 0) || (strcmp(para,"gameKindName") == 0) || (strcmp(para,"gamekind") == 0) || (strcmp(para,"GAMEKINDNAME") == 0)){
+		return paraGAMEKINDNAME;
+	}
+	if( (strcmp(para,"playername") == 0) || (strcmp(para,"playerNAME") == 0) || (strcmp(para,"playerName") == 0) || (strcmp(para,"PLAYERNAME") == 0)){
+		return paraPLAYERNAME;
+	}
+	if( (strcmp(para,"playernumber") == 0) || (strcmp(para,"p") == 0) || (strcmp(para,"playerNumber") == 0) || (strcmp(para,"PLAYERNUMBER") == 0)){
+		return paraPLAYERNUMBER;
+	}
+	if( (strcmp(para,"gameVersion") == 0)){
+		return paraVERSION;
+	}
+	return -1;
+}
+
+int assignParameters(char* ParameterLine){
+
+	char* paraLine = ParameterLine;
+	char* assParameter;
+	char* assValue;
+	char paraDelimiter[] = "=";
+	char gamverval[256];
+		if( (strcmp(paraLine," ")==0) || (strcmp(paraLine,"  ") == 0) ){
+			return 0;
+		}
+ 		//Line in Parameter und Wert aufteilen
+		assParameter = strtok(paraLine,paraDelimiter); //Parameter
+		//printf("assPara: \"%s\" \n", assParameter);
+		paraLine = strtok(NULL,paraDelimiter); //zum wert springen
+
+		assValue = strtok(paraLine,paraDelimiter); //Wert
+		paraLine = strtok(NULL,paraDelimiter);
+
+		//Parameter und Wert bereinigen
+		assParameter = cleanBlankspace(assParameter);
+		assValue = cleanBlankspace(assValue);
+
+		//printf("assParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
+
+		//Parameter erkennen und der struktur zuweisen
+		switch(tellParam(assParameter)){
+			case paraGAMEID:
+										if(strcmp(isGameidAlreadyDefined," ") != 0){
+											strcpy(confiConst.gameID, isGameidAlreadyDefined);
+										}
+										else{
+											strcpy(confiConst.gameID, assValue);
+										}
+										break;
+			case paraPLAYERNUMBER:
+										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
+											confiConst.playerNumber = atof(isPlayernumberAlreadyDefined);
+										}
+										else{
+											confiConst.playerNumber = atof(assValue);
+										}
+										break;
+			case paraPORT:
+										confiConst.portNumber = atof(assValue);
+										//strcpy(confiConst.portNumber, assValue);
+										break;
+			case paraPLAYERNAME:
+										strcpy(confiConst.playerName, assValue);
+										break;
+			case paraGAMEKINDNAME:
+										strcpy(confiConst.gameKindName, assValue);
+										break;
+			case paraHOSTNAME:
+										strcpy(confiConst.hostName, assValue);
+										break;
+			case paraVERSION:
+										strcpy(gamverval,"VERSION ");
+										strcat(gamverval,assValue);
+										strcat(gamverval,"\n");
+										strcpy(confiConst.gameVersion, gamverval);
+										break;
+		 	default:
+										printf("Parameter nicht erkannt: \"%s\" \n",assParameter);
+										break;
+		}
+	return 0;
+}
+
+
 int read_configfile(char* gameID, char* playerNumber, char* configFileName){
 FILE* file;
 char* filepath = configFileName;
