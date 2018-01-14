@@ -24,7 +24,7 @@ char* cleanBlankspace(char* toClean){
 			return " ";
 		}
 	while(bufferChar != NULL){
-	printf("\nbefore strtok \n")
+	printf("\nbefore strtok \n");
 		toReturn = strtok(bufferChar,BlankDeli);
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
 			return toReturn;
