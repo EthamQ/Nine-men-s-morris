@@ -22,14 +22,14 @@ char* cleanBlankspace(char* toClean){
 	/*
 		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
 			return " ";
-		}*/
+		}
 	while(bufferChar != NULL){
 		toReturn = strtok(bufferChar,BlankDeli);
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
 			return toReturn;
 		}
 		bufferChar = strtok(NULL,BlankDeli);
-	}
+	}*/
 	return "ERROR";
 }
 
