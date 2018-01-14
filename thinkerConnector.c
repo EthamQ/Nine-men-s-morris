@@ -399,6 +399,7 @@ int main(int argc, char *argv[]){
                 if((strstr(parGameId, "-")) != NULL){
                   parGameId = " ";
                 }
+                printf("gameid: %s",optarg);
                 break;
       case 'p':
                 parPlayerNumber = optarg;
@@ -407,7 +408,7 @@ int main(int argc, char *argv[]){
       case 'c':
                 //parConfigFileLocation = optarg;
                 parConfigFileLocation = " ";
-                printf("parameter c");
+                printf("parameter c: ",optarg);
                 break;
       default:
                 perror("Fehler: ungueltiger Parameter, THINKCON");
