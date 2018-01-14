@@ -23,10 +23,9 @@ char* cleanBlankspace(char* toClean){
 		if((strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)){
 			return " ";
 		}
+		/*
 	while(bufferChar != NULL){
-		printf("\nbefore strtok bufferchar: \"%s\"\n",bufferChar);
 		toReturn = strtok(bufferChar," ");
-		printf("passed I\n");
 		printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
 			printf("in if schleife\n");
@@ -34,7 +33,11 @@ char* cleanBlankspace(char* toClean){
 		}
 		bufferChar = strtok(NULL," ");
 	}
-	return "ERROR";
+	*/
+	toReturn = strtok(bufferChar," ");
+	printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
+	return toReturn;
+	//return "ERROR";
 }
 
 short tellParam(char* para){
@@ -82,7 +85,7 @@ int assignParameters(char* ParameterLine){
 
 		//Parameter und Wert bereinigen
 		assParameter = cleanBlankspace(assParameter);
-		//assValue = cleanBlankspace(assValue);
+		assValue = cleanBlankspace(assValue);
 
 		//printf("assParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
 
@@ -156,7 +159,6 @@ char* filepath = configFileName;
 			//printf("opened client.conf successfully, woohoo \n");
 		}
 	}
-	printf("test\n");
 
 	//in line werden die einzelnen Zeilen zwischengespeichert
 	char line[256];
@@ -168,7 +170,7 @@ char* filepath = configFileName;
 	 	while(configFileParameter != NULL){
 
 			if( (strstr(configFileParameter, "§§$$")) != NULL || (strcmp(configFileParameter,"")==0) || (strcmp(configFileParameter," ")==0) ){
-				printf("Line wird ignoriert: \"%s\" \n",configFileParameter);
+				//printf("Line wird ignoriert: \"%s\" \n",configFileParameter);
 			}
 			else{
 				//printf("\nLine: \"%s\"\n",configFileParameter);
