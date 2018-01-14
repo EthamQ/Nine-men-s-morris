@@ -90,5 +90,7 @@ short send_move_to_server(int sockfd, char* move){
 		return ERROR;
 	}
 	printf("\nC: %s\n", move);
+	printf("length of this command: %i", strlen(move));
+	free(move);
 	return 0;
 }

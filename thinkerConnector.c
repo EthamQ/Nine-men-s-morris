@@ -83,11 +83,10 @@ return sockfd;
 
 //Normalen Spielzug an Connector schicken / in die Pipe schreiben
 short sendMove(){
-  char *pipeBuffer= malloc(sizeof(char)*(256));
   //pipeBuffer=think();
   //printf("SPeicheradresse von shmat: %p\n",shmat(shmid_g, NULL, 0)); 
   struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-  pipeBuffer=think_new(shm_pointer);
+  char *pipeBuffer=think_new(shm_pointer);
   //printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
   //printf("pipebuffer: %s \n", pipeBuffer);
 	if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
@@ -181,7 +180,7 @@ int fork_thinker_connector(){
   int sockfd;
 
   //Pipe BUFFER
-  char *movePipe=malloc(sizeof(char)*(PIPE_BUF));
+  char *movePipe=malloc(PIPE_BUF);
 
   //Erstellung der Pipe, muss vor Fork geschehen
   if (pipe(pipeFd) < 0) {
@@ -195,10 +194,12 @@ int fork_thinker_connector(){
 	//int shmid; 	
 	size_t shm_size = sizeof(struct SHM_data); 	
 	shmid = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | 0666); 	
-	if (shmid >= 0) { 	struct playerStruct *SHM_data = shmat(shmid,  0, 0); 	
-	if (SHM_data==(void *)-1) { 	perror("shmat failed"); 	} 	
+	if (shmid >= 0) { 
+	struct SHM_data* shm_p = shmat(shmid,  0, 0);	
+	if (shm_p ==(void *)-1) { 	
+	perror("shmat failed"); 	} 	
 	else { 						
-	shmdt(SHM_data); 	
+	shmdt(shm_p); 	
 	} 	
 	} 
 	else 
@@ -270,20 +271,24 @@ printf("-Ab hier switch case-\n");
 			
 			case GAMEOVER: 
 			printf("S: GAMEOVER"); 
+			close(pipeFd);
 			exit(0); 
 			break;
 			
 			case ERROR: 
 			printf("CASE ERROR");  
+			close(pipeFd);
 			exit(0); 
 			break;
 		  }
 		  
 	  }
+	  close(pipeFd);
 			exit(0);
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 
+	shmat(shmid, NULL, 0);
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
 
@@ -307,11 +312,6 @@ printf("-Ab hier switch case-\n");
 			else{
 				perror("sigaction groesser Null, Fehler ???");
 			}
-
-	    //Elterprozess vererbt shared memory an Kindprozess, also attach hier im Elternprozess
-      shmat(shmid, NULL, 0);
-      //printf("THINKER: jetzt beginnt das warten\n");
-
 			wait(NULL);
       break;
   }

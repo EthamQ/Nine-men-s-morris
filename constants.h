@@ -34,7 +34,7 @@
 #define A 0
 #define B 1
 #define C 2
-#define SIZE_PLAY_COMMAND 15
+#define SIZE_PLAY_COMMAND 20
 #define RANDOM 0
 #define NEIGHBOURING 1
 
