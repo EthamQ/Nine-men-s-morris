@@ -26,7 +26,7 @@ char* think(){
 //Ab hier neue Version von Raphael
 
 int stones;
-int stonesA = 0;
+//int stonesA = 0;
 int stonesB;
 
 
@@ -338,7 +338,7 @@ char* think_new(struct SHM_data* shm_pointer){
 	else{
 		int FROM[2];
 		int TO[2];
-		if(stonesA >= 3){
+		if(shm_pointer->used_pieces >= 3){
 			move(shm_pointer->field, FROM, TO);
 			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
 			//printf("\n%s\n", play_command);

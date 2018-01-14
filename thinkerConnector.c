@@ -90,7 +90,7 @@ short sendMove(){
   pipeBuffer=think_new(shm_pointer);
   //printf(" Thinker berechneter Zug: %s\n ",pipeBuffer);
   //printf("pipebuffer: %s \n", pipeBuffer);
-	if((write(pipeFd[1], pipeBuffer, sizeof(pipeBuffer)))<=0){
+	if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return -1;
     }
@@ -139,7 +139,7 @@ static void signalHandlerThinker(int signalNum){
 			//printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
 			//sleep(1); //TODO ist sleep hier notwendig ?
 			//Aus der Pipe den Spielzug lesen
-			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
 			//printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
 			}
 			else{
@@ -159,7 +159,7 @@ static void signalHandlerThinker(int signalNum){
 			//printf("Signal an Thinker gesendet,erster spielzug, CONNECTOR \n");
 			//sleep(1); //TODO ist sleep hier notwendig ?
 			//Aus der Pipe den Spielzug lesen
-			if((read (pipeFd[0], movePipe, sizeof(movePipe))) >0){
+			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
 			//printf("Spielzug aus Pipe gelesen: %s \n", movePipe);
 			}
 			else{
