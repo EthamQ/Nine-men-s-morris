@@ -19,7 +19,7 @@ char* ptr;
 char delimiter[] = "=";
 while (fgets(line, sizeof(line), file)){
 	ptr = strtok(line,delimiter);
-       
+
 	 while(ptr != NULL) {
 	 	printf("Ausgelesen:%s\n",ptr);
 	 	ptr = strtok(NULL,delimiter);
@@ -31,8 +31,3 @@ while (fgets(line, sizeof(line), file)){
 
 return 0;
 }
-
-//int main(){
-//read_configfile();
-//return 0;
-//}
