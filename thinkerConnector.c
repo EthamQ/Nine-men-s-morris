@@ -399,19 +399,17 @@ int main(int argc, char *argv[]){
                 if((strstr(parGameId, "-")) != NULL){
                   parGameId = " ";
                 }
-                printf("\ngameid: %s",optarg);
+              //  printf("\ngameid: %s",optarg);
                 break;
       case 'p':
                 parPlayerNumber = optarg;
-                printf("\nplayernumber: %s \n", parPlayerNumber);
+              //  printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                printf("\nparameter c: \"%s\"",optarg);
                 strcpy(parConfigFileLocation,optarg);
-                printf("\nparameter c: %s",optarg);
                 break;
       default:
-                perror("Fehler: ungueltiger Parameter, THINKCON");
+                printf("Fehler: ungueltiger Parameter, THINKCON");
     }
   }
   if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
