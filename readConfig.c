@@ -89,6 +89,7 @@ int assignParameters(char* ParameterLine){
 										}
 										break;
 			case paraPLAYERNUMBER:
+										printf("test I: %s",assValue);
 										if(strcmp(assValue," ") == 0){
 											printf("test");
 											assValue = "1";
@@ -206,7 +207,7 @@ short checkStructurComplete(){
 		}
 	}
 	//Wenn playernumber fehlt ist das auch ok, weil dann einfach der Server eine zuweist
-	
+
 	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
