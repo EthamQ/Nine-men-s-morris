@@ -89,7 +89,7 @@ int assignParameters(char* ParameterLine){
 										}
 										else{
 											if(strcmp(assValue,"") == 0){
-												printf("test\n");
+												strcpy(confiConst.gameID, gamverval);
 											}
 											strcpy(gamverval, "ID ");
 											strcat(gamverval, assValue);
@@ -99,10 +99,7 @@ int assignParameters(char* ParameterLine){
 										break;
 			case paraPLAYERNUMBER:
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
-											strcpy(gamverval, "PLAYER ");
-											strcat(gamverval, isPlayernumberAlreadyDefined);
-											strcat(gamverval, "\n");
-											strcpy(confiConst.playerNumber, gamverval);
+											strcpy(confiConst.playerNumber, " ");
 										}
 										else{
 											strcpy(gamverval, "PLAYER ");
@@ -138,7 +135,7 @@ short checkStructurComplete(){
 	char scanVal[256];
 	printf("\n gameid: \"%s\"\n",confiConst.gameID);
 	//gameid
-	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) || (strcmp(confiConst.gameVersion, "ID \n") == 0) || (strcmp(confiConst.gameVersion, "ID  \n") == 0)){
+	if(strcmp(confiConst.gameID, " ") == 0){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
 		strcpy(confiConst.gameID,scanVal);
