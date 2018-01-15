@@ -90,7 +90,10 @@ int assignParameters(char* ParameterLine){
 										break;
 			case paraPLAYERNUMBER:
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
-											confiConst.playerNumber = atof(isPlayernumberAlreadyDefined);
+											strcpy(gamverval, "PLAYER ");
+											strcat(gamverval, isGameidAlreadyDefined);
+											strcat(gamverval, "\n");
+											strcpy(confiConst.playerNumber, gamverval);
 										}
 										else{
 											confiConst.playerNumber = atof(assValue);
@@ -196,7 +199,20 @@ short checkStructurComplete(){
 		}
 	}
 	//playerNumber
-
+	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) ){
+		printf("Mitspielernummer fehlt, Defaultwert nehmen? (y/n): ");
+		scanf("%s",scanVal);
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+			strcat(confiConst.playerNumber,"PLAYER\n");
+			printf("Default Mitspielernummer: %s",confiConst.playerNumber);
+		}
+		else{
+			printf("Spielart eingeben: ");
+			scanf("%s",scanVal);
+			strcat(confiConst.playerNumber,scanVal);
+			printf("Neue Mitspielernummer: %s\n",confiConst.playerNumber);
+		}
+	}
 	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%i\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
