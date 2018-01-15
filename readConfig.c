@@ -127,7 +127,7 @@ int assignParameters(char* ParameterLine){
 }
 
 short checkStructurComplete(){
-	char scanVal[250];
+	char scanVal[256];
 	printf("check\n");
 	//gameid
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
@@ -136,12 +136,13 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-
+	scanVal = "";
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
-		/*
+
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n) ");
 		scanf("%s",scanVal);
+		/*
 		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
 		}
@@ -164,7 +165,7 @@ short checkStructurComplete(){
 
 	//playerNumber
 
-	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber: %i\n gameVersion: %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
