@@ -181,7 +181,7 @@ short checkStructurComplete(){
 		else{
 			printf("Spielversion eingeben: ");
 			scanf("%f",scanVal);
-			strcpy(gamverval,"VERSION ");
+			strcpy(confiConst.gameVersion,"VERSION ");
 			strcat(confiConst.gameVersion,scanVal);
 			strcat(confiConst.gameVersion,"\n");
 			printf("Neue Spielversion: %s\n",confiConst.gameVersion);
