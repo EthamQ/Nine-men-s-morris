@@ -125,25 +125,52 @@ short checkStructurComplete(){
 	printf("check\n");
 	char scanVal[250];
 
+	//gameid
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
+
+	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
-		printf("Hostname fehlt, Default Wert nehmen oder Eingabe ? (y/n) ");
+		printf("Hostname fehlt, Defaultwert nehmen? (y/n) ");
 		scanf("%s",scanVal);
-		if((strcmp(scanVal,"y")) || strcmp(scanVal,"y")){
+		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
+			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
+		}
+		else{
 			printf("Hostname eingeben: ");
 			scanf("%s",scanVal);
 			strcat(confiConst.hostName,scanVal);
 		}
-		else{
-			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
-		}
 		printf("Neuer Hostname: %s\n",confiConst.hostName);
 	}
+	//playerNumber
+	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) ){
+		printf("playerNumber fehlt, Defaultwert nehmen? (y/n) ");
+		scanf("%s",scanVal);
+		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
+			strcatconfiConst.playerNumber = 1);
+		}
+		else{
+			printf("playerNumber eingeben: ");
+			scanf("%s",scanVal);
+			strcat(confiConst.playerNumber,scanVal);
+		}
+		printf("Neue Playernumber: %s\n",confiConst.hostName);
+	}
+	//gameKindName
+
+	//portNumber
+
+	//gameVersion
+
+	//playerName
+
+
+
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
