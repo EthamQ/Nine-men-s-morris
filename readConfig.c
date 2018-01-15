@@ -216,7 +216,7 @@ short checkStructurComplete(){
 			printf("Neue Mitspielernummer: %s\n",confiConst.playerNumber);
 		}
 	}
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%i\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
