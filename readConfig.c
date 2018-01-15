@@ -19,23 +19,11 @@ char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
 
-		printf("I\n");
-		if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
-			printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
-			return " ";
-		}
-		/*
-	while(bufferChar != NULL){
-		toReturn = strtok(bufferChar," ");
-		printf("\nbefore strcmp bufferchar: \"%s\" toReturn:\"%s\"\n",bufferChar,toReturn);
-		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
-			printf("in if schleife\n");
-			return toReturn;
-		}
-		bufferChar = strtok(NULL," ");
+	if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
+		//printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
+		return " ";
 	}
-		//return "ERROR";
-	*/
+
 	toReturn = strtok(bufferChar," ");
 	return toReturn;
 }
@@ -142,6 +130,19 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
+	}
+	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
+		printf("Hostname fehlt, Default Wert nehmen oder Eingabe ? (y/n) ");
+		scanf("%s",scanVal);
+		if((strcmp(scanVal,"y")) || strcmp(scanVal,"y")){
+			printf("Hostname eingeben: ");
+			scanf("%s",scanVal);
+			strcat(confiConst.hostName,scanVal);
+		}
+		else{
+			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
+		}
+		printf("Neuer Hostname: %s\n",confiConst.hostName);
 	}
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
