@@ -129,7 +129,7 @@ short checkStructurComplete(){
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
-		strcat(confiConst.gameID,scanVal);
+		strcpy(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
 
@@ -138,7 +138,7 @@ short checkStructurComplete(){
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n) ");
 		scanf("%s",scanVal);
 		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
-			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
+			strcpy(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
 		}
 		else{
 			printf("Hostname eingeben: ");
@@ -151,13 +151,13 @@ short checkStructurComplete(){
 	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) ){
 		printf("playerNumber fehlt, Defaultwert nehmen? (y/n) ");
 		scanf("%s",scanVal);
-		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
-			strcatconfiConst.playerNumber = 1);
+		if(strcmp(scanVal,"y") || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
+			confiConst.playerNumber = 1;
 		}
 		else{
 			printf("playerNumber eingeben: ");
 			scanf("%s",scanVal);
-			strcat(confiConst.playerNumber,scanVal);
+			strcpy(confiConst.playerNumber,scanVal);
 		}
 		printf("Neue Playernumber: %s\n",confiConst.hostName);
 	}
