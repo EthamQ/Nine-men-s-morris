@@ -14,7 +14,6 @@ struct configConstants{
   char   gameKindName[BUFFER_SIZE];
   char   hostName[BUFFER_SIZE];
   char   gameID[BUFFER_SIZE];
-  char   playerName[BUFFER_SIZE];
   char   gameVersion[BUFFER_SIZE];
   int    playerNumber;
   int    portNumber; //uint16_t portNumber;

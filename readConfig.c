@@ -8,9 +8,8 @@
 #define paraPORT 2
 #define paraGAMEKINDNAME 3
 #define paraGAMEID 4
-#define paraPLAYERNAME 5
-#define paraPLAYERNUMBER 6
-#define paraVERSION 7
+#define paraPLAYERNUMBER 5
+#define paraVERSION 6
 
 char* isGameidAlreadyDefined = " ";
 char* isPlayernumberAlreadyDefined = " ";
@@ -45,9 +44,6 @@ short tellParam(char* para){
 	}
 	if( (strcmp(para,"gamekindname") == 0) || (strcmp(para,"gameKindName") == 0) || (strcmp(para,"gamekind") == 0) || (strcmp(para,"GAMEKINDNAME") == 0)){
 		return paraGAMEKINDNAME;
-	}
-	if( (strcmp(para,"playername") == 0) || (strcmp(para,"playerNAME") == 0) || (strcmp(para,"playerName") == 0) || (strcmp(para,"PLAYERNAME") == 0)){
-		return paraPLAYERNAME;
 	}
 	if( (strcmp(para,"playernumber") == 0) || (strcmp(para,"p") == 0) || (strcmp(para,"playerNumber") == 0) || (strcmp(para,"PLAYERNUMBER") == 0)){
 		return paraPLAYERNUMBER;
@@ -103,9 +99,6 @@ int assignParameters(char* ParameterLine){
 			case paraPORT:
 										confiConst.portNumber = atof(assValue);
 										//strcpy(confiConst.portNumber, assValue);
-										break;
-			case paraPLAYERNAME:
-										strcpy(confiConst.playerName, assValue);
 										break;
 			case paraGAMEKINDNAME:
 										strcpy(confiConst.gameKindName, assValue);
@@ -180,20 +173,18 @@ short checkStructurComplete(){
 		}
 		else{
 			printf("Spielversion eingeben: ");
-			scanf("%f",scanVal);
+			scanf("%s",scanVal);
 			strcpy(confiConst.gameVersion,"VERSION ");
 			strcat(confiConst.gameVersion,scanVal);
 			strcat(confiConst.gameVersion,"\n");
 			printf("Neue Spielversion: %s\n",confiConst.gameVersion);
 		}
 	}
-	//playerName
-
 	//portNumber
 
 	//playerNumber
 
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerName: \"%s\"\n6.playerNumber: \"%i\"\n7.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%i\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
