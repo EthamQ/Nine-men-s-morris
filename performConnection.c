@@ -12,10 +12,7 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "VERSION 2.0\n";
-//static char game_idPRC []= "ID 02pobsvmluimp\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+
 static char game_idPRC []= "ID 13dusd0qsvk4l\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
@@ -65,13 +62,13 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     //C: <<Client Version>>
     while(testifvalid < 0){
-        testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
+        testifvalid = write(sockfd, confiConst.gameVersion, (int)strlen(confiConst.gameVersion));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return ERROR;
         }
     }
-    printf("%s\n",versionPRC);
+    printf("%s\n",confiConst.gameVersion);
     testifvalid = -1;
 	  attempts = 0;
 
@@ -154,7 +151,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 			perror("Fehler beim senden von THINKING");
 		}
 		printf("C: %s", THINKING_MSG);
-		
+
 	memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
@@ -175,8 +172,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
-		
+
 	}
- 
+
  return ERROR;
 }
