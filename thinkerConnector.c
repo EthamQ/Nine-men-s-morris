@@ -331,7 +331,8 @@ int main(int argc, char *argv[]){
                 }
                 strcpy(parGameId,optarg);
                 if((strstr(parGameId, "-")) != NULL){
-                  parGameId = " ";
+                  //parGameId = " ";
+                  strcpy(parGameId," ");
                 }
                 //printf("\ngameid: %s",optarg);
                 break;
@@ -357,7 +358,7 @@ int main(int argc, char *argv[]){
   if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
   }
   else{
-    parPlayerNumber = " ";
+    strcpy(parPlayerNumber," ");
   }
   if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
     strcpy(parConfigFileLocation," ");
