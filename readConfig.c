@@ -140,7 +140,7 @@ short checkStructurComplete(){
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
 			printf("Default Hostname: %s\n",confiConst.hostName);
 		}
@@ -156,7 +156,7 @@ short checkStructurComplete(){
 	if( (strcmp(confiConst.gameKindName, "") == 0) || (strcmp(confiConst.gameKindName, " ") == 0) ){
 		printf("Spielart fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.gameKindName,"NMMORRIS");
 			printf("Default Spielart: %s\n",confiConst.gameKindName);
 		}
@@ -173,7 +173,7 @@ short checkStructurComplete(){
 		strcpy(confiConst.gameVersion,"");
 		printf("Spielversion fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.gameVersion,"VERSION 2.0\n");
 			printf("Default Spielversion: %s",confiConst.gameVersion);
 		}
@@ -190,7 +190,7 @@ short checkStructurComplete(){
 	if(confiConst.portNumber == 0){
 		printf("Portnummer fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			confiConst.portNumber = 1357;
 			printf("Default Portnummer: %i\n",confiConst.portNumber);
 		}
@@ -202,10 +202,10 @@ short checkStructurComplete(){
 		}
 	}
 	//playerNumber
-	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) || (strcmp(confiConst.gameVersion, "PLAYER \n") == 0) || (strcmp(confiConst.gameVersion, "PLAYER  \n") == 0) ){
+	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) || (strcmp(confiConst.gameVersion, "PLAYER \n") == 0) || (strcmp(confiConst.gameVersion, "PLAYER   \n") == 0) ){
 		printf("Mitspielernummer fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.playerNumber,"PLAYER\n");
 			printf("Default Mitspielernummer: %s",confiConst.playerNumber);
 		}
