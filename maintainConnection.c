@@ -85,7 +85,8 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 
 
 short send_move_to_server(int sockfd, char* move){
-	if(write(sockfd, move, sizeof(move)) < 0){
+	//test
+	if(write(sockfd, move, strlen(move)) < 0){
 		perror("write error, MAINCON");
 		return ERROR;
 	}
