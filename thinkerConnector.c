@@ -406,10 +406,8 @@ int main(int argc, char *argv[]){
                 printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                printf("\nin C !!!\n");
                 printf("\nparameter c: \"%s\"",optarg);
-                strcpy(parConfigFileLocation,"");
-                strcat(parConfigFileLocation,optarg);
+                strcpy(parConfigFileLocation,optarg);
                 printf("\nparameter c: %s",optarg);
                 break;
       default:
@@ -420,6 +418,9 @@ int main(int argc, char *argv[]){
   }
   else{
     parPlayerNumber = " ";
+  }
+  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
+    parConfigFileLocation = " ";
   }
 
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
