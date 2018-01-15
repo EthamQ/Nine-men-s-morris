@@ -390,8 +390,8 @@ int main(int argc, char *argv[]){
   char* parGameId;
   char* parPlayerNumber;
   char parConfigFileLocation[256];
+  //Auslesen der Parameter fuer Konfig
   strcpy(parConfigFileLocation,"");
-  //Auslesen der Parameter
   while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
     switch(paras){
       case 'g':
@@ -424,5 +424,13 @@ int main(int argc, char *argv[]){
     perror("Terrible Failure in readConfig.c , THINKCON");
     return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
   }
+  //Rest
+  drawField();
+  parseMove("A1:A2",0);
+  parseMove("A3:A4",1);
+  parseMove("B1:C1",0);
+  parseMove("C3:C2",1);
+  parseMove("C1:C2",0);
+  fork_thinker_connector();
 return 0;
 }
