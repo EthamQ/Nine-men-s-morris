@@ -392,7 +392,7 @@ int main(int argc, char *argv[]){
   char* parConfigFileLocation;
 
   //Auslesen der Parameter
-  while( (paras = getopt(argc, argv, "g:p:c")) != -1){
+  while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
     switch(paras){
       case 'g':
                 parGameId = optarg;
