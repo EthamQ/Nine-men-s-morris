@@ -222,7 +222,7 @@ char* filepath = configFileName;
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
 	file = fopen(filepath, "r");
 	if(file == NULL){
-		printf("\n Fehlerhafter Dateipfad fuer die Konfigdatei, oeffne stattdessen client.conf\n\n");
+		printf("\nKeine oder nicht existente Konfigdatei angegeben, oeffne stattdessen client.conf\n\n");
 		file=fopen("client.conf","r");
 		if(file == NULL){
 			perror("client.conf does not exist either D: , READCONF");
