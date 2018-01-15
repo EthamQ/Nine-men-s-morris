@@ -140,8 +140,9 @@ short checkStructurComplete(){
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
 
-		printf("Hostname fehlt, Defaultwert nehmen? (y/n) \n");
-		scanf("%s",scanVal);
+		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
+		//scanf("%s",scanVal);
+		scanf("%c \0",scanVal);
 		printf("\ntest%c\n",scanVal);/*
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
