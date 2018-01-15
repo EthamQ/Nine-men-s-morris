@@ -409,8 +409,8 @@ int main(int argc, char *argv[]){
                 printf("\nin C !!!\n");
                 printf("\nparameter c: \"%s\"",optarg);
                 strcpy(parConfigFileLocation,"");
-                //strcat(parConfigFileLocation,optarg);
-                //printf("\nparameter c: %s",optarg);
+                strcat(parConfigFileLocation,optarg);
+                printf("\nparameter c: %s",optarg);
                 break;
       default:
                 perror("Fehler: ungueltiger Parameter, THINKCON");
