@@ -89,11 +89,6 @@ int assignParameters(char* ParameterLine){
 										}
 										break;
 			case paraPLAYERNUMBER:
-										printf("test I: \"%s\"",assValue);
-										if(strcmp(assValue," ") == 0){
-											printf("test");
-											assValue = "1";
-										}
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
 											strcpy(gamverval, "PLAYER ");
 											strcat(gamverval, isGameidAlreadyDefined);
