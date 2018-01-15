@@ -91,6 +91,7 @@ int assignParameters(char* ParameterLine){
 											if((strcmp(assValue," ") == 0)||(strcmp(assValue,"") == 0)){
 												printf("test\n");
 												strcpy(confiConst.playerNumber, " ");
+												return 0;
 											}
 											strcpy(gamverval, "ID ");
 											strcat(gamverval, assValue);
