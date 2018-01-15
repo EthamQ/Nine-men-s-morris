@@ -89,6 +89,10 @@ int assignParameters(char* ParameterLine){
 										}
 										break;
 			case paraPLAYERNUMBER:
+										if(strcmp(assValue," ") == 0){
+											printf("test");
+											assValue = "1";
+										}
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
 											strcpy(gamverval, "PLAYER ");
 											strcat(gamverval, isGameidAlreadyDefined);
@@ -201,21 +205,8 @@ short checkStructurComplete(){
 			printf("Neue Portnummer: %i\n",confiConst.portNumber);
 		}
 	}
-	//playerNumber
-	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) || (strcmp(confiConst.gameVersion, "PLAYER\n") == 0) || (strcmp(confiConst.gameVersion, "PLAYER  \n") == 0) ){
-		printf("Mitspielernummer fehlt, Defaultwert nehmen? (y/n): ");
-		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
-			strcat(confiConst.playerNumber,"PLAYER\n");
-			printf("Default Mitspielernummer: %s",confiConst.playerNumber);
-		}
-		else{
-			printf("Spielart eingeben: ");
-			scanf("%s",scanVal);
-			strcat(confiConst.playerNumber,scanVal);
-			printf("Neue Mitspielernummer: %s\n",confiConst.playerNumber);
-		}
-	}
+	//Wenn playernumber fehlt ist das auch ok, weil dann einfach der Server eine zuweist
+	
 	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
