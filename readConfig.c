@@ -142,7 +142,7 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
-			printf("Default Hostname: %s\n",confiConst.hostName);
+			//printf("Default Hostname: %s\n",confiConst.hostName);
 		}
 		else{
 			printf("Hostname eingeben: ");
@@ -158,7 +158,7 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.gameKindName,"NMMORRIS");
-			printf("Default Spielart: %s\n",confiConst.gameKindName);
+			//printf("Default Spielart: %s\n",confiConst.gameKindName);
 		}
 		else{
 			printf("Spielart eingeben: ");
@@ -175,7 +175,7 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			strcat(confiConst.gameVersion,"VERSION 2.0\n");
-			printf("Default Spielversion: %s",confiConst.gameVersion);
+			//printf("Default Spielversion: %s",confiConst.gameVersion);
 		}
 		else{
 			printf("Spielversion eingeben: ");
@@ -192,7 +192,7 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
 			confiConst.portNumber = 1357;
-			printf("Default Portnummer: %i\n",confiConst.portNumber);
+			//printf("Default Portnummer: %i\n",confiConst.portNumber);
 		}
 		else{
 			printf("Portnummer eingeben: ");
@@ -222,7 +222,7 @@ char* filepath = configFileName;
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
 	file = fopen(filepath, "r");
 	if(file == NULL){
-		printf("\ninvalid configfilename or path, opening client.conf instead\n\n");
+		printf("\n Fehlerhafter Dateipfad fuer die Konfigdatei, oeffne stattdessen client.conf\n\n");
 		file=fopen("client.conf","r");
 		if(file == NULL){
 			perror("client.conf does not exist either D: , READCONF");
