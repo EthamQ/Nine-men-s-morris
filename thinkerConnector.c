@@ -407,7 +407,8 @@ int main(int argc, char *argv[]){
                 break;
       case 'c':
                 //parConfigFileLocation = optarg;
-                parConfigFileLocation = " ";
+                //parConfigFileLocation = " ";
+                strcpy(parConfigFileLocation,optarg);
                 printf("\nparameter c: %s",optarg);
                 break;
       default:
@@ -417,7 +418,6 @@ int main(int argc, char *argv[]){
   if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
   }
   else{
-    //printf("playernumber ist nicht 1 oder 2: %s \n", parPlayerNumber);
     parPlayerNumber = " ";
   }
 
