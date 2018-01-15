@@ -147,11 +147,10 @@ short checkStructurComplete(){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
 		}
 		else{
-
 			printf("Hostname eingeben: ");
-			scanf("%s",scanVal);/*
+			scanf("%s",scanVal);
 			strcat(confiConst.hostName,scanVal);
-			*/
+
 		}
 		printf("Neuer Hostname: %s\n",confiConst.hostName);
 
