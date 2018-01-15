@@ -406,6 +406,7 @@ int main(int argc, char *argv[]){
                 printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
+                printf("\nin C !!!\n")
                 //parConfigFileLocation = optarg;
                 //parConfigFileLocation = " ";
                 strcpy(parConfigFileLocation,optarg);
