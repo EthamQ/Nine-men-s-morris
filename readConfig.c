@@ -136,30 +136,57 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-	//scanVal = NULL;
+
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
-
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		printf("\ntest%s\n",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
+			printf("Default Hostname: %s\n",confiConst.hostName);
 		}
 		else{
 			printf("Hostname eingeben: ");
 			scanf("%s",scanVal);
 			strcat(confiConst.hostName,scanVal);
-
+			printf("Neuer Hostname: %s\n",confiConst.hostName);
 		}
-		printf("Neuer Hostname: %s\n",confiConst.hostName);
-
 	}
 
 	//gameKindName
+	if( (strcmp(confiConst.gameKindName, "") == 0) || (strcmp(confiConst.gameKindName, " ") == 0) ){
+		printf("Spielart fehlt, Defaultwert nehmen? (y/n): ");
+		scanf("%s",scanVal);
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+			strcat(confiConst.gameKindName,"NMMORRIS");
+			printf("Default Spielart: %s\n",confiConst.gameKindName);
+		}
+		else{
+			printf("Spielart eingeben: ");
+			scanf("%s",scanVal);
+			strcat(confiConst.gameKindName,scanVal);
+			printf("Neue Spielart: %s\n",confiConst.gameKindName);
+		}
+	}
 
 	//gameVersion
-
+	if( (strcmp(confiConst.gameVersion, "") == 0) || (strcmp(confiConst.gameVersion, " ") == 0) || (strcmp(confiConst.gameVersion, "VERSION \n") == 0) || (strcmp(confiConst.gameVersion, "VERSION  \n") == 0) ){
+		strcpy(confiConst.gameVersion,"");
+		printf("Spielversion fehlt, Defaultwert nehmen? (y/n): ");
+		scanf("%s",scanVal);
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+			strcat(confiConst.gameVersion,"VERSION 2.0\n");
+			printf("Default Spielversion: %s\n",confiConst.gameVersion);
+		}
+		else{
+			printf("Spielversion eingeben: ");
+			scanf("%f",scanVal);
+			strcpy(gamverval,"VERSION ");
+			strcat(confiConst.gameVersion,scanVal);
+			strcat(confiConst.gameVersion,"\n");
+			printf("Neue Spielversion: %s\n",confiConst.gameVersion);
+		}
+	}
 	//playerName
 
 	//portNumber
