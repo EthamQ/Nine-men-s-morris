@@ -389,7 +389,7 @@ int main(int argc, char *argv[]){
   short paras;
   char* parGameId;
   char* parPlayerNumber;
-  char* parConfigFileLocation;
+  char parConfigFileLocation[256];
 
   //Auslesen der Parameter
   while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
