@@ -133,7 +133,7 @@ int assignParameters(char* ParameterLine){
 
 short checkStructurComplete(){
 	char scanVal[256];
-	printf("\n gameid: %s\n",confiConst.gameID);
+	printf("\n gameid: \"%s\"\n",confiConst.gameID);
 	//gameid
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) || (strcmp(confiConst.gameVersion, "ID \n") == 0) || (strcmp(confiConst.gameVersion, "ID  \n") == 0)){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
