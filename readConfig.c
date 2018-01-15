@@ -202,7 +202,7 @@ short checkStructurComplete(){
 		}
 	}
 	//playerNumber
-	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) || (strcmp(confiConst.gameVersion, "PLAYER \n") == 0) || (strcmp(confiConst.gameVersion, "PLAYER   \n") == 0) ){
+	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) || (strcmp(confiConst.gameVersion, "PLAYER\n") == 0) || (strcmp(confiConst.gameVersion, "PLAYER  \n") == 0) ){
 		printf("Mitspielernummer fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
