@@ -420,7 +420,7 @@ int main(int argc, char *argv[]){
     parPlayerNumber = " ";
   }
   if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
-    parConfigFileLocation = " ";
+    strcpy(parConfigFileLocation," ");
   }
 
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
