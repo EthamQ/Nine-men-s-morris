@@ -23,9 +23,14 @@ char* cleanBlankspace(char* toClean){
 		//printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
 		return " ";
 	}
-
-	toReturn = strtok(bufferChar," ");
-	return toReturn;
+	while(bufferChar != NULL){
+		toReturn = strtok(bufferChar,BlankDeli);
+		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
+			return toReturn;
+		}
+		bufferChar = strtok(NULL,BlankDeli);
+	}
+	return " ";
 }
 
 short tellParam(char* para){
@@ -122,6 +127,7 @@ int assignParameters(char* ParameterLine){
 }
 
 short checkStructurComplete(){
+	/*
 	printf("check\n");
 	char scanVal[250];
 
@@ -148,19 +154,7 @@ short checkStructurComplete(){
 		printf("Neuer Hostname: %s\n",confiConst.hostName);
 	}
 	//playerNumber
-	if( (strcmp(confiConst.playerNumber, "") == 0) || (strcmp(confiConst.playerNumber, " ") == 0) ){
-		printf("playerNumber fehlt, Defaultwert nehmen? (y/n) ");
-		scanf("%s",scanVal);
-		if(strcmp(scanVal,"y") || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
-			confiConst.playerNumber = 1;
-		}
-		else{
-			printf("playerNumber eingeben: ");
-			scanf("%s",scanVal);
-			strcat(confiConst.playerNumber,scanVal);
-		}
-		printf("Neue Playernumber: %s\n",confiConst.hostName);
-	}
+
 	//gameKindName
 
 	//portNumber
@@ -170,7 +164,7 @@ short checkStructurComplete(){
 	//playerName
 
 
-
+*/
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
