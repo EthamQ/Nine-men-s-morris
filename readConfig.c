@@ -181,13 +181,12 @@ short checkStructurComplete(){
 		}
 	}
 	//portNumber
-	if( (strcmp(confiConst.portNumber, "") == 0) || (strcmp(confiConst.portNumber, " ") == 0) || (strcmp(confiConst.portNumber, "VERSION \n") == 0) || (strcmp(confiConst.portNumber, "VERSION  \n") == 0) ){
-		strcpy(confiConst.portNumber,"");
+	if(confiConst.portNumber == 0){
 		printf("Portnummer fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
 			confiConst.portNumber = 1357;
-			printf("Default Portnummer: %s\n",confiConst.portNumber);
+			printf("Default Portnummer: %i\n",confiConst.portNumber);
 		}
 		else{
 			printf("Portnummer eingeben: ");
