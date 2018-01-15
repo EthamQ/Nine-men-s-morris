@@ -1,11 +1,6 @@
 #ifndef CONSTANTS
 #define CONSTANTS
 
-//Main server and game information
-#define GAMEKINDNAME "NMMORRIS"
-#define PORTNUMBER 1357
-#define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
-#define CONFIG_DEFAULT "client.conf"
 
 //performConnection
 #define BUFFER_SIZE 256
@@ -16,7 +11,7 @@ struct configConstants{
   char   gameID[BUFFER_SIZE];
   char   gameVersion[BUFFER_SIZE];
   char   playerNumber[BUFFER_SIZE];
-  int    portNumber; //uint16_t portNumber;
+  char   portNumber[BUFFER_SIZE]; //uint16_t portNumber;
 };
 
 struct configConstants confiConst;

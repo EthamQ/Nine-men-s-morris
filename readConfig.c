@@ -109,8 +109,8 @@ int assignParameters(char* ParameterLine){
 										}
 										break;
 			case paraPORT:
-										confiConst.portNumber = atof(assValue);
-										//strcpy(confiConst.portNumber, assValue);
+										//confiConst.portNumber = atof(assValue);
+										strcpy(confiConst.portNumber, assValue);
 										break;
 			case paraGAMEKINDNAME:
 										strcpy(confiConst.gameKindName, assValue);
@@ -138,7 +138,7 @@ short checkStructurComplete(){
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
-		strcat(confiConst.gameID,scanVal);
+		strcpy(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
 
@@ -147,7 +147,7 @@ short checkStructurComplete(){
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
-			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
+			strcpy(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
 			//printf("Default Hostname: %s\n",confiConst.hostName);
 		}
 		else{
@@ -163,7 +163,7 @@ short checkStructurComplete(){
 		printf("Spielart fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
-			strcat(confiConst.gameKindName,"NMMORRIS");
+			strcpy(confiConst.gameKindName,"NMMORRIS");
 			//printf("Default Spielart: %s\n",confiConst.gameKindName);
 		}
 		else{
@@ -180,7 +180,7 @@ short checkStructurComplete(){
 		printf("Spielversion fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
-			strcat(confiConst.gameVersion,"VERSION 2.0\n");
+			strcpy(confiConst.gameVersion,"VERSION 2.0\n");
 			//printf("Default Spielversion: %s",confiConst.gameVersion);
 		}
 		else{
@@ -193,23 +193,23 @@ short checkStructurComplete(){
 		}
 	}
 	//portNumber
-	if(confiConst.portNumber == 0){
+	if( (strcmp(confiConst.portNumber, "") == 0) || (strcmp(confiConst.portNumber, " ") == 0) ){
 		printf("Portnummer fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) || (strcmp(scanVal,"Y") == 0) ){
-			confiConst.portNumber = 1357;
+			strcat(confiConst.portNumber,"1357");
 			//printf("Default Portnummer: %i\n",confiConst.portNumber);
 		}
 		else{
 			printf("Portnummer eingeben: ");
 			scanf("%s",scanVal);
-			confiConst.portNumber = atof(scanVal);
-			printf("Neue Portnummer: %i\n",confiConst.portNumber);
+                        strcpy(confiConst.gameVersion,scanVal);
+			//printf("Neue Portnummer: %i\n",confiConst.portNumber);
 		}
 	}
 	//Wenn playernumber fehlt ist das auch ok, weil dann einfach der Server eine zuweist
 
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 

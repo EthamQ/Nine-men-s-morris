@@ -15,7 +15,7 @@ static char dataPRS[MES_LENGTH_SERVER];
 
 //static char game_idPRC []= "ID 13dusd0qsvk4l\n";
 
-static char numberOfPlayersPRC []= "PLAYER\n";
+//static char numberOfPlayersPRC []= "PLAYER\n";
 
 
 //ARGS: server message, if it begins with "+" return true
@@ -26,11 +26,7 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-
-
-
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
-    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
@@ -112,7 +108,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     //C: [[GewÅ¸nschte Mitspielernummer]]
     while(testifvalid < 0){
-        testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
+        testifvalid = write(sockfd, confiConst.playerNumber, (int)strlen(confiConst.playerNumber));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return -1;
