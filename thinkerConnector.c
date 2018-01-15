@@ -407,6 +407,7 @@ int main(int argc, char *argv[]){
                 break;
       case 'c':
                 printf("\nin C !!!\n");
+                printf("\nparameter c: %s",optarg);
                 //parConfigFileLocation = optarg;
                 //parConfigFileLocation = " ";
                 strcpy(parConfigFileLocation,optarg);
