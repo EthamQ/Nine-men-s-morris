@@ -28,7 +28,7 @@ char* cleanBlankspace(char* toClean){
 		if((strcmp(toReturn," "))!=0){	//Alle Leerzeichen wurden entfernt
 			return toReturn;
 		}
-		bufferChar = strtok(NULL,BlankDeli);
+		bufferChar = strtok(NULL," ");
 	}
 	return " ";
 }
