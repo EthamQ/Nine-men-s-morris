@@ -13,7 +13,7 @@
 
 static char dataPRS[MES_LENGTH_SERVER];
 
-static char game_idPRC []= "ID 13dusd0qsvk4l\n";
+//static char game_idPRC []= "ID 13dusd0qsvk4l\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
 
@@ -88,13 +88,13 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     //C: <<Game-ID>>
     while(testifvalid < 0){
-        testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
+        testifvalid = write(sockfd, confiConst.gameID, (int)strlen(confiConst.gameID));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return -1;
         }
     }
-    printf("%s\n",game_idPRC);
+    printf("%s\n",confiConst.gameID);
     testifvalid = -1;
 	  attempts = 0;
 

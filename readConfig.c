@@ -82,16 +82,22 @@ int assignParameters(char* ParameterLine){
 		switch(tellParam(assParameter)){
 			case paraGAMEID:
 										if(strcmp(isGameidAlreadyDefined," ") != 0){
-											strcpy(confiConst.gameID, isGameidAlreadyDefined);
+											strcpy(gamverval, "ID ");
+											strcat(gamverval, isGameidAlreadyDefined);
+											strcat(gamverval, "\n");
+											strcpy(confiConst.gameID, gamverval);
 										}
 										else{
-											strcpy(confiConst.gameID, assValue);
+											strcpy(gamverval, "ID ");
+											strcat(gamverval, assValue);
+											strcat(gamverval, "\n");
+											strcpy(confiConst.gameID, gamverval);
 										}
 										break;
 			case paraPLAYERNUMBER:
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
 											strcpy(gamverval, "PLAYER ");
-											strcat(gamverval, isGameidAlreadyDefined);
+											strcat(gamverval, isPlayernumberAlreadyDefined);
 											strcat(gamverval, "\n");
 											strcpy(confiConst.playerNumber, gamverval);
 										}
