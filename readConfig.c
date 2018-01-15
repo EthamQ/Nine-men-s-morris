@@ -136,7 +136,7 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-	scanVal = "";
+	//scanVal = NULL;
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
 
