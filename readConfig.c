@@ -96,7 +96,10 @@ int assignParameters(char* ParameterLine){
 											strcpy(confiConst.playerNumber, gamverval);
 										}
 										else{
-											confiConst.playerNumber = atof(assValue);
+											strcpy(gamverval, "PLAYER ");
+											strcat(gamverval, assValue);
+											strcat(gamverval, "\n");
+											strcpy(confiConst.playerNumber, gamverval);
 										}
 										break;
 			case paraPORT:
