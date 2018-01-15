@@ -325,17 +325,26 @@ int main(int argc, char *argv[]){
   while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
     switch(paras){
       case 'g':
-                parGameId = optarg;
+                if(optarg == NULL){
+                  strcpy(parGameId," ");
+                }
+                strcpy(parGameId,optarg);
                 if((strstr(parGameId, "-")) != NULL){
                   parGameId = " ";
                 }
               //  printf("\ngameid: %s",optarg);
                 break;
       case 'p':
-                parPlayerNumber = optarg;
+                if(optarg == NULL){
+                  strcpy(parPlayerNumber," ");
+                }
+                strcpy(parPlayerNumber,optarg);
               //  printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
+                if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
+                  strcpy(parConfigFileLocation," ");
+                }
                 strcpy(parConfigFileLocation,optarg);
                 break;
       default:
