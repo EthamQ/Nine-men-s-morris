@@ -13,11 +13,6 @@
 
 static char dataPRS[MES_LENGTH_SERVER];
 
-//static char game_idPRC []= "ID 13dusd0qsvk4l\n";
-
-//static char numberOfPlayersPRC []= "PLAYER\n";
-
-
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
     if(strncmp(r, "+",1) == 0){
