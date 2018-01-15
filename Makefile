@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall -Wextra
-ARGS=-g $(GAME_ID) -p  $(PLAYER) -c  $(CONFIG)
+ARGS=-g $(GAME_ID) -p $(PLAYER) -c $(CONFIG)
 
 default: build
 
