@@ -422,7 +422,6 @@ int main(int argc, char *argv[]){
   if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
     strcpy(parConfigFileLocation," ");
   }
-
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
     perror("Terrible Failure in readConfig.c , THINKCON");
     return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
