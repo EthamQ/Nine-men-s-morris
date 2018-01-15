@@ -145,15 +145,16 @@ short checkStructurComplete(){
 		printf("\ntest%s\n",scanVal);
 		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
-		}/*
+		}
 		else{
 
 			printf("Hostname eingeben: ");
-			scanf("%s",scanVal);
+			scanf("%s",scanVal);/*
 			strcat(confiConst.hostName,scanVal);
+			*/
 		}
 		printf("Neuer Hostname: %s\n",confiConst.hostName);
-		*/
+
 	}
 
 	//gameKindName
