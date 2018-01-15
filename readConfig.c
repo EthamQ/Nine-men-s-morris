@@ -142,10 +142,10 @@ short checkStructurComplete(){
 
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
-		printf("\ntest%s\n",scanVal);/*
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
+		printf("\ntest%s\n",scanVal);
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
 			strcat(confiConst.hostName,"sysprak.priv.lab.nm.ifi.lmu.de");
-		}
+		}/*
 		else{
 
 			printf("Hostname eingeben: ");
