@@ -135,7 +135,7 @@ short checkStructurComplete(){
 	char scanVal[256];
 
 	//gameid
-	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
+	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) || (strcmp(confiConst.gameVersion, "ID \n") == 0) || (strcmp(confiConst.gameVersion, "ID  \n") == 0)){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
 		strcpy(confiConst.gameID,scanVal);
