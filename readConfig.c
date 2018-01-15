@@ -127,10 +127,8 @@ int assignParameters(char* ParameterLine){
 }
 
 short checkStructurComplete(){
-	/*
-	printf("check\n");
 	char scanVal[250];
-
+	printf("check\n");
 	//gameid
 	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
@@ -138,7 +136,7 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-
+/*
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n) ");
