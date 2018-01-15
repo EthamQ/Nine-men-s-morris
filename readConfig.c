@@ -136,9 +136,10 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,scanVal);
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-/*
+
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
+		/*
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n) ");
 		scanf("%s",scanVal);
 		if((strcmp(scanVal,"y")) || strcmp(scanVal,"yes")){ // strcmp gibt 0 zurueck wenn gleich, 0 ist gleichzeitig FALSE,
@@ -150,19 +151,18 @@ short checkStructurComplete(){
 			strcat(confiConst.hostName,scanVal);
 		}
 		printf("Neuer Hostname: %s\n",confiConst.hostName);
+		*/
 	}
-	//playerNumber
 
 	//gameKindName
-
-	//portNumber
 
 	//gameVersion
 
 	//playerName
 
+	//portNumber
 
-*/
+	//playerNumber
 
 	printf("\n Struktur:\n gameKindName: %s\n portNumber: %i\n hostName : %s\n gameID: %s\n playerName: %s\n playerNumber %i\n gameVersion %s\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
