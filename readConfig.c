@@ -175,7 +175,7 @@ short checkStructurComplete(){
 	}
 
 	//gameVersion
-	if( (strcmp(confiConst.gameVersion, "") == 0) || (strcmp(confiConst.gameVersion, " ") == 0) || (strcmp(confiConst.gameVersion, "VERSION \n") == 0) || (strcmp(confiConst.gameVersion, "VERSION  \n") == 0) ){
+	if( (strcmp(confiConst.gameVersion, "") == 0) || (strcmp(confiConst.gameVersion, " ") == 0) || (strcmp(confiConst.gameVersion, "VERSION\n") == 0) || (strcmp(confiConst.gameVersion, "VERSION \n") == 0) ){
 		strcpy(confiConst.gameVersion,"");
 		printf("Spielversion fehlt, Defaultwert nehmen? (y/n): ");
 		scanf("%s",scanVal);
