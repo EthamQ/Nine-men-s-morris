@@ -21,7 +21,7 @@ char* cleanBlankspace(char* toClean){
 
 	if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
 		//printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
-		return " ";
+		return "";
 	}
 	while(bufferChar != NULL){
 		toReturn = strtok(bufferChar," ");
@@ -30,7 +30,7 @@ char* cleanBlankspace(char* toClean){
 		}
 		bufferChar = strtok(NULL," ");
 	}
-	return " ";
+	return "";
 }
 
 short tellParam(char* para){
@@ -65,7 +65,7 @@ int assignParameters(char* ParameterLine){
 	char* assValue;
 	char paraDelimiter[] = "=";
 	char gamverval[256];
-		if( (strcmp(paraLine," ")==0) || (strcmp(paraLine,"  ") == 0) ){
+		if( (strcmp(paraLine,"")==0) || (strcmp(paraLine,"  ") == 0) ){
 			return 0;
 		}
  		//Line in Parameter und Wert aufteilen
