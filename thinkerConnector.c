@@ -317,14 +317,15 @@ printf("-Ab hier switch case-\n");
 
 int main(int argc, char *argv[]){
   short paras;
-  char* parGameId;
-  char* parPlayerNumber;
+  char parGameId[256];
+  char parPlayerNumber[256];
   char parConfigFileLocation[256];
   //Auslesen der Parameter fuer Konfig
   strcpy(parConfigFileLocation,"");
   while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
     switch(paras){
       case 'g':
+                printf("optarg g: \"%s\"\n",optarg);
                 if(optarg == NULL){
                   strcpy(parGameId," ");
                 }
@@ -332,16 +333,18 @@ int main(int argc, char *argv[]){
                 if((strstr(parGameId, "-")) != NULL){
                   parGameId = " ";
                 }
-              //  printf("\ngameid: %s",optarg);
+                //printf("\ngameid: %s",optarg);
                 break;
       case 'p':
+                printf("optarg p: \"%s\"\n",optarg);
                 if(optarg == NULL){
                   strcpy(parPlayerNumber," ");
                 }
                 strcpy(parPlayerNumber,optarg);
-              //  printf("\nplayernumber: %s \n", parPlayerNumber);
+                printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
+                printf("optarg c: \"%s\"\n",optarg);
                 if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
                   strcpy(parConfigFileLocation," ");
                 }
