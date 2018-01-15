@@ -89,7 +89,7 @@ int assignParameters(char* ParameterLine){
 										}
 										break;
 			case paraPLAYERNUMBER:
-										printf("test I: %s",assValue);
+										printf("test I: \"%s\"",assValue);
 										if(strcmp(assValue," ") == 0){
 											printf("test");
 											assValue = "1";
