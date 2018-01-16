@@ -36,7 +36,7 @@ int shmid;
 int initConnect(){
       int sockfd;
       int rv;
-      int portnumberBuff;
+      char portnumberBuff[256];
       struct addrinfo hints, *servinfo, *p;
       memset(&hints, 0, sizeof hints);
       hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
