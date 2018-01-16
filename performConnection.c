@@ -12,9 +12,14 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC[BUFFER_SIZE];
-static char game_idPRC[BUFFER_SIZE];
-static char numberOfPlayersPRC[BUFFER_SIZE];
+static char versionPRC []= "VERSION 2.0\n";
+//static char game_idPRC []= "ID 02pobsvmluimp\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+//static char game_idPRC []= "ID 2uiyd4c9217om\n";
+static char game_idPRC []= "ID 13dusd0qsvk4l\n";
+
+static char numberOfPlayersPRC []= "PLAYER\n";
+
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -23,6 +28,9 @@ static bool serverResponseValid(const char r[]){
     }
       return false;
 }
+
+
+
 
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
     //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
@@ -56,7 +64,6 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
     attempts = 0;
 
     //C: <<Client Version>>
-    strcpy(versionPRC,confiConst.gameVersion);
     while(testifvalid < 0){
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
@@ -83,7 +90,6 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 
     //C: <<Game-ID>>
-    strcpy(game_idPRC,confiConst.gameID);
     while(testifvalid < 0){
         testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
         attempts++;
@@ -108,7 +114,6 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 
     //C: [[GewÅ¸nschte Mitspielernummer]]
-    strcpy(numberOfPlayersPRC,confiConst.playerNumber);
     while(testifvalid < 0){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;

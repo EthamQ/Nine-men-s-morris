@@ -16,7 +16,6 @@ struct configConstants{
 
 struct configConstants confiConst;
 
-
 //Flags
   //Rueckgabe
   #define ERROR -1
