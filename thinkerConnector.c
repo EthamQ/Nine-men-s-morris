@@ -36,16 +36,13 @@ int shmid;
 int initConnect(){
       int sockfd;
       int rv;
-      char portnumberBuff[256];
-      char hostnameBuff[256];
+
       struct addrinfo hints, *servinfo, *p;
       memset(&hints, 0, sizeof hints);
       hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
       hints.ai_socktype = SOCK_STREAM;
-      strcpy(portnumberBuff,confiConst.portNumber);
-      strcpy(hostnameBuff,confiConst.hostName);
 
-      if ((rv = getaddrinfo(hostnameBuff, portnumberBuff, &hints, &servinfo)) != 0) {
+      if ((rv = getaddrinfo("sysprak.priv.lab.nm.ifi.lmu.de", "1357", &hints, &servinfo)) != 0) {
       fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
       //exit(1);
       return -1;
@@ -262,6 +259,22 @@ printf("-Ab hier switch case-\n");
 				}
 				else if(shm_pointer->capture_status == 2){
 					//TODO: 2 Spielsteine werfen
+					char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+					send_signal(sockfd, CAPTURE, movePipe);
+					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
+						perror("Fehler beim senden von THINKING");
+					}
+					printf("C: %s", THINKING_MSG);
+
+				//receive OKTHINK
+				if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
+					perror("Fehler beim empfangen von OKTHINK");
+				};
+					printf("\nS: %s",serverResponse);
+
+					read_piecelist(shm_pointer, serverResponse);
+					send_signal(sockfd, CAPTURE, movePipe);
+					free(serverResponse);
 				}
 				break;
 
@@ -319,65 +332,14 @@ printf("-Ab hier switch case-\n");
   return 0;
 }
 
-int main(int argc, char *argv[]){
-  short paras;
-  char parGameId[256];
-  char parPlayerNumber[256];
-  char parConfigFileLocation[256];
-  //Auslesen der Parameter fuer Konfig
-  strcpy(parConfigFileLocation,"");
-  while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
-    switch(paras){
-      case 'g':
-                printf("optarg g: \"%s\"\n",optarg);
-                if(optarg == NULL){
-                  strcpy(parGameId," ");
-                }
-                strcpy(parGameId,optarg);
-                if((strstr(parGameId, "-")) != NULL){
-                  //parGameId = " ";
-                  strcpy(parGameId," ");
-                }
-                //printf("\ngameid: %s",optarg);
-                break;
-      case 'p':
-                printf("optarg p: \"%s\"\n",optarg);
-                if(optarg == NULL){
-                  strcpy(parPlayerNumber," ");
-                }
-                strcpy(parPlayerNumber,optarg);
-                printf("\nplayernumber: %s \n", parPlayerNumber);
-                break;
-      case 'c':
-                printf("optarg c: \"%s\"\n",optarg);
-                if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
-                  strcpy(parConfigFileLocation," ");
-                }
-                strcpy(parConfigFileLocation,optarg);
-                break;
-      default:
-                printf("Fehler: ungueltiger Parameter, THINKCON");
-    }
-  }
-  if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
-  }
-  else{
-    strcpy(parPlayerNumber," ");
-  }
-  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
-    strcpy(parConfigFileLocation," ");
-  }
-  if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
-    perror("Terrible Failure in readConfig.c , THINKCON");
-    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
-  }
-  //Rest
-  drawField();
-  parseMove("A1:A2",0);
-  parseMove("A3:A4",1);
-  parseMove("B1:C1",0);
-  parseMove("C3:C2",1);
-  parseMove("C1:C2",0);
-  fork_thinker_connector();
+int main(){
+	drawField();
+	parseMove("A1:A2",0);
+   parseMove("A3:A4",1);
+   parseMove("B1:C1",0);
+   parseMove("C3:C2",1);
+   parseMove("C1:C2",0);
+	read_configfile(CONFIG_DEFAULT);
+	fork_thinker_connector();
 return 0;
 }
