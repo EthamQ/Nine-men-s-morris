@@ -37,13 +37,15 @@ int initConnect(){
       int sockfd;
       int rv;
       char portnumberBuff[256];
+      char hostnameBuff[256];
       struct addrinfo hints, *servinfo, *p;
       memset(&hints, 0, sizeof hints);
       hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
       hints.ai_socktype = SOCK_STREAM;
-      portnumberBuff = atof(confiConst.portNumber);
+      strcpy(portnumberBuff,confiConst.portNumber);
+      strcpy(hostnameBuff,confiConst.hostName);
 
-      if ((rv = getaddrinfo(confiConst.hostName, portnumberBuff, &hints, &servinfo)) != 0) {
+      if ((rv = getaddrinfo(hostnameBuff, portnumberBuff, &hints, &servinfo)) != 0) {
       fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
       //exit(1);
       return -1;
