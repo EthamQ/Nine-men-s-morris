@@ -103,7 +103,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     char playerNumberBuffer[256];
     strcpy(playerNumberBuffer,confiConst.playerNumber);
-    printf("\nplaynumbuffer:%s\n",playerNumberBuffer)
+    printf("\nplaynumbuffer:%s\n",playerNumberBuffer);
     //C: [[GewÅ¸nschte Mitspielernummer]]
     while(testifvalid < 0){
         testifvalid = write(sockfd, playerNumberBuffer, (int)strlen(playerNumberBuffer));
