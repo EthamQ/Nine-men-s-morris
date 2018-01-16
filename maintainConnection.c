@@ -16,7 +16,7 @@
 
 
 int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
-	//printf("\nStart method maintainConnection()\n");
+	printf("\nStart method maintainConnection()\n");
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
 
 	//Servernachricht auslesen
