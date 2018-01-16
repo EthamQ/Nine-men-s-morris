@@ -213,7 +213,7 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 
 
 //an ein benachbartes freies Feld ziehen
-/*void move(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2], int movetype){
+void move(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2], int movetype){
 	//printf("\nFunction move:\n");
 	int x;
 	int y;
@@ -260,10 +260,10 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 	}
 	
 	}
-	*/
+	
 	
 	//an ein benachbartes freies Feld ziehen 
-	void move(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2]){ 	
+	void movee(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2]){ 	
 	printf("\nFunction move:\n"); 	
 	int x; 	
 	int y; 	
@@ -386,15 +386,15 @@ char* think_new(struct SHM_data* shm_pointer){
 		int number = count_number_of(PLAYER_CLIENT, shm_pointer);
 		printf("\nJetzt alle Spielsteine gesetzt. So viele Spielsteine sind noch auf dem Feld: %i\n", number);
 		if(number > 3){
-			move(shm_pointer->field, FROM, TO);
+			move(shm_pointer->field, FROM, TO, NEIGHBOURING);
 			create_MOVE_command(move_command, FROM[0], FROM[1], TO[0], TO[1]);
 			return move_command;
 		}
-		/*else if(number == 3){
+		else if(number == 3){
 			move(shm_pointer->field, FROM, TO, RANDOM);
 			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
 			return play_command;
-		}*/
+		}
 	}
 	return play_command;
 }

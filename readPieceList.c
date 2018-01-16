@@ -116,13 +116,12 @@ void printt(int fieldd[3][8]){
 	
 	//Liest den Status eines Steins ein und schreibt ihn ggf in das shared memory Spielfeld wenn er gesetzt ist
 	void fill_array(int player, char status[2], struct SHM_data* shm_pointer){
-		//int field[][] = shm_pointer->field;
-		//printf("value of empty: %i\n", status[1]);
-		//printf("value of char 5: %i\n", '5');
+		
+		//Umwandeln char zu int
 		int zahl = status[1] - '0';
 		
-		//Falls nur ein A hinter einem piece und keine Zahl
-		if(player == 1 && status[0] == 'A' && (zahl < 0 || zahl > 8)){
+		//Falls nur ein A hinter einem piece vom Client und keine Zahl dann ist es available
+		if(player == PLAYER_CLIENT && status[0] == 'A' && (zahl < 0 || zahl > 8)){
 			available_pieces++;
 		}
 		
@@ -189,26 +188,23 @@ void printt(int fieldd[3][8]){
 			 playerA = PLAYER_OPPONENT;
 			 playerB = PLAYER_CLIENT;
 		 }
-		//9 Pieces Spieler CLIENT
+		//9 Pieces Spieler A
 		while(n<9){
 		pos = read_piecelist_hidden(piecelist, "PIECE0,", pos, status);
 		fill_array(playerA, status, shm_pointer);
 		n++;
 		}
 	
-		//available pieces wird hochgezählt in der fill_array methode wenn hinter einem piece nur "A " steht
-		//used pieces gibt an wie viele Spielsteine bereits gesetzt wurden und wird in shared memory geschrieben
-		printf("\nAvailable pieces: %i\n", available_pieces);
-		shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
-		available_pieces = 0;
-	
-		//9 Pieces Spieler OPPONENT
+		//9 Pieces Spieler B
 		n = 0;
 		while(n<9){
 		pos = read_piecelist_hidden(piecelist, "PIECE1,", pos, status);
 		fill_array(playerB, status, shm_pointer);
 		n++;
 		}
+		printf("\nAvailable pieces: %i\n", available_pieces);
+		shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
+		available_pieces = 0;
 	
 		//Look at the capture value and write in shared memory
 		int capture = read_capture_status(piecelist);

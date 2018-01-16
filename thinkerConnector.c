@@ -259,6 +259,22 @@ printf("-Ab hier switch case-\n");
 				}
 				else if(shm_pointer->capture_status == 2){
 					//TODO: 2 Spielsteine werfen
+					char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+					send_signal(sockfd, CAPTURE, movePipe);
+					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
+						perror("Fehler beim senden von THINKING");
+					}
+					printf("C: %s", THINKING_MSG);
+		
+				//receive OKTHINK
+				if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
+					perror("Fehler beim empfangen von OKTHINK");
+				};
+					printf("\nS: %s",serverResponse);
+					
+					read_piecelist(shm_pointer, serverResponse);
+					send_signal(sockfd, CAPTURE, movePipe);
+					free(serverResponse);
 				}
 				break;
 			
