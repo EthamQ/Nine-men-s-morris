@@ -101,9 +101,12 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
     testifvalid = -1;
 	  attempts = 0;
 
+    char playerNumberBuffer[256];
+    strcpy(playerNumberBuffer,confiConst.playerNumber);
+    printf("\nplaynumbuffer:%s\n",playerNumberBuffer)
     //C: [[GewÅ¸nschte Mitspielernummer]]
     while(testifvalid < 0){
-        testifvalid = write(sockfd, confiConst.playerNumber, (int)strlen(confiConst.playerNumber));
+        testifvalid = write(sockfd, playerNumberBuffer, (int)strlen(playerNumberBuffer));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return -1;
