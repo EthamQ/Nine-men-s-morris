@@ -332,64 +332,14 @@ printf("-Ab hier switch case-\n");
   return 0;
 }
 
-int main(int argc, char *argv[]){
-  short paras;
-  char parGameId[256];
-  char parPlayerNumber[256];
-  char parConfigFileLocation[256];
-  //Auslesen der Parameter fuer Konfig
-  strcpy(parConfigFileLocation,"");
-  while( (paras = getopt(argc, argv, "g:p:c:")) != -1){
-    switch(paras){
-      case 'g':
-                printf("optarg g: \"%s\"\n",optarg);
-                if(optarg == NULL){
-                  strcpy(parGameId," ");
-                }
-                strcpy(parGameId,optarg);
-                if((strstr(parGameId, "-")) != NULL){
-                  //parGameId = " ";
-                  strcpy(parGameId," ");
-                }
-                //printf("\ngameid: %s",optarg);
-                break;
-      case 'p':
-                printf("optarg p: \"%s\"\n",optarg);
-                if(optarg == NULL){
-                  strcpy(parPlayerNumber," ");
-                }
-                strcpy(parPlayerNumber,optarg);
-                printf("\nplayernumber: %s \n", parPlayerNumber);
-                break;
-      case 'c':
-                printf("optarg c: \"%s\"\n",optarg);
-                if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
-                  strcpy(parConfigFileLocation," ");
-                }
-                strcpy(parConfigFileLocation,optarg);
-                break;
-      default:
-                printf("Fehler: ungueltiger Parameter, THINKCON");
-    }
-  }
-  if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
-  }
-  else{
-    strcpy(parPlayerNumber," ");
-  }
-  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
-    strcpy(parConfigFileLocation," ");
-  }
-  if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
-    perror("Terrible Failure in readConfig.c , THINKCON");
-    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
-  }
+int main(){
 	drawField();
 	parseMove("A1:A2",0);
    parseMove("A3:A4",1);
    parseMove("B1:C1",0);
    parseMove("C3:C2",1);
    parseMove("C1:C2",0);
+	//read_configfile(CONFIG_DEFAULT);
 	fork_thinker_connector();
 return 0;
 }
