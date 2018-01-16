@@ -12,6 +12,11 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
+static char versionPRC []= "VERSION 2.0\n";
+static char game_idPRC []= "ID 1eeno1v0yf6vo\n";
+
+static char numberOfPlayersPRC []= "PLAYER\n";
+static char thinkingPRC []= "THINKING\n";
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -21,7 +26,11 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
+
+
+
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
+    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
       printf("%dtest",sockfd);
       perror("Invalid socket file descriptor");
@@ -53,13 +62,13 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     //C: <<Client Version>>
     while(testifvalid < 0){
-        testifvalid = write(sockfd, confiConst.gameVersion, (int)strlen(confiConst.gameVersion));
+        testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return ERROR;
         }
     }
-    printf("%s\n",confiConst.gameVersion);
+    printf("%s\n",versionPRC);
     testifvalid = -1;
 	  attempts = 0;
 
@@ -79,13 +88,13 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     //C: <<Game-ID>>
     while(testifvalid < 0){
-        testifvalid = write(sockfd, confiConst.gameID, (int)strlen(confiConst.gameID));
+        testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return -1;
         }
     }
-    printf("%s\n",confiConst.gameID);
+    printf("%s\n",game_idPRC);
     testifvalid = -1;
 	  attempts = 0;
 
@@ -101,12 +110,9 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
     testifvalid = -1;
 	  attempts = 0;
 
-    char playerNumberBuffer[256];
-    strcpy(playerNumberBuffer,confiConst.playerNumber);
-    printf("\nplaynumbuffer:%s\n",playerNumberBuffer);
     //C: [[GewÅ¸nschte Mitspielernummer]]
     while(testifvalid < 0){
-        testifvalid = write(sockfd, playerNumberBuffer, (int)strlen(playerNumberBuffer));
+        testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
             return -1;
@@ -136,24 +142,30 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 	  read_piecelist(shm_pointer,dataPRS);
 
-	  //---------Entscheiden Move oder wait-----------------
     //C: THINKING
-	if(strstr(dataPRS,"+ MOVE ")){
-		//send THINKING
-		printf("\nperformConnection(): received +MOVE from the server\n");
-		if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
-			perror("Fehler beim senden von THINKING");
-		}
-		printf("C: %s", THINKING_MSG);
-
-	memset(&dataPRS[0], 0, sizeof(dataPRS));
+    while(testifvalid < 0){
+        testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
+        attempts++;
+        if(attempts >= ATTEMPTS_INVALID){
+            printf("Fehler beim senden von THINKING, PERFCON");
+            return -1;
+        }
+    }
+    testifvalid = -1;
+    attempts = 0;
+    /*dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
+      TODO Spaeter sollten wir vllt den Inahlt von dataPRS in eine anderes charray schreiben
+      und das dann nach "C: THINKING" ins shared memeory schreiben, wobei das vllt gar nicht noetig ist,
+      weil die intialpositionen und PIECELIST eh immer gleich ist
+    */
+    memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
   //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-    //printf("\nOKthink ???\n\n");
-    printf("S: %s\n",dataPRS);
+    printf("\nOKthink ???\n\n");
+    printf("%s\n",dataPRS);
     if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
       perror("Invalid server response5");
       return -1;
@@ -162,12 +174,10 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     //printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
-
-	}
 
  return ERROR;
 }
