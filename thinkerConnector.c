@@ -332,7 +332,7 @@ printf("-Ab hier switch case-\n");
   return 0;
 }
 
-int main(){
+int main(int argc, char *argv[]){
   short paras;
   char parGameId[256];
   char parPlayerNumber[256];
