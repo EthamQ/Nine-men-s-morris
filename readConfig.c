@@ -85,7 +85,7 @@ int assignParameters(char* ParameterLine){
 											strcpy(gamverval, "ID ");
 											strcat(gamverval, isGameidAlreadyDefined);
 											strcat(gamverval, "\n");
-											strcpy(confiConst.gameID, gamverval);
+											strcat(confiConst.gameID, gamverval);
 										}
 										else{
 											if((strcmp(assValue," ") == 0)||(strcmp(assValue,"") == 0)){
@@ -96,7 +96,7 @@ int assignParameters(char* ParameterLine){
 											strcpy(gamverval, "ID ");
 											strcat(gamverval, assValue);
 											strcat(gamverval, "\n");
-											strcpy(confiConst.gameID, gamverval);
+											strcat(confiConst.gameID, gamverval);
 										}
 										break;
 			case paraPLAYERNUMBER:
