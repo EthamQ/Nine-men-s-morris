@@ -12,7 +12,7 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "VERSION 2.0\n";
+static char versionPRC[BUFFER_SIZE];
 static char game_idPRC []= "ID 06dt45o6tkr8g\n";
 
 static char numberOfPlayersPRC []= "PLAYER\n";
@@ -61,6 +61,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
     attempts = 0;
 
     //C: <<Client Version>>
+    strcpy(versionPRC,confiConst.gameVersion);
     while(testifvalid < 0){
         testifvalid = write(sockfd, versionPRC, (int)strlen(versionPRC));
         attempts++;
