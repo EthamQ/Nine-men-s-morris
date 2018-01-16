@@ -14,7 +14,7 @@
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC[BUFFER_SIZE];
 static char game_idPRC[BUFFER_SIZE];
-static char numberOfPlayersPRC []= "PLAYER\n";
+static char numberOfPlayersPRC[BUFFER_SIZE];
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -108,6 +108,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 
     //C: [[GewÅ¸nschte Mitspielernummer]]
+    strcpy(numberOfPlayersPRC,confiConst.playerNumber);
     while(testifvalid < 0){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;
