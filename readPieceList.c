@@ -37,7 +37,7 @@ int read_piecelist_hidden(char* piecelist, char *search, int startposition, char
            pos_search = 0;
         }
     }
-
+   
    //Suchwort gefunden, pos_text befindet sich  beim letzten char des Suchbegriffs
 	status[0] = piecelist[pos_text+3];
 	status[1] = piecelist[pos_text+4];
@@ -110,21 +110,21 @@ void printt(int fieldd[3][8]){
 		if(j==(8-1)){
 			printf("\n");
 		}
-	}
+	}	
 	}
 }
-
+	
 	//Liest den Status eines Steins ein und schreibt ihn ggf in das shared memory Spielfeld wenn er gesetzt ist
 	void fill_array(int player, char status[2], struct SHM_data* shm_pointer){
-
+		
 		//Umwandeln char zu int
 		int zahl = status[1] - '0';
-
+		
 		//Falls nur ein A hinter einem piece vom Client und keine Zahl dann ist es available
 		if(player == PLAYER_CLIENT && status[0] == 'A' && (zahl < 0 || zahl > 8)){
 			available_pieces++;
 		}
-
+		
 		//Falls ASCII Wert des chars eine Dezimalzahl zwischen 0 und 7 ist wurde der Spielstein gesetzt
 		//und wird in shared memory geschrieben
 		if(zahl >= 0 && zahl < 8){
@@ -139,10 +139,10 @@ void printt(int fieldd[3][8]){
 			if(status[0] == 'C'){
 				shm_pointer->field[2][zahl] = player;
 				//printf("Player: %i - set[C][%i]",player, zahl);
-			}
-		}
+			}	
+		}		
 	}
-
+	
 	//Alle Stellen auf 0(=EMPTY) setzen
 	void resetArray(struct SHM_data* shm_pointer){
 		int i, j;
@@ -152,7 +152,7 @@ void printt(int fieldd[3][8]){
 		}
 	}
 	}
-
+	
 	//Liest alle Spielsteine, die gesetzten Steine und den capture status aus der Servernachricht
 	//und schreibt alles in die shared memory
 	void read_piecelist(struct SHM_data* shm_pointer, char* piecelist){
@@ -161,23 +161,23 @@ void printt(int fieldd[3][8]){
 		printf("Field wurde resettet: \n");
 		printt(shm_pointer->field);
 		printf("\n");
-
+		
 		//Zählvariablen
 		int pos = 0;
 		int n = 0;
-
+	
 		//Hier wird immer der Status der einzelnen pieces zwischengespeichert
 		char status[2];
 		status[0] = 'E';
 		status[1] = 'E';
-
+	
 		//which player are we?
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
-		 shm_pointer->player = plNR;
+		 shm_pointer->player = plNR; 
 		 }
 		 printf("\nYOU: %i\n", shm_pointer->player);
-
+		 
 		 int playerA;
 		 int playerB;
 		 if(shm_pointer->player == 0){
@@ -194,7 +194,7 @@ void printt(int fieldd[3][8]){
 		fill_array(playerA, status, shm_pointer);
 		n++;
 		}
-
+	
 		//9 Pieces Spieler B
 		n = 0;
 		while(n<9){
@@ -203,15 +203,15 @@ void printt(int fieldd[3][8]){
 		n++;
 		}
 		printf("\nAvailable pieces: %i\n", available_pieces);
-		shm_pointer->used_pieces = NUMBER_STONES - available_pieces;
+		shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
 		available_pieces = 0;
-
+	
 		//Look at the capture value and write in shared memory
 		int capture = read_capture_status(piecelist);
 		printf("\nCapture: %i\n", capture);
 		shm_pointer->capture_status = capture;
 		printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);
-
+	
 		printf("\nJetzt wurde die Servernachricht eingelesen: \n");
 		printt(shm_pointer->field);
 		printf("\n");

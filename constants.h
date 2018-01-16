@@ -22,7 +22,7 @@
   #define CAPTURE 6
   //maincon
   //#define MOVETHINKING 4
-
+  
 //Zugberechnungen in brain.c
 #define NUMBER_FIELDS 24
 #define NUMBER_STONES 9
