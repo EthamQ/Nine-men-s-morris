@@ -138,7 +138,7 @@ short checkStructurComplete(){
 	char scanVal[256];
 
 	//gameid
-	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0) ){
+	if( (strcmp(confiConst.gameID, "") == 0) || (strcmp(confiConst.gameID, " ") == 0)  || (strcmp(confiConst.gameVersion, "ID \n") == 0) || (strcmp(confiConst.gameVersion, "ID  \n") == 0) ){
 		printf("GameID fehlt, bitte geben sie die GAMEID ein: ");
 		scanf("%s",scanVal);
 		strcat(confiConst.gameID,scanVal);
@@ -210,7 +210,7 @@ char* filepath = configFileName;
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(gameID," ") != 0){
-		isGameidAlreadyDefined = gameID;
+		strcpy(isGameidAlreadyDefined,gameID);
 	}
 	if(strcmp(playerNumber," ") != 0){
 		isPlayernumberAlreadyDefined = playerNumber;

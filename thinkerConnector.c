@@ -345,12 +345,12 @@ int main(int argc, char *argv[]){
                 printf("optarg g: \"%s\"\n",optarg);
                 if(optarg == NULL){
                   strcpy(parGameId," ");
-                }
-                else{
+                }else{
                   if((strstr(optarg, "-")) != NULL){
                     strcpy(parGameId," ");
+                  }else{
+                    strcpy(parGameId,optarg);
                   }
-                  strcpy(parGameId,optarg);
                 }
                 break;
       case 'p':
