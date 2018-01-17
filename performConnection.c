@@ -13,9 +13,6 @@
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-//static char game_idPRC []= "ID 02pobsvmluimp\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
 static char game_idPRC []= "ID 052j3mkakfco2\n";
 static char numberOfPlayersPRC []= "PLAYER\n";
 static char thinkingPRC []= "THINKING\n";
@@ -30,23 +27,22 @@ static bool serverResponseValid(const char r[]){
 
 
 
-
+// Begin to connect with gameserver
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
-    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
+  
     if(sockfd < 0){
-      perror("Invalid socket file descriptor");
+      perror("Fehler bei sockfd\n");
       close(sockfd);
       return ERROR;
     }
     else{
-      printf("Good to go?!\n");
+      printf("Beginne Verbindung\n");
     }
     //if testifvalid is negative then there was an error, repeat write() or read() if error
     ssize_t testifvalid = -1;
     //Number of invalid attempts you're allowed to have, amount -> see #define ATTEMPTS_INVALID, counts attempts up to this number
     int attempts = 0;
 
-    //TODO: if Server doesn't respond with "+" -> error handling
     //S: <<Gameserver Version>>
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
@@ -166,27 +162,24 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            printf("Fehler beim senden von THINKING, PERFCON");
+            printf("Fehler beim senden vom 1.THINKING");
             return -1;
         }
     }
     testifvalid = -1;
     attempts = 0;
-    /*dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
-      TODO Spaeter sollten wir vllt den Inahlt von dataPRS in eine anderes charray schreiben
-      und das dann nach "C: THINKING" ins shared memeory schreiben, wobei das vllt gar nicht noetig ist,
-      weil die intialpositionen und PIECELIST eh immer gleich ist
-    */
+    //dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
+      
+    
     memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
   //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-    //printf("\nOKthink ???\n\n");
     printf("S: %s\n",dataPRS);
     if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response5");
+      perror("Fehler bei OKTHINK");
       return -1;
     }
   }
