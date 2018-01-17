@@ -375,8 +375,7 @@ int main(int argc, char *argv[]){
   if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
   }
   else{
-    //printf("playernumber ist nicht 1 oder 2: %s \n", parPlayerNumber);
-    parPlayerNumber = " ";
+    strcpy(parPlayerNumber," ");
   }
   if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
     strcpy(parConfigFileLocation," ");
