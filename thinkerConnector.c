@@ -218,8 +218,14 @@ int fork_thinker_connector(){
       break;
 	  
 	  //>>=======CONNECTOR=======<<
+
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-		//temporary: short endCon = 0;
+		
+		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+	  shm_pointer->pid_connector = getpid();
+	  shm_pointer->pid_thinker = getppid();
+	  //printf("\nPID CONNECTOR in shm: %i\n", shm_pointer->pid_connector);
+	  //printf("\nPID THINKER in shm: %i\n", shm_pointer->pid_thinker);
 
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
@@ -233,7 +239,9 @@ int fork_thinker_connector(){
         //printf("\nfork_thinker_connector(): initConnect success\n");
 			}
 
-	  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);;
+	 
+	 // printf("\nPID NOCHMAL: %i\n", );
+	  
 	  printf("-Start performConnection-\n");
 	  
 	//Prologphase und senden des ersten THINKING Befehls falls Server move sendet
@@ -300,8 +308,13 @@ printf("-Ab hier switch case-\n");
 			exit(0);
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
+	
+	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
+	if (shm_pointer_t ==(void *)-1) { 	
+	perror("shmat failed im thinker"); 	
+	} 
 
-	shmat(shmid, NULL, 0);
+	printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);	
 			//Leseseite der Pipe schliessen
 			close (pipeFd[0]);
 

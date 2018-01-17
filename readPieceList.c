@@ -45,23 +45,27 @@ int read_piecelist_hidden(char* piecelist, char *search, int startposition, char
 
 }
 
-//funktioniert wie read_piecelist_hidden nur mit kleinen Vereinfachungen, da es nur nach "CAPTURE " sucht
-//returned den Wert, der nach CAPTURE steht, also 0 oder 1 (bei 1 muss man einen Stein des Gegners werfen)
-int read_capture_status(char* piecelist){
+
+int read_from_piecelist(char* piecelist, int task){
 	int array_length = strlen(piecelist);
-	char *search = "CAPTURE ";
+	char *search;
+	
+	switch(task){
+		case CAPTURE: search = "CAPTURE ";
+		break;
+		case NUMBER_OF_PLAYERS: search = "TOTAL ";
+		break;
+		case PLAYER_NUMBER: search = "YOU ";
+		break;
+	}
 	int search_length = strlen(search);
-	//printf("array_length: %i\n", array_length);
 	int pos_text;
 	int pos_search = 0;
     for (pos_text = 0; pos_text < array_length; pos_text++){
-		//printf("Check if %c and %c is the same | %i\n", piecelist[pos_text], search[pos_search], (piecelist[pos_text] == search[pos_search]));
-		//printf("pos text: %i, pos_search: %i\n", pos_text, pos_search);
         if(piecelist[pos_text] == search[pos_search]){
             pos_search++;
             if(pos_search == search_length){
                 // match
-                //printf("match from %d to %d\n",pos_text,pos_text);
 				break;
             }
 		}
@@ -71,23 +75,36 @@ int read_capture_status(char* piecelist){
         }
     }
 	return piecelist[pos_text+1] - '0';
+}
+
+//funktioniert wie read_piecelist_hidden nur mit kleinen Vereinfachungen, da es nur nach "CAPTURE " sucht
+//returned den Wert, der nach CAPTURE steht, also 0 oder 1 (bei 1 muss man einen Stein des Gegners werfen)
+int read_capture_status(char* piecelist){
+	return read_from_piecelist(piecelist, CAPTURE);
 }
 
 int read_player_number(char* piecelist){
+	return read_from_piecelist(piecelist, PLAYER_NUMBER);
+}
+
+
+int read_number_of_players(char* piecelist){
+	return read_from_piecelist(piecelist, NUMBER_OF_PLAYERS);
+}
+
+
+int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 	int array_length = strlen(piecelist);
 	char *search = "YOU ";
+	
 	int search_length = strlen(search);
-	//printf("array_length: %i\n", array_length);
 	int pos_text;
 	int pos_search = 0;
-    for (pos_text = 0; pos_text < array_length-1; pos_text++){
-		//printf("Check if %c and %c is the same | %i\n", piecelist[pos_text], search[pos_search], (piecelist[pos_text] == search[pos_search]));
-		//printf("pos text: %i, pos_search: %i\n", pos_text, pos_search);
+    for (pos_text = 0; pos_text < array_length; pos_text++){
         if(piecelist[pos_text] == search[pos_search]){
             pos_search++;
             if(pos_search == search_length){
                 // match
-                //printf("match from %d to %d\n",pos_text,pos_text);
 				break;
             }
 		}
@@ -96,10 +113,15 @@ int read_player_number(char* piecelist){
            pos_search = 0;
         }
     }
-	return piecelist[pos_text+1] - '0';
+	int i = 0;
+	pos_text = pos_text+3;
+	while(piecelist[pos_text+1] != '+'){
+		//printf("i: %i\nAusgelesen[%c]\n", i,  piecelist[pos_text]);
+		shm_pointer->client.spielername[i++] = piecelist[pos_text++];
+	}
+	printf("name: %s", shm_pointer->client.spielername);
+	return 0;
 }
-
-
 //"Spielfeld" ausgeben
 void printt(int fieldd[3][8]){
 	int i;
@@ -162,32 +184,40 @@ void printt(int fieldd[3][8]){
 		printt(shm_pointer->field);
 		printf("\n");
 		
-		//Zählvariablen
-		int pos = 0;
-		int n = 0;
+		
 	
 		//Hier wird immer der Status der einzelnen pieces zwischengespeichert
 		char status[2];
 		status[0] = 'E';
 		status[1] = 'E';
-	
+		
+		shm_pointer->anzahl_spieler =  read_number_of_players(piecelist);
+		printf("Number of players: %i\n", shm_pointer->anzahl_spieler);
+		
 		//which player are we?
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
-		 shm_pointer->player = plNR; 
+		 shm_pointer->client.spielernummer = plNR; 
+		read_player_name(piecelist, shm_pointer);
 		 }
-		 printf("\nYOU: %i\n", shm_pointer->player);
+		 printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
 		 
 		 int playerA;
 		 int playerB;
-		 if(shm_pointer->player == 0){
+		 if(shm_pointer->client.spielernummer == 0){
 			 playerA = PLAYER_CLIENT;
 			 playerB = PLAYER_OPPONENT;
 		 }
-		 else if(shm_pointer->player == 1){
+		 else if(shm_pointer->client.spielernummer == 1){
 			 playerA = PLAYER_OPPONENT;
 			 playerB = PLAYER_CLIENT;
 		 }
+
+		 
+		 //Zählvariablen
+		int pos = 0;
+		int n = 0;
+
 		//9 Pieces Spieler A
 		while(n<9){
 		pos = read_piecelist_hidden(piecelist, "PIECE0,", pos, status);
@@ -208,6 +238,9 @@ void printt(int fieldd[3][8]){
 	
 		//Look at the capture value and write in shared memory
 		int capture = read_capture_status(piecelist);
+		if(capture != 0 && capture != 1 && capture != 2){
+		capture = 0;
+		}		
 		printf("\nCapture: %i\n", capture);
 		shm_pointer->capture_status = capture;
 		printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);

@@ -2,19 +2,16 @@ Status 10.1
 
 TODO:
 
-GameID aus Configfile Lesen
-
 Speicherfehler bei play senden ausbessern (pointerfehler ?)
 
 KI weitermachen + funktionen verkapseln
- =>Spiel fortsetzen 
+ =>Spiel fortsetzen
  =>Zweites Move Command, ueber wait phase herauskommen
  =>versuchen nicht nur zufällige spielzüge zu machen, sondern wohlüberlegte
 
 Sharedmem verwenden, nicht ueberall drin
 
 Draw (?)
-
 
 
 GameID als kommandozeilenparameter
