@@ -347,14 +347,15 @@ int main(int argc, char *argv[]){
                   strcpy(parGameId," ");
                 }
                 else{
-                  strcpy(parGameId,optarg);
-                  if((strstr(parGameId, "-")) != NULL){
+                  if((strstr(optarg, "-")) != NULL){
                     strcpy(parGameId," ");
                   }
+                  strcpy(parGameId,optarg);
                 }
 
                 break;
       case 'p':
+                printf("\nplaynumpara: %s\n",optarg);
                 if(optarg == NULL){
                   strcpy(parPlayerNumber," ");
                 }
