@@ -362,7 +362,7 @@ int main(int argc, char *argv[]){
                 printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                printf("optarg c: \"%s\"\n",optarg)
+                printf("optarg c: \"%s\"\n",optarg);
                 if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
                   strcpy(parConfigFileLocation," ");
                 }
