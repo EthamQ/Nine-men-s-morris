@@ -358,7 +358,9 @@ int main(int argc, char *argv[]){
                 if(optarg == NULL){
                   strcpy(parPlayerNumber," ");
                 }
-                strcpy(parPlayerNumber,optarg);
+                else{
+                  strcpy(parPlayerNumber,optarg);
+                }
                 printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
