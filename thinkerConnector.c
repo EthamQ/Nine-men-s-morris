@@ -342,19 +342,31 @@ int main(int argc, char *argv[]){
   while( (paras = getopt(argc, argv, "g:p:c")) != -1){
     switch(paras){
       case 'g':
-                parGameId = optarg;
-                if((strstr(parGameId, "-")) != NULL){
-                  parGameId = " ";
+                printf("optarg g: \"%s\"\n",optarg);
+                if(optarg == NULL){
+                  strcpy(parGameId," ");
                 }
+                else{
+                  strcpy(parGameId,optarg);
+                  if((strstr(parGameId, "-")) != NULL){
+                    strcpy(parGameId," ");
+                  }
+                }
+
                 break;
       case 'p':
-                parPlayerNumber = optarg;
+                if(optarg == NULL){
+                  strcpy(parPlayerNumber," ");
+                }
+                strcpy(parPlayerNumber,optarg);
                 printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                //parConfigFileLocation = optarg;
-                parConfigFileLocation = " ";
-                printf("parameter c");
+                printf("optarg c: \"%s\"\n",optarg)
+                if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
+                  strcpy(parConfigFileLocation," ");
+                }
+                strcpy(parConfigFileLocation,optarg);
                 break;
       default:
                 perror("Fehler: ungueltiger Parameter, THINKCON");
