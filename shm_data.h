@@ -2,21 +2,8 @@
 #define SHM_DATA
 #include "constants.h"
 
-#define BUFFER_SIZE 256
 #define SPIELNAME 0
 #define FIELD 1
-
-//Configstruct
-struct configConstants{
-  char   gameKindName[BUFFER_SIZE];
-  char   hostName[BUFFER_SIZE];
-  char   gameID[BUFFER_SIZE];
-  char   gameVersion[BUFFER_SIZE];
-  char   playerNumber[BUFFER_SIZE];
-  char   portNumber[BUFFER_SIZE]; //uint16_t portNumber;
-};
-
-struct configConstants confiConst;
 
 struct spieler{
 char spielernummer[BUFFER_SIZE];

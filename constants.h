@@ -7,7 +7,22 @@
 #define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
 #define CONFIG_DEFAULT "client.conf"
 
+//Misc
+#define ATTEMPTS_INVALID 20
+#define BUFF_SIZE_SMALL 256
+#define BUFFER_SIZE 256
 
+//Configstruct
+struct configConstants{
+  char   gameKindName[BUFFER_SIZE];
+  char   hostName[BUFFER_SIZE];
+  char   gameID[BUFFER_SIZE];
+  char   gameVersion[BUFFER_SIZE];
+  char   playerNumber[BUFFER_SIZE];
+  char   portNumber[BUFFER_SIZE]; //uint16_t portNumber;
+};
+
+struct configConstants confiConst;
 
 //Flags
   //Rueckgabe
@@ -22,7 +37,7 @@
   #define CAPTURE 6
   //maincon
   //#define MOVETHINKING 4
-  
+
 //Zugberechnungen in brain.c
 #define NUMBER_FIELDS 24
 #define NUMBER_STONES 9
@@ -50,9 +65,7 @@
 #define PIPE_BUF 24
 
 
-//Other
-#define ATTEMPTS_INVALID 20
-#define BUFF_SIZE_SMALL 256
+
 
 //Field
 
