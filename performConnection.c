@@ -8,6 +8,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdbool.h>
+
 #include "constants.h"
 #include "shm_data.h"
 
@@ -15,7 +16,7 @@ static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
 static char game_idPRC []= "ID 052j3mkakfco2\n";
 static char numberOfPlayersPRC []= "PLAYER\n";
-static char thinkingPRC []= "THINKING\n";
+
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -157,39 +158,37 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 	  read_piecelist(shm_pointer,dataPRS);
 
+	  //---------Entscheiden Move oder wait-----------------
     //C: THINKING
-    while(testifvalid < 0){
-        testifvalid = write(sockfd, thinkingPRC, (int)strlen(thinkingPRC));
-        attempts++;
-        if(attempts >= ATTEMPTS_INVALID){
-            printf("Fehler beim senden vom 1.THINKING");
-            return -1;
-        }
-    }
-    testifvalid = -1;
-    attempts = 0;
-    //dataPRS leeren, damit OKTHINK think nicht den anderen inhalt von dataPRS ueberschreibt
-      
-    
-    memset(&dataPRS[0], 0, sizeof(dataPRS));
-    printf("\nC: THINKING\n");
+	if(strstr(dataPRS,"+ MOVE ")){
+		//send THINKING
+		printf("\nperformConnection(): received +MOVE from the server\n");
+		if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
+			perror("Fehler beim senden von THINKING");
+		}
+		printf("C: %s", THINKING_MSG);
+		
+	memset(&dataPRS[0], 0, sizeof(dataPRS));
+    	printf("\nC: THINKING\n");
 
   //S:+ OKTHINK
-  while(testifvalid < 0){
-    testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-    printf("S: %s\n",dataPRS);
-    if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Fehler bei OKTHINK");
-      return -1;
-    }
-  }
+  		while(testifvalid < 0){
+    			testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
+    			printf("S: %s\n",dataPRS);
+    			if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
+      			perror("Fehler bei OKTHINK");
+      			return -1;
+    			}
+  		}
 
-  //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
-  if(strstr(dataPRS,"+ OKTHINK")){
-     //printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
-	 //Aufruf von Spielzug PLAY ...
-     return OKTHINK;
- }
+  		//Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
+  		if(strstr(dataPRS,"+ OKTHINK")){
+     		printf("\nperform Connection tells maintainConnection.c that the Server sent 			+OKTHINK");
+	 	//Aufruf von Spielzug PLAY ...
+     		return OKTHINK;
+  		}
+		
+	}
  
- return ERROR;
+ 	return ERROR;
 }
