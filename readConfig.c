@@ -253,6 +253,7 @@ char* filepath = configFileName;
 		}
   }
 	checkStructurComplete();
+	printf("\ntest 2\n");
   fclose(file);
 return 0;
 }
