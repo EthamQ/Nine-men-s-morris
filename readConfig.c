@@ -48,7 +48,7 @@ short tellParam(char* para){
 	if( (strcmp(para,"playernumber") == 0) || (strcmp(para,"p") == 0) || (strcmp(para,"playerNumber") == 0) || (strcmp(para,"PLAYERNUMBER") == 0)){
 		return paraPLAYERNUMBER;
 	}
-	if( (strcmp(para,"gameVersion") == 0)){
+	if( (strcmp(para,"version") == 0) || (strcmp(para,"gameversion") == 0) || (strcmp(para,"gamerVersion") == 0) || (strcmp(para,"GAMEVERSION") == 0) || (strcmp(para,"VERSION") == 0) || (strcmp(para,"Version") == 0) ){
 		return paraVERSION;
 	}
 	return -1;
