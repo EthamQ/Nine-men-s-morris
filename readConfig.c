@@ -17,7 +17,6 @@ char* isPlayernumberAlreadyDefined = " ";
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
 	char* toReturn;
-
 	if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
 		//printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
 		return "";
@@ -200,7 +199,8 @@ short checkStructurComplete(){
 
 	//playerNumber
 
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n6.playerNumber: \"%s\"\n7.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+		printf("\ntest\n");
 	return 0;
 }
 
