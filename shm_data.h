@@ -9,7 +9,7 @@
 
 struct spieler{
 int spielernummer;
-char name[BUFFER_SIZE];
+char spielername[BUFFER_SIZE];
 int flag_registriert;
 };
 
