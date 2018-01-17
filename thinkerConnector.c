@@ -334,9 +334,9 @@ printf("-Ab hier switch case-\n");
 
 int main(int argc, char *argv[]){
   short paras;
-  char* parGameId;
-  char* parPlayerNumber;
-  char* parConfigFileLocation;
+  char parGameId[BUFFER_SIZE];
+  char parPlayerNumber[BUFFER_SIZE];
+  char parConfigFileLocation[BUFFER_SIZE];
 
   //Auslesen der Parameter
   while( (paras = getopt(argc, argv, "g:p:c")) != -1){
