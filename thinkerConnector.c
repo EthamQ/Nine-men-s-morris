@@ -352,7 +352,6 @@ int main(int argc, char *argv[]){
                   }
                   strcpy(parGameId,optarg);
                 }
-
                 break;
       case 'p':
                 printf("\nplaynumpara: %s\n",optarg);
@@ -369,7 +368,9 @@ int main(int argc, char *argv[]){
                 if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
                   strcpy(parConfigFileLocation," ");
                 }
-                strcpy(parConfigFileLocation,optarg);
+                else{
+                  strcpy(parConfigFileLocation,optarg);
+                }
                 break;
       default:
                 perror("Fehler: ungueltiger Parameter, THINKCON");
