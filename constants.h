@@ -20,8 +20,10 @@
   #define OKWAIT 4
   #define MOVEOK 5
   #define CAPTURE 6
-  //maincon
-  //#define MOVETHINKING 4
+  #define NUMBER_OF_PLAYERS 7
+  #define PLAYER_NUMBER 8
+  #define PLAYER_NAME 9
+  
   
 //Zugberechnungen in brain.c
 #define NUMBER_FIELDS 24
