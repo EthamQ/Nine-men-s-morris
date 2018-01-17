@@ -8,7 +8,6 @@
 #define paraPORT 2
 #define paraGAMEKINDNAME 3
 #define paraGAMEID 4
-#define paraPLAYERNAME 5
 #define paraPLAYERNUMBER 6
 #define paraVERSION 7
 
@@ -45,9 +44,6 @@ short tellParam(char* para){
 	}
 	if( (strcmp(para,"gamekindname") == 0) || (strcmp(para,"gameKindName") == 0) || (strcmp(para,"gamekind") == 0) || (strcmp(para,"GAMEKINDNAME") == 0)){
 		return paraGAMEKINDNAME;
-	}
-	if( (strcmp(para,"playername") == 0) || (strcmp(para,"playerNAME") == 0) || (strcmp(para,"playerName") == 0) || (strcmp(para,"PLAYERNAME") == 0)){
-		return paraPLAYERNAME;
 	}
 	if( (strcmp(para,"playernumber") == 0) || (strcmp(para,"p") == 0) || (strcmp(para,"playerNumber") == 0) || (strcmp(para,"PLAYERNUMBER") == 0)){
 		return paraPLAYERNUMBER;
@@ -86,26 +82,39 @@ int assignParameters(char* ParameterLine){
 		switch(tellParam(assParameter)){
 			case paraGAMEID:
 										if(strcmp(isGameidAlreadyDefined," ") != 0){
-											strcpy(confiConst.gameID, isGameidAlreadyDefined);
+											strcpy(gamverval, "ID ");
+											strcat(gamverval, isGameidAlreadyDefined);
+											strcat(gamverval, "\n");
+											strcat(confiConst.gameID, gamverval);
 										}
 										else{
-											strcpy(confiConst.gameID, assValue);
+													if((strcmp(assValue," ") == 0)||(strcmp(assValue,"") == 0)){
+														strcpy(confiConst.gameID, " ");
+														return 0;
+													}
+													strcpy(gamverval, "ID ");
+													strcat(gamverval, assValue);
+													strcat(gamverval, "\n");
+													strcat(confiConst.gameID, gamverval);
 										}
 										break;
 			case paraPLAYERNUMBER:
 										if(strcmp(isPlayernumberAlreadyDefined," ") != 0){
-											confiConst.playerNumber = atof(isPlayernumberAlreadyDefined);
+													strcpy(gamverval, "PLAYER ");
+													strcat(gamverval, isPlayernumberAlreadyDefined);
+													strcat(gamverval, "\n");
+													strcpy(confiConst.playerNumber, gamverval);
 										}
 										else{
-											confiConst.playerNumber = atof(assValue);
+													strcpy(gamverval, "PLAYER ");
+													strcat(gamverval, assValue);
+													strcat(gamverval, "\n");
+													strcpy(confiConst.playerNumber, gamverval);
 										}
 										break;
 			case paraPORT:
-										confiConst.portNumber = atof(assValue);
-										//strcpy(confiConst.portNumber, assValue);
-										break;
-			case paraPLAYERNAME:
-										strcpy(confiConst.playerName, assValue);
+
+										strcpy(confiConst.portNumber, assValue);
 										break;
 			case paraGAMEKINDNAME:
 										strcpy(confiConst.gameKindName, assValue);
@@ -187,26 +196,11 @@ short checkStructurComplete(){
 			printf("Neue Spielversion: %s\n",confiConst.gameVersion);
 		}
 	}
-	//playerName
-	if( (strcmp(confiConst.playerName, "") == 0) || (strcmp(confiConst.playerName, " ") == 0) ){
-		printf("Spielername fehlt, Defaultwert nehmen? (y/n): ");
-		scanf("%s",scanVal);
-		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
-			strcat(confiConst.gameVersion,"VERSION 2.0\n");
-			printf("Default Spielversion: %s\n",confiConst.gameVersion);
-		}
-		else{
-			printf("Spielername eingeben: ");
-			scanf("%s",scanVal);
-			strcat(confiConst.gameVersion,scanVal);
-			printf("Neue Spielversion: %s\n",confiConst.gameVersion);
-		}
-	}
 	//portNumber
 
 	//playerNumber
 
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%i\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerName: \"%s\"\n6.playerNumber: \"%i\"\n7.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerName, confiConst.playerNumber, confiConst.gameVersion);
+	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n6.playerNumber: \"%s\"\n7.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
