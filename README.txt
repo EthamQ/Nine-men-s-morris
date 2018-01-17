@@ -9,12 +9,13 @@ Speicherfehler bei play senden ausbessern (pointerfehler ?)
 KI weitermachen + funktionen verkapseln
  =>Spiel fortsetzen 
  =>Zweites Move Command, ueber wait phase herauskommen
+ =>versuchen nicht nur zufällige spielzüge zu machen, sondern wohlüberlegte
 
 Sharedmem verwenden, nicht ueberall drin
 
 Draw (?)
 
-unnoetige dateien 
+
 
 GameID als kommandozeilenparameter
 
