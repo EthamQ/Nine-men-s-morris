@@ -333,6 +333,47 @@ printf("-Ab hier switch case-\n");
 }
 
 int main(){
+  short paras;
+  char* parGameId;
+  char* parPlayerNumber;
+  char* parConfigFileLocation;
+
+  //Auslesen der Parameter
+  while( (paras = getopt(argc, argv, "g:p:c")) != -1){
+    switch(paras){
+      case 'g':
+                parGameId = optarg;
+                if((strstr(parGameId, "-")) != NULL){
+                  parGameId = " ";
+                }
+                break;
+      case 'p':
+                parPlayerNumber = optarg;
+                printf("\nplayernumber: %s \n", parPlayerNumber);
+                break;
+      case 'c':
+                //parConfigFileLocation = optarg;
+                parConfigFileLocation = " ";
+                printf("parameter c");
+                break;
+      default:
+                perror("Fehler: ungueltiger Parameter, THINKCON");
+    }
+  }
+  if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
+  }
+  else{
+    //printf("playernumber ist nicht 1 oder 2: %s \n", parPlayerNumber);
+    parPlayerNumber = " ";
+  }
+
+  if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
+    perror("Terrible Failure in readConfig.c , THINKCON");
+    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
+  }
+  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
+    strcpy(parConfigFileLocation," ");
+  }
 	drawField();
 	parseMove("A1:A2",0);
    parseMove("A3:A4",1);
