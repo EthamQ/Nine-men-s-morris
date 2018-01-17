@@ -366,14 +366,14 @@ int main(int argc, char *argv[]){
     //printf("playernumber ist nicht 1 oder 2: %s \n", parPlayerNumber);
     parPlayerNumber = " ";
   }
-
+  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
+    strcpy(parConfigFileLocation," ");
+  }
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
     perror("Terrible Failure in readConfig.c , THINKCON");
     return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
   }
-  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
-    strcpy(parConfigFileLocation," ");
-  }
+
 	drawField();
 	parseMove("A1:A2",0);
    parseMove("A3:A4",1);
