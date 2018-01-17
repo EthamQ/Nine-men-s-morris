@@ -91,6 +91,37 @@ int read_player_number(char* piecelist){
 int read_number_of_players(char* piecelist){
 	return read_from_piecelist(piecelist, NUMBER_OF_PLAYERS);
 }
+
+
+int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
+	int array_length = strlen(piecelist);
+	char *search = "YOU ";
+	
+	int search_length = strlen(search);
+	int pos_text;
+	int pos_search = 0;
+    for (pos_text = 0; pos_text < array_length; pos_text++){
+        if(piecelist[pos_text] == search[pos_search]){
+            pos_search++;
+            if(pos_search == search_length){
+                // match
+				break;
+            }
+		}
+        else{
+           pos_text -= pos_search;
+           pos_search = 0;
+        }
+    }
+	int i = 0;
+	pos_text = pos_text+3;
+	while(piecelist[pos_text+1] != '+'){
+		//printf("i: %i\nAusgelesen[%c]\n", i,  piecelist[pos_text]);
+		shm_pointer->client.spielername[i++] = piecelist[pos_text++];
+	}
+	printf("name: %s", shm_pointer->client.spielername);
+	return 0;
+}
 //"Spielfeld" ausgeben
 void printt(int fieldd[3][8]){
 	int i;
@@ -167,6 +198,7 @@ void printt(int fieldd[3][8]){
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
 		 shm_pointer->client.spielernummer = plNR; 
+		read_player_name(piecelist, shm_pointer);
 		 }
 		 printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
 		 
