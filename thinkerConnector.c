@@ -395,7 +395,6 @@ int main(int argc, char *argv[]){
    parseMove("B1:C1",0);
    parseMove("C3:C2",1);
    parseMove("C1:C2",0);
-	read_configfile(" "," "," ");
 	fork_thinker_connector();
 return 0;
 }
