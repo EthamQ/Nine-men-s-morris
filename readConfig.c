@@ -223,7 +223,7 @@ short checkStructurComplete(){
 int read_configfile(char* paragameID, char* paraplayerNumber, char* configFileName){
 FILE* file;
 char* filepath = configFileName;
-	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", gameID,playerNumber, configFileName);
+	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(gameID," ") != 0){
