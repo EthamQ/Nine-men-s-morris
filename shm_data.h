@@ -6,22 +6,21 @@
 #define FIELD 1
 
 struct spieler{
-char spielernummer[BUFFER_SIZE];
-char name[BUFFER_SIZE];
+int spielernummer;
+char spielername[BUFFER_SIZE];
 int flag_registriert;
 };
 
 
 struct SHM_data{
 char spielname[BUFFER_SIZE];
-char spielernummer[BUFFER_SIZE];
-char anzahl_spieler[BUFFER_SIZE];
+int anzahl_spieler;
 int pid_thinker;
 int pid_connector;
 int field[ZEILEN][SPALTEN];
 int used_pieces;
 int capture_status;
-int player;
+struct spieler client;
 };
 
 

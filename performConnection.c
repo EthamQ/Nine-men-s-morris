@@ -8,16 +8,13 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdbool.h>
+//included Headerfiles
 #include "constants.h"
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-//static char game_idPRC []= "ID 02pobsvmluimp\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
-//static char game_idPRC []= "ID 2uiyd4c9217om\n";
 static char game_idPRC []= "ID 2hbxlcc7v2nf5\n";
-
 static char numberOfPlayersPRC []= "PLAYER\n";
 
 
@@ -33,33 +30,28 @@ static bool serverResponseValid(const char r[]){
 
 
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
-    //char *serverPiecelist=malloc(sizeof(char)*1048); //TODO Free
     if(sockfd < 0){
-      printf("%dtest",sockfd);
-      perror("Invalid socket file descriptor");
+      perror("Fehler bei sockfd");
       close(sockfd);
       return ERROR;
     }
     else{
-      printf("Good to go?!");
+      printf("Beginne PerformConnection");
     }
     //if testifvalid is negative then there was an error, repeat write() or read() if error
     ssize_t testifvalid = -1;
     //Number of invalid attempts you're allowed to have, amount -> see #define ATTEMPTS_INVALID, counts attempts up to this number
     int attempts = 0;
 
-    //TODO: if Server doesn't respond with "+" -> error handling
     //S: <<Gameserver Version>>
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       attempts++;
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Invalid server response2");
-        printf("%sfehlertest",dataPRS);
+        perror("Fehler bei Server Version");
         return ERROR;
       }
     }
-    printf("%s\n",dataPRS);
     testifvalid = -1;
     attempts = 0;
 
@@ -71,7 +63,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("%s\n",versionPRC);
+    printf("Client ist auf Version: %s\n",versionPRC);
     testifvalid = -1;
 	  attempts = 0;
 
@@ -80,9 +72,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
 	      attempts++;
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response3");
-            printf("%s\n",dataPRS);
-            return -1;
+            perror("Fehler bei Game-ID");
+            return ERROR;
         }
     }
     printf("%s\n",dataPRS);
@@ -94,35 +85,36 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         testifvalid = write(sockfd, game_idPRC, (int)strlen(game_idPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return ERROR;
         }
     }
-    printf("%s\n",game_idPRC);
+    printf("Spiel mit der %s wurde erstellt\n",game_idPRC);
     testifvalid = -1;
-	  attempts = 0;
+    attempts = 0;
 
     //S: <<Gamekind-Name>>
     while(testifvalid < 0){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Invalid server response4");
-            return -1;
+            perror("Fehler bei Gamekind-Name\n");
+            return ERROR;
         }
     }
-    printf("%s\n",dataPRS);
+    printf("Gespielt wird im Modus %s\n",dataPRS);
     testifvalid = -1;
-	  attempts = 0;
+    attempts = 0;
 
     //C: [[GewÅ¸nschte Mitspielernummer]]
     while(testifvalid < 0){
         testifvalid = write(sockfd, numberOfPlayersPRC, (int)strlen(numberOfPlayersPRC));
         attempts++;
         if(attempts >= ATTEMPTS_INVALID){
-            return -1;
+            return ERROR;
         }
     }
+    printf("Anzahl der teilnehmenden Spieler: &c",numberofPlayerPRC);	
     testifvalid = -1;
-	  attempts = 0;
+    attempts = 0;
 
     //S: <<Mitspielernummer>> <<Mitspielername>>
     //S: <<Mitspieleranzahl>>
@@ -137,8 +129,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response5");
-      return -1;
+      perror("Fehler bei Endplayers bzw Endpiecelist");
+      return ERROR;
       }
     }
     testifvalid = -1;
@@ -171,7 +163,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     //printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
