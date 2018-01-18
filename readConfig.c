@@ -220,19 +220,20 @@ short checkStructurComplete(){
 	return 0;
 }
 
-int read_configfile(char* gameID, char* playerNumber, char* configFileName){
+int read_configfile(char* paragameID, char* paraplayerNumber, char* configFileName){
 FILE* file;
 char* filepath = configFileName;
 	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", gameID,playerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(gameID," ") != 0){
-
-		strcpy(isGameidAlreadyDefined,gameID);
+		printf("\nTest\n");
+		strcpy(isGameidAlreadyDefined,paragameID);
 	}
 	if(strcmp(playerNumber," ") != 0){
-		printf("\nTest\n");
-		isPlayernumberAlreadyDefined = playerNumber;
+		printf("\nTest II\n");
+		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber)
+		//isPlayernumberAlreadyDefined = playerNumber;
 	}
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
 	file = fopen(filepath, "r");
