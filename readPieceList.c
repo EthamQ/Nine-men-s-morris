@@ -119,8 +119,29 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 		
 		shm_pointer->client.spielername[i++] = piecelist[pos_text++];
 	}
-	printf("name: %s", shm_pointer->client.spielername);
+	printf("name: %s\n", shm_pointer->client.spielername);
 	return 0;
+}
+
+int read_ready_status(char* piecelist){
+	char delimiter[] = "+";
+	char *copy = malloc(strlen(piecelist));
+	strcpy(copy,piecelist);
+	char *ptr;
+// initialisieren und ersten Abschnitt erstellen
+ptr = strtok(copy, delimiter);
+	//printf("Abschnitt gefunden: %s\n", ptr);
+int i =0;
+while(i<2) {
+
+	// naechsten Abschnitt erstellen
+ 	ptr = strtok(NULL, delimiter);
+		//printf("Abschnitt gefunden: %s\n", ptr);
+	i++;
+}
+printf("char: %c\n", ptr[strlen(ptr)-2]);
+free(copy);
+return ptr[strlen(ptr)-2] - '0';
 }
 //"Spielfeld" ausgeben
 void printt(int fieldd[3][8]){
@@ -185,6 +206,8 @@ void printt(int fieldd[3][8]){
 		printf("\n");
 		
 		
+		
+		
 	
 		//Hier wird immer der Status der einzelnen pieces zwischengespeichert
 		char status[2];
@@ -197,8 +220,10 @@ void printt(int fieldd[3][8]){
 		//which player are we?
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
-		 shm_pointer->client.spielernummer = plNR; 
-		read_player_name(piecelist, shm_pointer);
+		 shm_pointer->client.spielernummer = plNR;
+		 //shm_pointer->client.flag_registriert = read_ready_status(piecelist);		 
+		 read_player_name(piecelist, shm_pointer);
+		 //printf("ready %i\n", shm_pointer->client.flag_registriert);
 		 }
 		 printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
 		 

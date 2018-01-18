@@ -14,7 +14,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/shm.h>
+
 //included Headerfiles
+#include <sys/ipc.h>
+#include <sys/sem.h>
 #include "performConnection.h"
 #include "shm_data.h"
 #include "debugging.h"
@@ -155,7 +158,8 @@ static void signalHandlerThinker(int signalNum){
 
 	}
 
-
+	
+	
 int fork_thinker_connector(){
   printf("\nStarte fork_thinker_connector\n");
 
@@ -193,6 +197,9 @@ int fork_thinker_connector(){
 	return ERROR;
 }
 
+semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
+
+
 	//FORK
   switch(pid = fork()){
 
@@ -206,6 +213,7 @@ int fork_thinker_connector(){
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		 
 	  shm_pointer->pid_connector = getpid();
 	  shm_pointer->pid_thinker = getppid();
 		//Schreibseite der Pipe schliessen
@@ -244,7 +252,7 @@ printf("-Ab hier switch case-\n");
 				}
 				else
 				       	if(shm_pointer->capture_status == 2){
-						char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+						char *server_Response=malloc(sizeof(char)*MES_LENGTH_SERVER);
 						send_signal(sockfd, CAPTURE, movePipe);
 					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
 						perror("Fehler beim senden von THINKING");
@@ -252,14 +260,14 @@ printf("-Ab hier switch case-\n");
 					printf("C: %s", THINKING_MSG);
 
 				//receive OKTHINK
-					if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
+					if(read(sockfd, server_Response, sizeof(char)*MES_LENGTH_SERVER) < 0){
 						perror("Fehler beim empfangen von OKTHINK");
 					};
-					printf("\nS: %s",serverResponse);
+					printf("\nS: %s",server_Response);
 
-					read_piecelist(shm_pointer, serverResponse);
+					read_piecelist(shm_pointer, server_Response);
 					send_signal(sockfd, CAPTURE, movePipe);
-					free(serverResponse);
+					free(server_Response);
 					}
 					break;
 
