@@ -215,7 +215,6 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 
 	  shm_pointer->pid_connector = getpid();
-	  shm_pointer->pid_thinker = getppid();
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
@@ -235,10 +234,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
      		send_signal(sockfd, MOVE, movePipe);
   	}
 
-
-
-
-printf("-Ab hier switch case-\n");
+    printf("-Ab hier switch case-\n");
 
 	  while(1){
 		switch(maintainConnection(sockfd, shm_pointer)){
@@ -291,14 +287,15 @@ printf("-Ab hier switch case-\n");
 	  }
 	close(close(pipeFd[0]));
 	exit(0);
-	  //>>=======THINKER=======<<
-    default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
+	 //>>=======THINKER=======<<
+  default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 
 	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
 	if (shm_pointer_t ==(void *)-1) {
 	perror("shmat failed im thinker");
 	}
 
+  shm_pointer->pid_thinker = getpid();
 	printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);
 
 	//Leseseite der Pipe schliessen
