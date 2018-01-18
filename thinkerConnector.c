@@ -172,6 +172,9 @@ static void signalHandlerThinker(int signalNum){
 	}
 				
 				
+				
+				
+				
 int fork_thinker_connector(){
   //printf("\nStarte fork_thinker_connector\n");
 
@@ -222,6 +225,7 @@ int fork_thinker_connector(){
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 		
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		 
 	  shm_pointer->pid_connector = getpid();
 	  shm_pointer->pid_thinker = getppid();
 	  //printf("\nPID CONNECTOR in shm: %i\n", shm_pointer->pid_connector);
