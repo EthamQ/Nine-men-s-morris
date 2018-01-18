@@ -112,7 +112,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Anzahl der teilnehmenden Spieler: &c",numberofPlayerPRC);	
+    printf("Anzahl der teilnehmenden Spieler: &c",numberofPlayersPRC);	
     testifvalid = -1;
     attempts = 0;
 
@@ -146,7 +146,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 			perror("Fehler beim senden von THINKING");
 		}
 		printf("C: %s", THINKING_MSG);
-		
+
 	memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
@@ -167,8 +167,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
-		
+
 	}
- 
+
  return ERROR;
 }
