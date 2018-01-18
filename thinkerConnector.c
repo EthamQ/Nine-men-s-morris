@@ -158,8 +158,8 @@ static void signalHandlerThinker(int signalNum){
 
 	}
 
-	
-	
+
+
 int fork_thinker_connector(){
   printf("\nStarte fork_thinker_connector\n");
 
@@ -213,7 +213,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-		 
+
 	  shm_pointer->pid_connector = getpid();
 	  shm_pointer->pid_thinker = getppid();
 		//Schreibseite der Pipe schliessen
@@ -334,7 +334,7 @@ int main(int argc, char *argv[]){
   while( (paras = getopt(argc, argv, "g:p:c")) != -1){
     switch(paras){
       case 'g':
-                printf("optarg g: \"%s\"\n",optarg);
+                //printf("optarg g: \"%s\"\n",optarg);
                 if(optarg == NULL){
                   strcpy(parGameId," ");
                 }else{
@@ -346,17 +346,17 @@ int main(int argc, char *argv[]){
                 }
                 break;
       case 'p':
-                printf("\nplaynumpara: %s\n",optarg);
+                //printf("\nplaynumpara: %s\n",optarg);
                 if(optarg == NULL){
                   strcpy(parPlayerNumber," ");
                 }
                 else{
                   strcpy(parPlayerNumber,optarg);
                 }
-                printf("\nplayernumber: %s \n", parPlayerNumber);
+                //printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                printf("optarg c: \"%s\"\n",optarg);
+                //printf("optarg c: \"%s\"\n",optarg);
                 if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
                   strcpy(parConfigFileLocation," ");
                 }
