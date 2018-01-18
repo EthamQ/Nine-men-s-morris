@@ -112,7 +112,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Anzahl der teilnehmenden Spieler: &c",numberofPlayersPRC);	
+    printf("Anzahl der teilnehmenden Spieler: &c",numberOfPlayersPRC);	
     testifvalid = -1;
     attempts = 0;
 
