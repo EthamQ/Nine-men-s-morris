@@ -196,10 +196,24 @@ short checkStructurComplete(){
 		}
 	}
 	//portNumber
-
+	if( (strcmp(confiConst.portNumber, "") == 0) || (strcmp(confiConst.portNumber, " ") == 0) ){
+		strcpy(confiConst.portNumber,"");
+		printf("Port fehlt, Defaultwert nehmen? (y/n): ");
+		scanf("%s",scanVal);
+		if( (strcmp(scanVal,"y") == 0) || (strcmp(scanVal,"yes") == 0) ){
+			strcat(confiConst.portNumber,"1357");
+			printf("Default Port: %s\n",confiConst.portNumber);
+		}
+		else{
+			printf("Port eingeben: ");
+			scanf("%s",scanVal);
+			strcat(confiConst.portNumber,scanVal);
+			printf("Neuer Port: %s\n",confiConst.portNumber);
+		}
+	}
 	//playerNumber
 
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+	//printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
