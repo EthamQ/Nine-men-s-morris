@@ -22,9 +22,6 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-
-
-
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
   char versionPRC[BUFFER_SIZE];
   char game_idPRC[BUFFER_SIZE];

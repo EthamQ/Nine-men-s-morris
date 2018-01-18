@@ -31,12 +31,19 @@ int initConnect(){
       int sockfd;
       int rv;
 
+      char gameKindNameBuffer[BUFFER_SIZE];
+      char portNumberBuffer[BUFFER_SIZE];
+      char hostNameBuffer[BUFFER_SIZE];
+      strcpy(gameKindNameBuffer,confiConst.gameKindName);
+      strcpy(portNumberBuffer,confiConst.portNumber);
+      strcpy(hostNameBuffer,confiConst.hostName);
+
       struct addrinfo hints, *servinfo, *p;
       memset(&hints,0, sizeof hints);
       hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
       hints.ai_socktype = SOCK_STREAM;
 
-      if ((rv = getaddrinfo("sysprak.priv.lab.nm.ifi.lmu.de", "1357", &hints, &servinfo)) != 0) {
+      if ((rv = getaddrinfo(hostNameBuffer, portNumberBuffer, &hints, &servinfo)) != 0) {
       	fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
       	return ERROR;
       }

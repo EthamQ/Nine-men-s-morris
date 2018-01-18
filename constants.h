@@ -1,12 +1,6 @@
 #ifndef CONSTANTS
 #define CONSTANTS
 
-//Main server and game information
-#define GAMEKINDNAME "NMMORRIS"
-#define PORTNUMBER 1357
-#define HOSTNAME "sysprak.priv.lab.nm.ifi.lmu.de"
-#define CONFIG_DEFAULT "client.conf"
-
 //Misc
 #define ATTEMPTS_INVALID 20
 #define BUFF_SIZE_SMALL 256
