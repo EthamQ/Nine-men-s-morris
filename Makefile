@@ -11,4 +11,4 @@ play: build
 	./sysprak-client $(ARGS)
 
 clean:
-	rm -r sysprak-client
+	rm -r -f sysprak-client

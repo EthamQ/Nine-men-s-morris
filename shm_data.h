@@ -2,10 +2,8 @@
 #define SHM_DATA
 #include "constants.h"
 
-#define BUFFER_SIZE 256
-#define SPIELNAME 0 
+#define SPIELNAME 0
 #define FIELD 1
-
 
 struct spieler{
 int spielernummer;

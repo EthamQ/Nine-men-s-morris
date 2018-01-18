@@ -13,9 +13,6 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 0gn4co1add5r5\n";
-static char numberOfPlayersPRC []= "PLAYER\n";
 
 
 //ARGS: server message, if it begins with "+" return true
@@ -26,10 +23,17 @@ static bool serverResponseValid(const char r[]){
       return false;
 }
 
-
-
-
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
+  char versionPRC[BUFFER_SIZE];
+  char game_idPRC[BUFFER_SIZE];
+  char numberOfPlayersPRC[BUFFER_SIZE];
+  strcpy(versionPRC,confiConst.gameVersion);
+  strcpy(game_idPRC,confiConst.gameID);
+  strcpy(numberOfPlayersPRC,confiConst.playerNumber);
+  printf("\nVersionPRC:\"%s\"\n",versionPRC);
+  printf("\nGameIdPRC:\"%s\"\n",game_idPRC);
+  printf("\nNumPlayersPRC:\"%s\"\n",numberOfPlayersPRC);
+
     if(sockfd < 0){
       perror("Fehler bei sockfd");
       close(sockfd);
@@ -111,7 +115,10 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         if(attempts >= ATTEMPTS_INVALID){
             return ERROR;
         }
-    }	
+    }
+   }
+    printf("Anzahl der teilnehmenden Spieler: &c",numberOfPlayersPRC);
+
     testifvalid = -1;
     attempts = 0;
 
@@ -145,7 +152,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 			perror("Fehler beim senden von THINKING");
 		}
 		printf("C: %s", THINKING_MSG);
-		
+
 	memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
@@ -166,8 +173,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
  }
-		
+
 	}
- 
+
  return ERROR;
 }

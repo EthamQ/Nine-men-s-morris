@@ -31,12 +31,19 @@ int initConnect(){
       int sockfd;
       int rv;
 
+      char gameKindNameBuffer[BUFFER_SIZE];
+      char portNumberBuffer[BUFFER_SIZE];
+      char hostNameBuffer[BUFFER_SIZE];
+      strcpy(gameKindNameBuffer,confiConst.gameKindName);
+      strcpy(portNumberBuffer,confiConst.portNumber);
+      strcpy(hostNameBuffer,confiConst.hostName);
+
       struct addrinfo hints, *servinfo, *p;
       memset(&hints,0, sizeof hints);
       hints.ai_family = AF_UNSPEC; // use AF_INET6 to force IPv6
       hints.ai_socktype = SOCK_STREAM;
 
-      if ((rv = getaddrinfo("sysprak.priv.lab.nm.ifi.lmu.de", "1357", &hints, &servinfo)) != 0) {
+      if ((rv = getaddrinfo(hostNameBuffer, portNumberBuffer, &hints, &servinfo)) != 0) {
       	fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
       	return ERROR;
       }
@@ -51,7 +58,7 @@ int initConnect(){
 
       if (connect(sockfd, p -> ai_addr,p -> ai_addrlen) < 0) {
 	  perror("fehler bei connect");
-          
+
           close(sockfd);
           continue;
 
@@ -81,7 +88,7 @@ short sendMove(){
        perror("Fehler beim schreiben des Spielzugs in die pipe, BRAIN");
        return ERROR;
     }
-  
+
   free(pipeBuffer);
   return 0;
 }
@@ -90,12 +97,12 @@ short sendMove(){
 	short sendCaptureMove(){
 		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 		char *pipeBuffer = capture(shm_pointer);
-		
+
 	if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
 		perror("Fehler beim schreiben des CAPTURE Spielzugs in die pipe, BRAIN");
 		return -1;
     }
-	
+
 	free(pipeBuffer);
 	return 0;
 }
@@ -110,15 +117,15 @@ static void signalHandlerThinker(int signalNum){
 }
 
 
-	//Sendet entsprechendes Signal an den Thinker und liest dann den Spielzug aus der pipe 
+	//Sendet entsprechendes Signal an den Thinker und liest dann den Spielzug aus der pipe
 	//und sendet ihn an conPlay, der die passende Nachricht an den Server sendet
 	void send_signal(int sockfd, int task, char* movePipe){
 	if(task == MOVE){
 			//SIGUSR1 Signal an den thinker
 			if(kill(getppid(),SIGUSR1)<0){
 			perror("Fehler bei senden von SIGUSR1 an den Thinker, CONNECTOR");
-			}	
-			
+			}
+
 			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
 			}
 			else{
@@ -127,28 +134,28 @@ static void signalHandlerThinker(int signalNum){
 			//Spielzug an den Server senden
 			if(send_move_to_server(sockfd, movePipe) == ERROR){
 			perror("conplay failure, THINKCON");
-			}	
+			}
 		}
-		
+
 	if(task == CAPTURE){
 			//SIGUSR2 Signal an den thinker
 			if(kill(getppid(),SIGUSR2)<0){
 			perror("Fehler bei senden von SIGUSR2 an den Thinker, CONNECTOR");
 			}
-			
-			
+
+
 			//Aus der Pipe den Spielzug lesen
 			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
 				perror("Spielzug konnte nicht aus der Pipe gelesen werden");
 			}
 			if(send_move_to_server(sockfd, movePipe) == ERROR){
 				perror("conplay failure, THINKCON");
-			}	
+			}
 		}
-		
+
 	}
-				
-				
+
+
 int fork_thinker_connector(){
   printf("\nStarte fork_thinker_connector\n");
 
@@ -168,36 +175,36 @@ int fork_thinker_connector(){
       printf("fork_thinker_connector(): Created pipe successfully");
    }
 
-	 	
-	size_t shm_size = sizeof(struct SHM_data); 	
-	shmid = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | 0666); 	
-	if (shmid >= 0) { 
-	struct SHM_data* shm_p = shmat(shmid,  0, 0);	
-	if (shm_p ==(void *)-1) { 	
-	perror("shmat failed"); 	} 	
-	else { 						
-	shmdt(shm_p); 	
-	} 	
-	} 
-	else 
-	{ 
-	/* shmget lief schief */ 	
-	perror("shmget failed"); 		
-	return ERROR; 			
-}	
+
+	size_t shm_size = sizeof(struct SHM_data);
+	shmid = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | 0666);
+	if (shmid >= 0) {
+	struct SHM_data* shm_p = shmat(shmid,  0, 0);
+	if (shm_p ==(void *)-1) {
+	perror("shmat failed"); 	}
+	else {
+	shmdt(shm_p);
+	}
+	}
+	else
+	{
+	/* shmget lief schief */
+	perror("shmget failed");
+	return ERROR;
+}
 
 	//FORK
   switch(pid = fork()){
-	  
+
 	  //ERROR
     case ERROR: perror("fork_thinker_connector(): Fehler bei fork\n");
       return ERROR;
       break;
-	  
+
 	  //>>=======CONNECTOR=======<<
 
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-		
+
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 	  shm_pointer->pid_connector = getpid();
 	  shm_pointer->pid_thinker = getppid();
@@ -213,16 +220,16 @@ int fork_thinker_connector(){
         	printf("\nfork_thinker_connector(): initConnect success\n");
 	}
 	 	 printf("-Start performConnection-\n");
-	  
+
 	//Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
       		//Signal an Thinker senden, erster spielzug des spiels
      		send_signal(sockfd, MOVE, movePipe);
   	}
-    
-   
-	  
-	  
+
+
+
+
 printf("-Ab hier switch case-\n");
 
 	  while(1){
@@ -243,49 +250,49 @@ printf("-Ab hier switch case-\n");
 						perror("Fehler beim senden von THINKING");
 					}
 					printf("C: %s", THINKING_MSG);
-		
+
 				//receive OKTHINK
 					if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
 						perror("Fehler beim empfangen von OKTHINK");
 					};
 					printf("\nS: %s",serverResponse);
-					
+
 					read_piecelist(shm_pointer, serverResponse);
 					send_signal(sockfd, CAPTURE, movePipe);
 					free(serverResponse);
 					}
 					break;
-			
-		case WAIT: break; 
-				
+
+		case WAIT: break;
+
 		case MOVEOK: break;
-			
-		case GAMEOVER: 
-		printf("S: GAMEOVER"); 
+
+		case GAMEOVER:
+		printf("S: GAMEOVER");
 		close(close(pipeFd[0]));
-		exit(0); 
+		exit(0);
 		break;
-			
-		case ERROR: 
-		printf("CASE ERROR");  
+
+		case ERROR:
+		printf("CASE ERROR");
 		close(close(pipeFd[0]));
-		exit(0); 
+		exit(0);
 		break;
 		}
-		  
+
 	  }
 	close(close(pipeFd[0]));
 	exit(0);
 	  //>>=======THINKER=======<<
     default: printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
-	
-	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
-	if (shm_pointer_t ==(void *)-1) { 	
-	perror("shmat failed im thinker"); 	
-	} 
 
-	printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);	
-	
+	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
+	if (shm_pointer_t ==(void *)-1) {
+	perror("shmat failed im thinker");
+	}
+
+	printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);
+
 	//Leseseite der Pipe schliessen
 	close (pipeFd[0]);
 
@@ -294,7 +301,7 @@ printf("-Ab hier switch case-\n");
 	sa.sa_handler = signalHandlerThinker;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-	
+
 
 			if(sigaction(SIGUSR1, &sa , NULL ) < 0){ //Bei success 0, sonst -1
 				perror("Fehler bei sigaction SIGURS1");
@@ -309,14 +316,69 @@ printf("-Ab hier switch case-\n");
   	return 0;
 }
 
-int main(){
+int main(int argc, char *argv[]){
+  short paras;
+  char parGameId[BUFFER_SIZE];
+  char parPlayerNumber[BUFFER_SIZE];
+  char parConfigFileLocation[BUFFER_SIZE];
+
+  //Auslesen der Parameter
+  while( (paras = getopt(argc, argv, "g:p:c")) != -1){
+    switch(paras){
+      case 'g':
+                printf("optarg g: \"%s\"\n",optarg);
+                if(optarg == NULL){
+                  strcpy(parGameId," ");
+                }else{
+                  if((strstr(optarg, "-")) != NULL){
+                    strcpy(parGameId," ");
+                  }else{
+                    strcpy(parGameId,optarg);
+                  }
+                }
+                break;
+      case 'p':
+                printf("\nplaynumpara: %s\n",optarg);
+                if(optarg == NULL){
+                  strcpy(parPlayerNumber," ");
+                }
+                else{
+                  strcpy(parPlayerNumber,optarg);
+                }
+                printf("\nplayernumber: %s \n", parPlayerNumber);
+                break;
+      case 'c':
+                printf("optarg c: \"%s\"\n",optarg);
+                if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
+                  strcpy(parConfigFileLocation," ");
+                }
+                else{
+                  strcpy(parConfigFileLocation,optarg);
+                }
+                break;
+      default:
+                perror("Fehler: ungueltiger Parameter, THINKCON");
+    }
+  }
+  if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){
+  }
+  else{
+    strcpy(parPlayerNumber," ");
+  }
+  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
+    strcpy(parConfigFileLocation," ");
+  }
+  if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
+    perror("Terrible Failure in readConfig.c , THINKCON");
+    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
+  }
+
 	drawField();
 	parseMove("A1:A2",0);
    parseMove("A3:A4",1);
    parseMove("B1:C1",0);
    parseMove("C3:C2",1);
    parseMove("C1:C2",0);
-	read_configfile(CONFIG_DEFAULT);
 	fork_thinker_connector();
 return 0;
 }
