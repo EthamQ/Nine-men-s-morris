@@ -232,7 +232,7 @@ char* filepath = configFileName;
 	}
 	if(strcmp(playerNumber," ") != 0){
 		printf("\nTest II\n");
-		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber)
+		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber);
 		//isPlayernumberAlreadyDefined = playerNumber;
 	}
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
