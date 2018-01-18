@@ -215,6 +215,7 @@ int fork_thinker_connector(){
 
 semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 
+
 	//FORK
   switch(pid = fork()){
 	  
