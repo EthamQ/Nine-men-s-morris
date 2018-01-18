@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+//included Headerfiles
 #include "shm_data.h"
 #include "constants.h"
 
@@ -11,7 +11,7 @@ int available_pieces = 0;
 
 
 
-char testread[] = "+ CAPTURE 0\n+ PIECELIST 2,9\n+ PIECE0,0 A1\n+ PIECE0,1 A\n+ PIECE0,2 A3\n+ PIECE0,3 A\n+ PIECE0,4 A\n+ PIECE0,5 A\n+ PIECE0,6 A\n+ PIECE0,7 A\n+ PIECE0,8 A\n+ PIECE1,0 A\n+ PIECE1,1 A\n+ PIECE1,2 A\n+ PIECE1,3 A\n+ PIECE1,4 A\n+ PIECE1,5 A\n+ PIECE1,6 A4\n+ PIECE1,7 A\n+ PIECE1,8 C0\n";
+
 
 /*bekommt die Servernachricht, den char nach dem gesucht wird, ab welcher Stelle in der piecelist gesucht werden soll
 und ein char array status wo es den Status der einzelnen pieces reinschreiben kann
@@ -28,8 +28,8 @@ int read_piecelist_hidden(char* piecelist, char *search, int startposition, char
             pos_search++;
             if(pos_search == search_length){
                 // match
-                //printf("match from %d to %d\n",pos_text,pos_text);
-				break;
+               
+		break;
             }
 		}
         else{
@@ -116,7 +116,7 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 	int i = 0;
 	pos_text = pos_text+3;
 	while(piecelist[pos_text+1] != '+'){
-		//printf("i: %i\nAusgelesen[%c]\n", i,  piecelist[pos_text]);
+		
 		shm_pointer->client.spielername[i++] = piecelist[pos_text++];
 	}
 	printf("name: %s", shm_pointer->client.spielername);

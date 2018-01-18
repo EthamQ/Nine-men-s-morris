@@ -14,7 +14,7 @@
 
 static char dataPRS[MES_LENGTH_SERVER];
 static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 2hbxlcc7v2nf5\n";
+static char game_idPRC []= "ID 0gn4co1add5r5\n";
 static char numberOfPlayersPRC []= "PLAYER\n";
 
 
@@ -111,8 +111,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         if(attempts >= ATTEMPTS_INVALID){
             return ERROR;
         }
-    }
-    printf("Anzahl der teilnehmenden Spieler: &c",numberofPlayerPRC);	
+    }	
     testifvalid = -1;
     attempts = 0;
 
