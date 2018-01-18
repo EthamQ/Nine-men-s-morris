@@ -143,7 +143,7 @@ short checkStructurComplete(){
 		scanf("%s",scanVal);
 		strcpy(confiConst.gameID,"ID ");
 		strcat(confiConst.gameID,scanVal);
-		strcat(confiConst.gameVersion,"\n");
+		strcat(confiConst.gameID,"\n");
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
 
