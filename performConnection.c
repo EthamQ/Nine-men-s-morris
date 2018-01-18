@@ -13,10 +13,6 @@
 #include "shm_data.h"
 
 static char dataPRS[MES_LENGTH_SERVER];
-static char versionPRC []= "VERSION 2.0\n";
-static char game_idPRC []= "ID 2hbxlcc7v2nf5\n";
-static char numberOfPlayersPRC []= "PLAYER\n";
-
 
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
@@ -30,6 +26,9 @@ static bool serverResponseValid(const char r[]){
 
 
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
+  char versionPRC []= confiConst.gameVersion;
+  char game_idPRC []= confiConst.gameID;
+  char numberOfPlayersPRC []= confiConst.playerNumber;
     if(sockfd < 0){
       perror("Fehler bei sockfd");
       close(sockfd);
@@ -112,7 +111,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Anzahl der teilnehmenden Spieler: &c",numberOfPlayersPRC);	
+    printf("Anzahl der teilnehmenden Spieler: &c",numberOfPlayersPRC);
     testifvalid = -1;
     attempts = 0;
 
