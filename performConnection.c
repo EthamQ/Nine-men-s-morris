@@ -26,9 +26,12 @@ static bool serverResponseValid(const char r[]){
 
 
 int performConnection(int sockfd, struct SHM_data* shm_pointer){
-  char versionPRC []= confiConst.gameVersion;
-  char game_idPRC []= confiConst.gameID;
-  char numberOfPlayersPRC []= confiConst.playerNumber;
+  char versionPRC[BUFFER_SIZE];
+  char game_idPRC[BUFFER_SIZE];
+  char numberOfPlayersPRC[BUFFER_SIZE];
+  strcpy(versionPRC,confiConst.gameVersion);
+  strcpy(game_idPRC,confiConst.gameID);
+  strcpy(numberOfPlayersPRC,confiConst.playerNumber);
     if(sockfd < 0){
       perror("Fehler bei sockfd");
       close(sockfd);
