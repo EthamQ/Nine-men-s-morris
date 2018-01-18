@@ -215,6 +215,8 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 
 	  shm_pointer->pid_connector = getpid();
+    shm_pointer->pid_thinker = getppid();
+    printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
@@ -295,8 +297,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 	perror("shmat failed im thinker");
 	}
 
-  shm_pointer->pid_thinker = getpid();
-	printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);
+
 
 	//Leseseite der Pipe schliessen
 	close (pipeFd[0]);
