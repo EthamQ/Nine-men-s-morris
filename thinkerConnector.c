@@ -2,7 +2,6 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -15,6 +14,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/shm.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 
 #include "performConnection.h"
 #include "shm_data.h"
@@ -211,6 +212,8 @@ int fork_thinker_connector(){
 	perror("shmget failed"); 		
 	return -1; 			
 }	
+
+semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 
 	//FORK
   switch(pid = fork()){
