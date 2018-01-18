@@ -226,11 +226,11 @@ char* filepath = configFileName;
 	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
-	if(strcmp(gameID," ") != 0){
+	if(strcmp(paragameID," ") != 0){
 		printf("\nTest\n");
 		strcpy(isGameidAlreadyDefined,paragameID);
 	}
-	if(strcmp(playerNumber," ") != 0){
+	if(strcmp(paraplayerNumber," ") != 0){
 		printf("\nTest II\n");
 		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber);
 		//isPlayernumberAlreadyDefined = playerNumber;
