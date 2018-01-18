@@ -227,9 +227,11 @@ char* filepath = configFileName;
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(gameID," ") != 0){
+
 		strcpy(isGameidAlreadyDefined,gameID);
 	}
 	if(strcmp(playerNumber," ") != 0){
+		printf("\nTest\n");
 		isPlayernumberAlreadyDefined = playerNumber;
 	}
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
