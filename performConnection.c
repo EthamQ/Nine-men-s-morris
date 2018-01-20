@@ -14,7 +14,6 @@
 
 static char dataPRS[MES_LENGTH_SERVER];
 
-
 //ARGS: server message, if it begins with "+" return true
 static bool serverResponseValid(const char r[]){
     if(strncmp(r, "+",1) == 0){
@@ -116,7 +115,6 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-
     printf("Anzahl der teilnehmenden Spieler: %s",numberOfPlayersPRC);
 
     testifvalid = -1;
@@ -143,8 +141,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  attempts = 0;
 	  read_piecelist(shm_pointer,dataPRS);
 
-	  //---------Entscheiden Move oder wait-----------------
-    //C: THINKING
+	//---------Entscheiden Move oder wait-----------------
+  //C: THINKING
 	if(strstr(dataPRS,"+ MOVE ")){
 		//send THINKING
 		printf("\nperformConnection(): received +MOVE from the server\n");
@@ -153,7 +151,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 		}
 		printf("C: %s", THINKING_MSG);
 
-	memset(&dataPRS[0], 0, sizeof(dataPRS));
+	 memset(&dataPRS[0], 0, sizeof(dataPRS));
     printf("\nC: THINKING\n");
 
   //S:+ OKTHINK
@@ -172,9 +170,8 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
      printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
+  }
  }
-
-	}
 
  return ERROR;
 }
