@@ -329,7 +329,7 @@ int main(int argc, char *argv[]){
   char parConfigFileLocation[BUFFER_SIZE];
 
   //Auslesen der Parameter
-  while( (paras = getopt(argc, argv, "g:p:c")) != -1){
+  while( (paras = getopt(argc, argv, "c:g:p:")) != -1){
     switch(paras){
       case 'g':
                 printf("optarg g: \"%s\"\n",optarg);

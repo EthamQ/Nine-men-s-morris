@@ -11,8 +11,8 @@
 #define paraPLAYERNUMBER 6
 #define paraVERSION 7
 
-char* isGameidAlreadyDefined = " ";
-char* isPlayernumberAlreadyDefined = " ";
+char isGameidAlreadyDefined[BUFFER_SIZE] = " ";
+char isPlayernumberAlreadyDefined[BUFFER_SIZE] = " ";
 
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
