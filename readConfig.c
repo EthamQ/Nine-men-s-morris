@@ -227,12 +227,9 @@ char* filepath = configFileName;
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(paragameID," ") != 0){
-		printf("\nTest\n");
 		strcpy(isGameidAlreadyDefined,paragameID);
-		printf("\nTest III\n");
 	}
 	if(strcmp(paraplayerNumber," ") != 0){
-		printf("\nTest II\n");
 		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber);
 		//isPlayernumberAlreadyDefined = playerNumber;
 	}
