@@ -332,7 +332,7 @@ int main(int argc, char *argv[]){
   while( (paras = getopt(argc, argv, "c:g:p:")) != -1){
     switch(paras){
       case 'g':
-                printf("optarg g: \"%s\"\n",optarg);
+                //printf("optarg g: \"%s\"\n",optarg);
                 if(optarg == NULL){
                   strcpy(parGameId," ");
                 }else{
@@ -344,17 +344,17 @@ int main(int argc, char *argv[]){
                 }
                 break;
       case 'p':
-                printf("\nplaynumpara: %s\n",optarg);
+                //printf("\nplaynumpara: %s\n",optarg);
                 if(optarg == NULL){
                   strcpy(parPlayerNumber," ");
                 }
                 else{
                   strcpy(parPlayerNumber,optarg);
                 }
-                printf("\nplayernumber: %s \n", parPlayerNumber);
+                //printf("\nplayernumber: %s \n", parPlayerNumber);
                 break;
       case 'c':
-                printf("optarg c: \"%s\"\n",optarg);
+                //printf("optarg c: \"%s\"\n",optarg);
                 if( (optarg == NULL) || (strcmp(optarg," ") == 0) || (strcmp(optarg,"") == 0) ){
                   strcpy(parConfigFileLocation," ");
                 }
