@@ -229,6 +229,7 @@ char* filepath = configFileName;
 	if(strcmp(paragameID," ") != 0){
 		printf("\nTest\n");
 		strcpy(isGameidAlreadyDefined,paragameID);
+		printf("\nTest III\n");
 	}
 	if(strcmp(paraplayerNumber," ") != 0){
 		printf("\nTest II\n");

@@ -371,7 +371,7 @@ int main(int argc, char *argv[]){
   else{
     strcpy(parPlayerNumber," ");
   }
-  if( (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
+  if( (parConfigFileLocation == NULL) || (strcmp(parConfigFileLocation," ") == 0) || (strcmp(parConfigFileLocation,"") == 0) ){
     strcpy(parConfigFileLocation," ");
   }
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
