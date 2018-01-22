@@ -20,7 +20,7 @@
 #include <sys/sem.h>
 #include "performConnection.h"
 #include "shm_data.h"
-#include "debugging.h"
+#include "drawfield.h"
 #include "config_header.h"
 #include "brain.h"
 #include "maintainConnection.h"
@@ -361,12 +361,6 @@ int main(int argc, char *argv[]){
     return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
   }
 
- drawField();
- parseMove("A1:A2",0);
- parseMove("A3:A4",1);
- parseMove("B1:C1",0);
- parseMove("C3:C2",1);
- parseMove("C1:C2",0);
  fork_thinker_connector();
 return 0;
 }
