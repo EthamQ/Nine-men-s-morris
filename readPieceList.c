@@ -223,9 +223,9 @@ void printt(int fieldd[3][8]){
 		 if(plNR == 0 || plNR == 1){
 		 shm_pointer->client.spielernummer = plNR;
 		 shm_pointer->client.spielernummer = 1-plNR;		
-		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 
+		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
 		 read_player_name(piecelist, shm_pointer);
-		 //printf("ready %i\n", shm_pointer->client.flag_registriert);
+		 printf("ready %i\n", shm_pointer->client.flag_registriert);
 		 }
 		 printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
 		 

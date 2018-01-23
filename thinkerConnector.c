@@ -199,12 +199,13 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
       //printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
         printf("\nAttache den Connector\n");
   		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		 shm_pointer->flag_think = 0;
+	  	shm_pointer->pid_connector = getpid();
+	  	shm_pointer->pid_thinker = getppid();
+		//Schreibseite der Pipe schliessen
+		close(pipeFd[1]);
 
-  	  shm_pointer->pid_connector = getpid();
-      shm_pointer->pid_thinker = getppid();
-      //printf("\nPID THINKER nach initialisierung: %i\n", shm_pointer->pid_thinker);
-  		//Schreibseite der Pipe schliessen
-  		close(pipeFd[1]);
+
 
   		//SERVERVERBINDUNG
        if((sockfd = initConnect()) < 0){
@@ -218,60 +219,71 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 
   	    //Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
-      	//Signal an Thinker senden, erster spielzug des spiels
+
+			shm_pointer->flag_think = 1;
+      		//Signal an Thinker senden, erster spielzug des spiels
      		send_signal(sockfd, MOVE, movePipe);
-    	}
+			shm_pointer->flag_think = 0;
+  	}
 
-      printf("-Ab hier switch case-\n");
 
-  	  while(1){
-  		switch(maintainConnection(sockfd, shm_pointer)){
-    		case MOVE:
-    				if(shm_pointer->capture_status == 0){
-    				send_signal(sockfd, MOVE, movePipe);
-    				}
-    				else
-    				    if(shm_pointer->capture_status == 1){
-    						  send_signal(sockfd, CAPTURE, movePipe);
-    				    }
-    				else //TODO WARUM GIBT ES KEINE GESCHWEIFTE KLAMMER NACH DEM ELSE ???
-    				  if(shm_pointer->capture_status == 2){
-      				  char *server_Response=malloc(sizeof(char)*MES_LENGTH_SERVER);
-      					send_signal(sockfd, CAPTURE, movePipe);
-      					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
-      						perror("Fehler beim Senden von THINKING");
-      					}
-      					printf("C: %s", THINKING_MSG);
 
-      				//receive OKTHINK
-      					if(read(sockfd, server_Response, sizeof(char)*MES_LENGTH_SERVER) < 0){
-      						perror("Fehler beim Empfangen von OKTHINK");
-      					};
-      					printf("\nS: %s",server_Response);
 
-      					read_piecelist(shm_pointer, server_Response);
-      					send_signal(sockfd, CAPTURE, movePipe);
-      					free(server_Response);
-    					}
-  			      break;
+printf("-Ab hier switch case-\n");
 
-    		case WAIT: break;
+	  while(1){
+		switch(maintainConnection(sockfd, shm_pointer)){
+		case MOVE:
+				shm_pointer->flag_think = 1;
+				if(shm_pointer->capture_status == 0){
+				send_signal(sockfd, MOVE, movePipe);
+				}
+				else
+				       	if(shm_pointer->capture_status == 1){
+						send_signal(sockfd, CAPTURE, movePipe);
+				}
+				else
+				       	if(shm_pointer->capture_status == 2){
+						char *server_Response=malloc(sizeof(char)*MES_LENGTH_SERVER);
+						send_signal(sockfd, CAPTURE, movePipe);
+					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
+						perror("Fehler beim senden von THINKING");
+					}
+					printf("C: %s", THINKING_MSG);
 
-    		case MOVEOK: break;
+				//receive OKTHINK
+					if(read(sockfd, server_Response, sizeof(char)*MES_LENGTH_SERVER) < 0){
+						perror("Fehler beim empfangen von OKTHINK");
+					};
+					printf("\nS: %s",server_Response);
 
-    		case GAMEOVER:
-                  		printf("S: GAMEOVER");
-                  		close(close(pipeFd[0]));
-                  		exit(0);
-                  		break;
+					read_piecelist(shm_pointer, server_Response);
+					send_signal(sockfd, CAPTURE, movePipe);
+					free(server_Response);
+					}
+					shm_pointer->flag_think = 0;
+					break;
 
-    		case ERROR:
-                		printf("CASE ERROR");
-                		close(close(pipeFd[0]));
-                		exit(0);
-                		break;
-  		 }
-	    }
+		case WAIT: break;
+
+		case MOVEOK: break;
+
+		case GAMEOVER:
+		printf("S: GAMEOVER");
+		close(close(pipeFd[0]));
+		exit(0);
+		break;
+
+		case ERROR:
+		printf("CASE ERROR");
+		close(close(pipeFd[0]));
+		exit(0);
+		break;
+		}
+
+	  }
+
+      
 	close(close(pipeFd[0]));
 	exit(0);
 	 //>>=======THINKER=======<<

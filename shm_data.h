@@ -20,6 +20,7 @@ int pid_connector;
 int field[ZEILEN][SPALTEN];
 int used_pieces;
 int capture_status;
+int flag_think;
 struct spieler client;
 struct spieler opponent;
 };

@@ -349,6 +349,9 @@ int count_number_of(int type, struct SHM_data* shm_pointer){
 //ansonsten auf ein beliebeiges freies Feld ziehen
 //returned passenden PLAY command
 char* think_new(struct SHM_data* shm_pointer){
+	if(shm_pointer->flag_think == 0){
+		exit(-1);
+	}
 	//printf("think new hat folgenden Pointer erhalten: %p", shm_pointer);
 	//play_command den man returned
 	char* play_command = malloc(SIZE_PLAY_COMMAND);
@@ -390,18 +393,22 @@ char* think_new(struct SHM_data* shm_pointer){
 }
 
 	//Wird aufgerufen wenn ein Stein des Gegner geschmissen werden soll
-char* capture(struct SHM_data* shm_pointer){
-	char* play_command = malloc(SIZE_PLAY_COMMAND);
-	while(1){
-		int x = (rand() % ZEILEN);
-		int y = (rand() % SPALTEN);
-		if(shm_pointer->field[x][y] == PLAYER_OPPONENT){
-			create_PLAY_command(play_command, x, y);
-			printf("\nCapture command: %s\n", play_command);
-			return play_command;
-		}
+	char* capture(struct SHM_data* shm_pointer){
+		if(shm_pointer->flag_think == 0){
+		exit(-1);
 	}
-}
+		char* play_command = malloc(SIZE_PLAY_COMMAND);
+		while(1){
+			int x = (rand() % ZEILEN);
+			int y = (rand() % SPALTEN);
+			if(shm_pointer->field[x][y] == PLAYER_OPPONENT){
+				create_PLAY_command(play_command, x, y);
+				printf("\nCapture command: %s\n", play_command);
+				return play_command;
+			}
+			}
+
+	}
 
 //Spielfeld initialisieren
 void init(int field[ZEILEN][SPALTEN]){
