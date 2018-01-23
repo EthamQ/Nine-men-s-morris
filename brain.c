@@ -200,7 +200,7 @@ int free_pos(int field[ZEILEN][SPALTEN], int newPos[2], int x, int y){
 			return 1;
 			}
 		}
-		printf("Es wurde keine freie Position gefunden");
+		//printf("Es wurde keine freie Position gefunden");
 		return 0;
 }
 
@@ -284,39 +284,59 @@ void movee(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2]){
 //Macht aus einem x und y Wert einen PLAY command für den Server, zb PLAY A1
 void create_PLAY_command(char* pos, int x, int y){
 	switch(x){
-		case A: strcpy(pos, "PLAY A"); break;
-		case B: strcpy(pos, "PLAY B"); break;
-		case C: strcpy(pos, "PLAY C"); break;
+		case A: strcpy(pos, "PLAY A");
+		printf("Der Client legt einen Stein auf A");		
+		break;
+		case B: strcpy(pos, "PLAY B"); 
+		printf("Der Client legt einen Stein auf B");
+		break;
+		case C: strcpy(pos, "PLAY C"); 
+		printf("Der Client legt einen Stein auf C");
+		break;
 	}
 
 	char number_extension[SIZE_PLAY_COMMAND];
 	//int zu char
-	sprintf(number_extension, "%i\n", y); //TODO Was ist der Sinn davon ein unintialisiertes Array auszugeben, BEVOR es beschrieben wurde ????
+	sprintf(number_extension, "%i\n", y); 
 	strcat(pos, number_extension);
+	printf("%i\n",y);
 }
 
 //Macht aus jeweils 2 x und y Werten einen PLAY command(von einem Feld auf ein anderes ziehen) für den Server, zb PLAY A1:A2
 void create_MOVE_command(char* pos, int x, int y, int x_new, int y_new){
 	switch(x){
-	case A: strcpy(pos, "PLAY A"); break;
-	case B: strcpy(pos, "PLAY B"); break;
-	case C: strcpy(pos, "PLAY C"); break;
+	case A: strcpy(pos, "PLAY A"); 
+	printf("Der Client bewegt seinen Stein von A");
+	break;
+	case B: strcpy(pos, "PLAY B"); 
+	printf("Der Client bewegt seinen Stein von B");
+	break;
+	case C: strcpy(pos, "PLAY C"); 
+	printf("Der Client bewegt seinen Stein von C");
+	break;
 	}
 	char number_extension[SIZE_PLAY_COMMAND];
 	//int zu char
 	sprintf(number_extension, "%i", y);
 	strcat(pos, number_extension);
-
+	printf("%i ",y);
 	switch(x_new){
-		case A: strcat(pos, ":A"); break;
-		case B: strcat(pos, ":B"); break;
-		case C: strcat(pos, ":C"); break;
+		case A: strcat(pos, ":A"); 
+		printf("zu A");
+		break;
+		case B: strcat(pos, ":B"); 
+		printf("zu B");
+		break;
+		case C: strcat(pos, ":C"); 
+		printf("zu C");
+		break;
 	}
 
 	char number_extension_new[SIZE_PLAY_COMMAND];
 	//int zu char
 	sprintf(number_extension_new, "%i\n", y_new);
 	strcat(pos, number_extension_new);
+	printf("%i\n",y_new);
 }
 
 
@@ -365,8 +385,9 @@ char* think_new(struct SHM_data* shm_pointer){
 			int x = (rand() % ZEILEN);
 			int y = (rand() % SPALTEN);
 			if(shm_pointer->field[x][y] == EMPTY){
-				print(shm_pointer->field);
+				//print(shm_pointer->field);
 				create_PLAY_command(play_command, x, y);
+				//shm_pointer->field[x][y] = PLAYER_CLIENT;
 				return play_command;
 			}
 		}

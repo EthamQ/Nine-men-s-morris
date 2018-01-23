@@ -64,7 +64,7 @@ int initConnect(){
             continue;
         }
         else{
-          fprintf(stderr,"mit Server Verbunden\n");
+          //fprintf(stderr,"mit Server Verbunden\n");
         }
         break; // if we get here, we must have connected successfully
       }
@@ -148,7 +148,7 @@ static void signalHandlerThinker(int signalNum){
 	}
 
 int fork_thinker_connector(){
-  printf("\nStarte fork_thinker_connector\n");
+  //printf("\nStarte fork_thinker_connector\n");
 
   //Fork Variablen
   pid_t pid;
@@ -163,7 +163,7 @@ int fork_thinker_connector(){
       return ERROR;
    }
    else{
-      printf("fork_thinker_connector(): Created pipe successfully");
+      //printf("fork_thinker_connector(): Created pipe successfully");
    }
 
 	size_t shm_size = sizeof(struct SHM_data);
@@ -197,7 +197,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 	  //CONNECTOR
     case 0:
       //printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
-        printf("\nAttache den Connector\n");
+        printf(" ");
   		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 		 shm_pointer->flag_think = 0;
 	  	shm_pointer->pid_connector = getpid();
@@ -213,9 +213,9 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
         	return -1;
   		 }
        else{
-          printf("\nfork_thinker_connector(): initConnect success\n");
+          //printf("\nfork_thinker_connector(): initConnect success\n");
   	   }
-  	 	 printf("-Start performConnection-\n");
+  	 	 //printf("-Start performConnection-\n");
 
   	    //Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
@@ -224,16 +224,18 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
       		//Signal an Thinker senden, erster spielzug des spiels
      		send_signal(sockfd, MOVE, movePipe);
 			shm_pointer->flag_think = 0;
+			//drawField(shm_pointer);
   	}
 
 
 
 
-printf("-Ab hier switch case-\n");
+//printf("-Ab hier switch case-\n");
 
 	  while(1){
 		switch(maintainConnection(sockfd, shm_pointer)){
 		case MOVE:
+				printf("Client ist am Zug");
 				shm_pointer->flag_think = 1;
 				if(shm_pointer->capture_status == 0){
 				send_signal(sockfd, MOVE, movePipe);
@@ -249,19 +251,20 @@ printf("-Ab hier switch case-\n");
 					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
 						perror("Fehler beim senden von THINKING");
 					}
-					printf("C: %s", THINKING_MSG);
+					//printf("C: %s", THINKING_MSG);
 
 				//receive OKTHINK
 					if(read(sockfd, server_Response, sizeof(char)*MES_LENGTH_SERVER) < 0){
 						perror("Fehler beim empfangen von OKTHINK");
 					};
-					printf("\nS: %s",server_Response);
+					//printf("\nS: %s",server_Response);
 
 					read_piecelist(shm_pointer, server_Response);
 					send_signal(sockfd, CAPTURE, movePipe);
 					free(server_Response);
 					}
 					shm_pointer->flag_think = 0;
+					//drawField(shm_pointer);
 					break;
 
 		case WAIT: break;
@@ -288,7 +291,7 @@ printf("-Ab hier switch case-\n");
 	exit(0);
 	 //>>=======THINKER=======<<
   default: //printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
-		printf("\nAttache den Thinker\n");
+		printf(" ");
 	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
 	if (shm_pointer_t ==(void *)-1) {
 	perror("Fehler beim Attachen der SHM beim Thinker");

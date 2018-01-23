@@ -26,20 +26,19 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
   char versionPRC[BUFFER_SIZE];
   char game_idPRC[BUFFER_SIZE];
   char numberOfPlayersPRC[BUFFER_SIZE];
+  char mode[BUFFER_SIZE];
   strcpy(versionPRC,confiConst.gameVersion);
   strcpy(game_idPRC,confiConst.gameID);
   strcpy(numberOfPlayersPRC,confiConst.playerNumber);
-  printf("\nVersionPRC:\"%s\"\n",versionPRC);
-  printf("\nGameIdPRC:\"%s\"\n",game_idPRC);
-  printf("\nNumPlayersPRC:\"%s\"\n",numberOfPlayersPRC);
+  strcpy(mode,confiConst.gameKindName);
 
     if(sockfd < 0){
-      perror("Fehler bei sockfd");
+      perror("Fehler bei sockfd\n");
       close(sockfd);
       return ERROR;
     }
     else{
-      printf("Beginne PerformConnection");
+      //printf("\nBeginne PerformConnection\n");
     }
     //if testifvalid is negative then there was an error, repeat write() or read() if error
     ssize_t testifvalid = -1;
@@ -51,7 +50,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
       attempts++;
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-        perror("Fehler bei Server Version");
+        perror("Fehler bei Server Version\n");
         return ERROR;
       }
     }
@@ -66,7 +65,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Client ist auf Version: %s\n",versionPRC);
+    printf("\nClient ist auf Version: %s\n",versionPRC);
     testifvalid = -1;
 	  attempts = 0;
 
@@ -75,11 +74,11 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
         testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
 	      attempts++;
         if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-            perror("Fehler bei Game-ID");
+            perror("Fehler bei Game-ID\n");
             return ERROR;
         }
     }
-    printf("%s\n",dataPRS);
+    printf("Server benötigt Game-ID\n");
     testifvalid = -1;
 	  attempts = 0;
 
@@ -91,7 +90,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Spiel mit der %s wurde erstellt\n",game_idPRC);
+    printf("Spiel erstellt mit %s\n",game_idPRC);
     testifvalid = -1;
     attempts = 0;
 
@@ -103,7 +102,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Gespielt wird im Modus %s\n",dataPRS);
+    printf("Gespielt wird %s\n",mode);
     testifvalid = -1;
     attempts = 0;
 
@@ -115,7 +114,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
             return ERROR;
         }
     }
-    printf("Anzahl der teilnehmenden Spieler: %s",numberOfPlayersPRC);
+    printf("Eingegebene Mitspielernummer: %s\n",numberOfPlayersPRC);
 
     testifvalid = -1;
     attempts = 0;
@@ -131,43 +130,50 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 
     while(testifvalid < 0){
       testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
-      printf("%s\n",dataPRS);
+      //printf("%s\n",dataPRS);
       if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Fehler bei Endplayers bzw Endpiecelist");
+      perror("Fehler bei Endplayers bzw Endpiecelist\n");
       return ERROR;
       }
     }
     testifvalid = -1;
 	  attempts = 0;
+	  
+	  if(shm_pointer->opponent.flag_registriert) {
+		printf("\nGegner ist bereit\n");
+	  }
+	  else {
+		printf("\nGegner ist noch nicht bereit\n");	
+		printf("servermessage:%s",dataPRS);
+	  }
 	  read_piecelist(shm_pointer,dataPRS);
-
 	//---------Entscheiden Move oder wait-----------------
   //C: THINKING
 	if(strstr(dataPRS,"+ MOVE ")){
 		//send THINKING
-		printf("\nperformConnection(): received +MOVE from the server\n");
+		//printf("\nperformConnection(): received +MOVE from the server\n");
 		if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
-			perror("Fehler beim senden von THINKING");
+			perror("Fehler beim senden von THINKING\n");
 		}
-		printf("C: %s", THINKING_MSG);
+		//printf("C: %s", THINKING_MSG);
 
 	 memset(&dataPRS[0], 0, sizeof(dataPRS));
-    printf("\nC: THINKING\n");
+    //printf("sende THINKING an den Server\n");
 
   //S:+ OKTHINK
   while(testifvalid < 0){
     testifvalid = read(sockfd, dataPRS, MES_LENGTH_SERVER);
     //printf("\nOKthink ???\n\n");
-    printf("S: %s\n",dataPRS);
+    //printf("S: %s\n",dataPRS);
     if(!serverResponseValid(dataPRS) || attempts >= ATTEMPTS_INVALID){
-      perror("Invalid server response5");
+      perror("Fehler bei OKTHINK\n");
       return -1;
     }
   }
 
   //Auf thinking darf nur okthink folgen, sonst ist vorher etwas schiefgelaufen
   if(strstr(dataPRS,"+ OKTHINK")){
-     printf("\nperform Connection tells maintainConnection.c that the Server sent +OKTHINK");
+     //printf("perform Connection tells maintainConnection.c that the Server sent +OKTHINK\n");
 	 //Aufruf von Spielzug PLAY ...
      return OKTHINK;
   }

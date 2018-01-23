@@ -144,19 +144,19 @@ printf("char: %c\n", ptr[strlen(ptr)-2]);
 return ptr[strlen(ptr)-2] - '0';
 }
 //"Spielfeld" ausgeben
-void printt(int fieldd[3][8]){
+/*void printt(int fieldd[3][8]){
 	int i;
 	int j;
 	for(i = 0; i<3; i++){
 	for(j = 0; j<8; j++){
 		printf("%i", fieldd[i][j]);
 		if(j==(8-1)){
-			printf("\n");
+			//printf("\n");
 		}
 	}	
 	}
 }
-	
+*/	
 	//Liest den Status eines Steins ein und schreibt ihn ggf in das shared memory Spielfeld wenn er gesetzt ist
 	void fill_array(int player, char status[2], struct SHM_data* shm_pointer){
 		
@@ -222,8 +222,8 @@ void printt(int fieldd[3][8]){
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
 		 shm_pointer->client.spielernummer = plNR;
-		 shm_pointer->client.spielernummer = 1-plNR;		
-		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
+		 shm_pointer->opponent.spielernummer = 1-plNR;		
+		 //shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
 		 read_player_name(piecelist, shm_pointer);
 		 printf("ready %i\n", shm_pointer->client.flag_registriert);
 		 }
@@ -275,5 +275,13 @@ void printt(int fieldd[3][8]){
 		//printf("\nJetzt wurde die Servernachricht eingelesen: \n");
 		//printt(shm_pointer->field);
 		printf("\n");
-		drawField(shm_pointer);
+		if(shm_pointer -> client.spielernummer == 0) {
+		printf("Steine des Clienten markiert mit #\n");
+		} 
+		else{
+		printf("Steine des Clienten markiert mit +\n");
+		}
+		
 	}
+
+

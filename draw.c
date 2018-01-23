@@ -4,11 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "drawfield.h"
 #include "shm_data.h"
 #define zeilen 15
 #define spalten 40
 
 void drawField(struct SHM_data* shm_pointer){
+    printf("zeiche das Feld");	
     char field[zeilen][spalten];
     int i;
     int j;
@@ -261,18 +263,18 @@ void drawField(struct SHM_data* shm_pointer){
         field[7][26]='+';
       }
       if(shm_pointer->field[2][4]==1){
-        field[9][25]='-';
-        field[9][26]='#';
+        field[9][25]='#';
+        field[9][26]='-';
       }if (shm_pointer->field[2][4]==2){
-        field[9][25]='-';
-        field[9][26]='+';
+        field[9][25]='+';
+        field[9][26]='-';
       }
       if(shm_pointer->field[2][5]==1){
-        field[9][19]='-';
-        field[9][20]='#';
+        field[9][19]='#';
+        field[9][20]='-';
       }if (shm_pointer->field[2][5]==2){
-        field[9][19]='-';
-        field[9][20]='+';
+        field[9][19]='+';
+        field[9][20]='-';
       }
       if(shm_pointer->field[2][6]==1){
         field[9][12]='#';
@@ -287,7 +289,7 @@ void drawField(struct SHM_data* shm_pointer){
         field[7][13]='-';
       }if (shm_pointer->field[2][7]==2){
         field[7][12]='+';
-        field[7][13]='7';
+        field[7][13]='-';
       }
 
 
