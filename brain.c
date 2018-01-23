@@ -357,6 +357,9 @@ int count_number_of(int type, struct SHM_data* shm_pointer){
 //ansonsten auf ein beliebeiges freies Feld ziehen
 //returned passenden PLAY command 
 char* think_new(struct SHM_data* shm_pointer){
+	if(shm_pointer->flag_think == 0){
+		exit(-1);
+	}
 	//printf("think new hat folgenden Pointer erhalten: %p", shm_pointer);
 	//play_command den man returned
 	char* play_command = malloc(SIZE_PLAY_COMMAND);
@@ -401,6 +404,9 @@ char* think_new(struct SHM_data* shm_pointer){
 
 	//Wird aufgerufen wenn ein Stein des Gegner geschmissen werden soll
 	char* capture(struct SHM_data* shm_pointer){
+		if(shm_pointer->flag_think == 0){
+		exit(-1);
+	}
 		char* play_command = malloc(SIZE_PLAY_COMMAND);
 		while(1){
 			int x = (rand() % ZEILEN);

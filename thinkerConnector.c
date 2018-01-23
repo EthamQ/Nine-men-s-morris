@@ -213,6 +213,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
     case 0: printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
 
 		 struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		 shm_pointer->flag_think = 0;
 		 
 	  shm_pointer->pid_connector = getpid();
 	  shm_pointer->pid_thinker = getppid();
@@ -231,8 +232,10 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 
 	//Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
+			shm_pointer->flag_think = 1;
       		//Signal an Thinker senden, erster spielzug des spiels
      		send_signal(sockfd, MOVE, movePipe);
+			shm_pointer->flag_think = 0;
   	}
 
 
@@ -243,6 +246,7 @@ printf("-Ab hier switch case-\n");
 	  while(1){
 		switch(maintainConnection(sockfd, shm_pointer)){
 		case MOVE:
+				shm_pointer->flag_think = 1;
 				if(shm_pointer->capture_status == 0){
 				send_signal(sockfd, MOVE, movePipe);
 				}
@@ -269,6 +273,7 @@ printf("-Ab hier switch case-\n");
 					send_signal(sockfd, CAPTURE, movePipe);
 					free(server_Response);
 					}
+					shm_pointer->flag_think = 0;
 					break;
 
 		case WAIT: break;
