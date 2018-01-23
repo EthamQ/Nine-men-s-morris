@@ -284,14 +284,11 @@ void movee(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2]){
 //Macht aus einem x und y Wert einen PLAY command für den Server, zb PLAY A1
 void create_PLAY_command(char* pos, int x, int y){
 	switch(x){
-		case A: strcpy(pos, "PLAY A");
-		printf("Der Client legt einen Stein auf A");		
+		case A: strcpy(pos, "PLAY A");		
 		break;
 		case B: strcpy(pos, "PLAY B"); 
-		printf("Der Client legt einen Stein auf B");
 		break;
 		case C: strcpy(pos, "PLAY C"); 
-		printf("Der Client legt einen Stein auf C");
 		break;
 	}
 
@@ -306,29 +303,22 @@ void create_PLAY_command(char* pos, int x, int y){
 void create_MOVE_command(char* pos, int x, int y, int x_new, int y_new){
 	switch(x){
 	case A: strcpy(pos, "PLAY A"); 
-	printf("Der Client bewegt seinen Stein von A");
 	break;
 	case B: strcpy(pos, "PLAY B"); 
-	printf("Der Client bewegt seinen Stein von B");
 	break;
 	case C: strcpy(pos, "PLAY C"); 
-	printf("Der Client bewegt seinen Stein von C");
 	break;
 	}
 	char number_extension[SIZE_PLAY_COMMAND];
 	//int zu char
 	sprintf(number_extension, "%i", y);
 	strcat(pos, number_extension);
-	printf("%i ",y);
 	switch(x_new){
 		case A: strcat(pos, ":A"); 
-		printf("zu A");
 		break;
 		case B: strcat(pos, ":B"); 
-		printf("zu B");
 		break;
 		case C: strcat(pos, ":C"); 
-		printf("zu C");
 		break;
 	}
 
@@ -336,7 +326,6 @@ void create_MOVE_command(char* pos, int x, int y, int x_new, int y_new){
 	//int zu char
 	sprintf(number_extension_new, "%i\n", y_new);
 	strcat(pos, number_extension_new);
-	printf("%i\n",y_new);
 }
 
 
@@ -387,7 +376,8 @@ char* think_new(struct SHM_data* shm_pointer){
 			if(shm_pointer->field[x][y] == EMPTY){
 				//print(shm_pointer->field);
 				create_PLAY_command(play_command, x, y);
-				//shm_pointer->field[x][y] = PLAYER_CLIENT;
+				shm_pointer->field[x][y] = PLAYER_CLIENT;
+				printf("Client legt einen Stein auf %c%i\n",buchstabe(x),y);	
 				return play_command;
 			}
 		}
@@ -402,12 +392,18 @@ char* think_new(struct SHM_data* shm_pointer){
 		if(number > 3){
 			move(shm_pointer->field, FROM, TO, NEIGHBOURING);
 			create_MOVE_command(move_command, FROM[0], FROM[1], TO[0], TO[1]);
+			shm_pointer->field[FROM[0]][FROM[1]]= EMPTY;
+			shm_pointer->field[TO[0]][TO[1]]= PLAYER_CLIENT;
+			printf("Client bewegt einen Stein von %c%i zu %c%i\n",buchstabe(FROM[0]),FROM[1],buchstabe(TO[0]),TO[1]);
 			return move_command;
 		}
 		else if(number == 3){
-			move(shm_pointer->field, FROM, TO, RANDOM);
-			create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
-			return play_command;
+		move(shm_pointer->field, FROM, TO, RANDOM);
+		create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
+		shm_pointer->field[FROM[0]][FROM[1]]= EMPTY;
+		shm_pointer->field[TO[0]][TO[1]]= PLAYER_CLIENT;
+		printf("Client bewegt einen Stein von %c%i zu %c%i\n",buchstabe(FROM[0]),FROM[1],buchstabe(TO[0]),TO[1]);			
+		return play_command;
 		}
 	}
 	return play_command;
@@ -424,7 +420,9 @@ char* think_new(struct SHM_data* shm_pointer){
 			int y = (rand() % SPALTEN);
 			if(shm_pointer->field[x][y] == PLAYER_OPPONENT){
 				create_PLAY_command(play_command, x, y);
+				shm_pointer->field[x][y] = EMPTY;
 				printf("\nCapture command: %s\n", play_command);
+				printf("Client wirft gegnerischen Stein bei %c%i\n",buchstabe(x),y);
 				return play_command;
 			}
 			}

@@ -119,29 +119,36 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 		
 		shm_pointer->client.spielername[i++] = piecelist[pos_text++];
 	}
-	printf("name: %s\n", shm_pointer->client.spielername);
+	//printf("name: %s\n", shm_pointer->client.spielername);
 	return 0;
 }
 
 int read_ready_status(char* piecelist){
-	char delimiter[] = "+";
-	char *copy = malloc(strlen(piecelist));
-	strcpy(copy,piecelist);
-	char *ptr;
-// initialisieren und ersten Abschnitt erstellen
-ptr = strtok(copy, delimiter);
-	//printf("Abschnitt gefunden: %s\n", ptr);
-int i =0;
-while(i<2) {
+	int array_length = strlen(piecelist);
+	char *search = "+ ENDPLAYERS";
+	int search_length = strlen(search);
+	int pos_text;
+	int pos_search = 0;
+    for (pos_text = 0; pos_text < array_length; pos_text++){
+        if(piecelist[pos_text] == search[pos_search]){
+            pos_search++;
+            if(pos_search == search_length){
+                // match
+				break;
+            }
+		}
+        else{
+           pos_text -= pos_search;
+           pos_search = 0;
+        }
+    }
 
-	// naechsten Abschnitt erstellen
- 	ptr = strtok(NULL, delimiter);
-		//printf("Abschnitt gefunden: %s\n", ptr);
-	i++;
-}
-printf("char: %c\n", ptr[strlen(ptr)-2]);
-//free(copy);
-return ptr[strlen(ptr)-2] - '0';
+
+
+	
+	pos_text = pos_text-13;
+	printf("ready: %c\n",piecelist[pos_text]);
+	return 0;
 }
 //"Spielfeld" ausgeben
 /*void printt(int fieldd[3][8]){
@@ -216,18 +223,18 @@ return ptr[strlen(ptr)-2] - '0';
 		status[1] = 'E';
 		
 		shm_pointer->anzahl_spieler =  read_number_of_players(piecelist);
-		printf("Number of players: %i\n", shm_pointer->anzahl_spieler);
+		//printf("Number of players: %i\n", shm_pointer->anzahl_spieler);
 		
 		//which player are we?
 		 int plNR = read_player_number(piecelist);
 		 if(plNR == 0 || plNR == 1){
 		 shm_pointer->client.spielernummer = plNR;
 		 shm_pointer->opponent.spielernummer = 1-plNR;		
-		 //shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
+		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
 		 read_player_name(piecelist, shm_pointer);
-		 printf("ready %i\n", shm_pointer->client.flag_registriert);
+		 //printf("ready %i\n", shm_pointer->client.flag_registriert);
 		 }
-		 printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
+		 //printf("\nYOU: %i\n", shm_pointer->client.spielernummer);
 		 
 		 int playerA;
 		 int playerB;
@@ -259,7 +266,7 @@ return ptr[strlen(ptr)-2] - '0';
 		fill_array(playerB, status, shm_pointer);
 		n++;
 		}
-		printf("\nAvailable pieces: %i\n", available_pieces);
+		//printf("\nAvailable pieces: %i\n", available_pieces);
 		shm_pointer->used_pieces = NUMBER_STONES - available_pieces; 	
 		available_pieces = 0;
 	
@@ -268,19 +275,15 @@ return ptr[strlen(ptr)-2] - '0';
 		if(capture != 0 && capture != 1 && capture != 2){
 		capture = 0;
 		}		
-		printf("\nCapture: %i\n", capture);
+		//printf("\nCapture: %i\n", capture);
 		shm_pointer->capture_status = capture;
-		printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);
+		//printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);
 	
 		//printf("\nJetzt wurde die Servernachricht eingelesen: \n");
 		//printt(shm_pointer->field);
 		printf("\n");
-		if(shm_pointer -> client.spielernummer == 0) {
-		printf("Steine des Clienten markiert mit #\n");
-		} 
-		else{
-		printf("Steine des Clienten markiert mit +\n");
-		}
+		printf("Steine des Clienten werden mit # markiert\n");
+		
 		
 	}
 

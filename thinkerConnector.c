@@ -121,9 +121,7 @@ static void signalHandlerThinker(int signalNum){
 			if(kill(getppid(),SIGUSR1)<0){
 			     perror("Fehler bei Senden von SIGUSR1 an den Thinker\n");
 			}
-			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
-			}
-			else{
+			if((read (pipeFd[0], movePipe, PIPE_BUF)) <0){
 			     perror("Spielzug konnte nicht aus der Pipe gelesen werden");
 			}
 			//Spielzug an den Server senden
@@ -224,7 +222,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
       		//Signal an Thinker senden, erster spielzug des spiels
      		send_signal(sockfd, MOVE, movePipe);
 			shm_pointer->flag_think = 0;
-			//drawField(shm_pointer);
+			drawField(shm_pointer);
   	}
 
 
@@ -264,7 +262,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 					free(server_Response);
 					}
 					shm_pointer->flag_think = 0;
-					//drawField(shm_pointer);
+					drawField(shm_pointer);
 					break;
 
 		case WAIT: break;

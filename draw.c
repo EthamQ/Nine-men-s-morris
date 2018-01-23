@@ -10,7 +10,7 @@
 #define spalten 40
 
 void drawField(struct SHM_data* shm_pointer){
-    printf("zeiche das Feld");	
+   
     char field[zeilen][spalten];
     int i;
     int j;
