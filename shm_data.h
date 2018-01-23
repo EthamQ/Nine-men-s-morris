@@ -21,6 +21,7 @@ int field[ZEILEN][SPALTEN];
 int used_pieces;
 int capture_status;
 struct spieler client;
+struct spieler opponent;
 };
 
 
