@@ -4,7 +4,7 @@
 #include <stdlib.h>
 //included Headerfiles
 #include "shm_data.h"
-#include "constants.h"
+#include "drawfield.h"
 
 int available_pieces = 0;
 
@@ -201,9 +201,10 @@ void printt(int fieldd[3][8]){
 	void read_piecelist(struct SHM_data* shm_pointer, char* piecelist){
 		//Alle Stellen im Spielfeld auf 0 setzen
 		resetArray(shm_pointer);
-		printf("Field wurde resettet: \n");
+		/*printf("Field wurde resettet: \n");
 		printt(shm_pointer->field);
 		printf("\n");
+		*/
 		
 		
 		
@@ -270,7 +271,8 @@ void printt(int fieldd[3][8]){
 		shm_pointer->capture_status = capture;
 		printf("\nOwn pieces set: %i\n", shm_pointer->used_pieces);
 	
-		printf("\nJetzt wurde die Servernachricht eingelesen: \n");
-		printt(shm_pointer->field);
+		//printf("\nJetzt wurde die Servernachricht eingelesen: \n");
+		//printt(shm_pointer->field);
 		printf("\n");
+		drawField(shm_pointer);
 	}

@@ -1,4 +1,6 @@
+#include "shm_data.h"
+
 #ifndef DRAW
 #define DRAW
-extern void drawField();
+void drawField(struct SHM_data* shm_pointer);
 #endif 

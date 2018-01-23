@@ -11,8 +11,8 @@
 #define paraPLAYERNUMBER 6
 #define paraVERSION 7
 
-char* isGameidAlreadyDefined = " ";
-char* isPlayernumberAlreadyDefined = " ";
+char isGameidAlreadyDefined[BUFFER_SIZE] = " ";
+char isPlayernumberAlreadyDefined[BUFFER_SIZE] = " ";
 
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
@@ -54,7 +54,6 @@ short tellParam(char* para){
 }
 
 int assignParameters(char* ParameterLine){
-
 	char* paraLine = ParameterLine;
 	char* assParameter;
 	char* assValue;
@@ -65,7 +64,6 @@ int assignParameters(char* ParameterLine){
 		}
  		//Line in Parameter und Wert aufteilen
 		assParameter = strtok(paraLine,paraDelimiter); //Parameter
-		//printf("assPara: \"%s\" \n", assParameter);
 		paraLine = strtok(NULL,paraDelimiter); //zum wert springen
 
 		assValue = strtok(paraLine,paraDelimiter); //Wert
@@ -74,8 +72,6 @@ int assignParameters(char* ParameterLine){
 		//Parameter und Wert bereinigen
 		assParameter = cleanBlankspace(assParameter);
 		assValue = cleanBlankspace(assValue);
-
-		//printf("\nassParameter,Assvalue after cleaning:\"%s\",\"%s\" \n", assParameter, assValue);
 
 		//Parameter erkennen und der struktur zuweisen
 		switch(tellParam(assParameter)){
@@ -146,7 +142,6 @@ short checkStructurComplete(){
 		strcat(confiConst.gameID,"\n");
 		printf("Neue gameID: %s\n",confiConst.gameID);
 	}
-
 	//Hostname
 	if( (strcmp(confiConst.hostName, "") == 0) || (strcmp(confiConst.hostName, " ") == 0) ){
 		printf("Hostname fehlt, Defaultwert nehmen? (y/n): ");
@@ -162,7 +157,6 @@ short checkStructurComplete(){
 			printf("Neuer Hostname: %s\n",confiConst.hostName);
 		}
 	}
-
 	//gameKindName
 	if( (strcmp(confiConst.gameKindName, "") == 0) || (strcmp(confiConst.gameKindName, " ") == 0) ){
 		printf("Spielart fehlt, Defaultwert nehmen? (y/n): ");
@@ -179,7 +173,6 @@ short checkStructurComplete(){
 			printf("Neue Spielart: %s\n",confiConst.gameKindName);
 		}
 	}
-
 	//gameVersion
 	if( (strcmp(confiConst.gameVersion, "") == 0) || (strcmp(confiConst.gameVersion, " ") == 0) || (strcmp(confiConst.gameVersion, "VERSION \n") == 0) || (strcmp(confiConst.gameVersion, "VERSION  \n") == 0) ){
 		strcpy(confiConst.gameVersion,"");
@@ -214,23 +207,22 @@ short checkStructurComplete(){
 			printf("Neuer Port: %s\n",confiConst.portNumber);
 		}
 	}
-	//playerNumber
-
-	printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
+	//printf("\n Struktur:\n1.gameKindName: \"%s\"\n2.portNumber: \"%s\"\n3.hostName : \"%s\"\n4.gameID: \"%s\"\n5.playerNumber: \"%s\"\n6.gameVersion: \"%s\"\n", confiConst.gameKindName, confiConst.portNumber, confiConst.hostName,  confiConst.gameID, confiConst.playerNumber, confiConst.gameVersion);
 	return 0;
 }
 
-int read_configfile(char* gameID, char* playerNumber, char* configFileName){
+int read_configfile(char* paragameID, char* paraplayerNumber, char* configFileName){
 FILE* file;
 char* filepath = configFileName;
-	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", gameID,playerNumber, configFileName);
+	//printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
-	if(strcmp(gameID," ") != 0){
-		strcpy(isGameidAlreadyDefined,gameID);
+	if(strcmp(paragameID," ") != 0){
+		strcpy(isGameidAlreadyDefined,paragameID);
 	}
-	if(strcmp(playerNumber," ") != 0){
-		isPlayernumberAlreadyDefined = playerNumber;
+	if(strcmp(paraplayerNumber," ") != 0){
+		strcpy(isPlayernumberAlreadyDefined,paraplayerNumber);
+		//isPlayernumberAlreadyDefined = playerNumber;
 	}
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
 	file = fopen(filepath, "r");
