@@ -149,12 +149,12 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  read_piecelist(shm_pointer,dataPRS);
 
 	  if(shm_pointer->client.spielernummer ==0){
-	  printf("Client ist Spieler 1 und hat den Namen %s",shm_pointer->client.spielername);
-	  printf("Der Gegner ist Spieler 2 und hat den Namen %s",shm_pointer-> opponent.spielername);
+	  printf("Client ist Spieler 1 und hat den Namen %s\n",shm_pointer->client.spielername);
+	  printf("Der Gegner ist Spieler 2 und hat den Namen %s\n",shm_pointer-> opponent.spielername);
 	  }
 	  else{
-	  printf("Client ist Spieler 2 und hat den Namen %s",shm_pointer->client.spielername);
-	  printf("Der Gegner ist Spieler 1 und hat den Namen %s",shm_pointer-> opponent.spielername);
+	  printf("Client ist Spieler 2 und hat den Namen %s\n",shm_pointer->client.spielername);
+	  printf("Der Gegner ist Spieler 1 und hat den Namen %s\n",shm_pointer-> opponent.spielername);
 	  }
 	  
 	//---------Entscheiden Move oder wait-----------------

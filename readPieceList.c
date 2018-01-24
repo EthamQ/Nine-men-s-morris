@@ -123,7 +123,7 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 	return 0;
 }
 
-int read_ready_status(char* piecelist){
+int read_ready_status(char* piecelist, struct SHM_data* shm_pointer){
 	int array_length = strlen(piecelist);
 	char *search = "+ ENDPLAYERS";
 	int search_length = strlen(search);
@@ -148,7 +148,30 @@ int read_ready_status(char* piecelist){
 	
 	pos_text = pos_text-13;
 	printf("ready: %c\n",piecelist[pos_text]);
-	return 0;
+	
+	int i = pos_text;
+	while(piecelist[i] != '+'){
+		//printf("[%c]", piecelist[i]);
+		i--;
+	}
+	printf("\n");
+	i=i+4;
+	int j = 0;
+	char *temp =malloc(30);
+	while(i<(pos_text-1)){
+		//printf("[%c]", piecelist[i]);
+		temp[j++] = piecelist[i++];
+	}
+	temp[j] = '\0';
+	stpcpy(shm_pointer->opponent.spielername, temp);
+	
+	//printf("Opponent SPielername: %s\n", temp);
+	//char *spielername = malloc(sizeof(temp));
+	//strcpy(spielername,temp);
+	//printf("Opponent SPielername: %s\n", spielername);
+	//free(spielername);
+	free(temp);
+	return (int)(piecelist[pos_text]-'0');
 }
 //"Spielfeld" ausgeben
 /*void printt(int fieldd[3][8]){
@@ -230,7 +253,7 @@ int read_ready_status(char* piecelist){
 		 if(plNR == 0 || plNR == 1){
 		 shm_pointer->client.spielernummer = plNR;
 		 shm_pointer->opponent.spielernummer = 1-plNR;		
-		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist);		 		 
+		 shm_pointer->opponent.flag_registriert = read_ready_status(piecelist, shm_pointer);		 		 
 		 read_player_name(piecelist, shm_pointer);
 		 //printf("ready %i\n", shm_pointer->client.flag_registriert);
 		 }

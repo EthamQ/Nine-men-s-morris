@@ -28,7 +28,7 @@
 
 int pipeFd[2];
 int shmid;
-sem_t semaphore;
+
 
 //Connect to the server and return the socket file descriptor
 int initConnect(){
@@ -166,21 +166,19 @@ int fork_thinker_connector(){
 
 	size_t shm_size = sizeof(struct SHM_data);
 	shmid = shmget(IPC_PRIVATE, shm_size, IPC_CREAT | 0666);
-	if (shmid >= 0) {
+	if (shmid < 0) {
+		perror("Fehler bei shm id\n");
+	}
   	struct SHM_data* shm_p = shmat(shmid,  0, 0);
   	if (shm_p ==(void *)-1){
   	   perror("shmat failed");
+	   return ERROR;
   	}
-    else {
-  	   shmdt(shm_p);
-  	}
-  }
-	else{
-	/* shmget lief schief */
-	perror("shmget failed");
-	return ERROR;
-}
+	
 
+//sem_t semaphore = shm_p->semaphore;
+sem_init(&(shm_p->semaphore),0,1);
+shmdt(shm_p);
 
 	//FORK
   switch(pid = fork()){
@@ -197,6 +195,10 @@ int fork_thinker_connector(){
   		
 		
 		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		if (shm_pointer ==(void *)-1){
+  	   perror("shmat failed");
+	   return ERROR;
+  	}
 		shm_pointer->flag_think = 0;
 	  	shm_pointer->pid_connector = getpid();
 	  	shm_pointer->pid_thinker = getppid();
@@ -210,9 +212,7 @@ int fork_thinker_connector(){
         	perror("\nfork_thinker_connector(): Fehler bei initConnect\n");
         	return -1;
   		 }
-       else{
-          //printf("\nfork_thinker_connector(): initConnect success\n");
-  	   }
+      
   	 	 //printf("-Start performConnection-\n");
 
   	    //Prologphase und senden des ersten THINKING Befehls falls Server move sendet
@@ -263,7 +263,7 @@ int fork_thinker_connector(){
 					}
 					shm_pointer->flag_think = 0;
 					drawField(shm_pointer);
-					sem_post(&semaphore);
+					sem_post(&(shm_pointer->semaphore));
 					break;
 
 		case WAIT: break;
@@ -289,7 +289,7 @@ int fork_thinker_connector(){
 	close(close(pipeFd[0]));
 	exit(0);
 	 //>>=======THINKER=======<<
-	sem_wait(&semaphore);
+	sem_wait(&(shm_pointer->semaphore));
   default: //printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 		printf(" ");
 	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
@@ -313,10 +313,11 @@ int fork_thinker_connector(){
 			if(sigaction(SIGUSR2, &sa , NULL ) < 0){ //Bei success 0, sonst -1
 				perror("Fehler bei sigaction SIGURS2");
 			}
-			wait(NULL);
+			
       	break;
   	}
   	free(movePipe);
+	wait(NULL);
   	return 0;
 }
 
@@ -374,11 +375,9 @@ int main(int argc, char *argv[]){
   }
   if(read_configfile(parGameId, parPlayerNumber, parConfigFileLocation) == -1){
     perror("Terrible Failure in readConfig.c , THINKCON");
-    return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
+    return ERROR;
   }
 
-	
-	sem_init(&semaphore,0,1);
- fork_thinker_connector();
+	fork_thinker_connector();
 return 0;
 }

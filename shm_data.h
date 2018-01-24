@@ -1,6 +1,8 @@
 #ifndef SHM_DATA
 #define SHM_DATA
 #include "constants.h"
+#include <semaphore.h>
+#include <sys/sem.h>
 
 #define SPIELNAME 0
 #define FIELD 1
@@ -23,6 +25,7 @@ int capture_status;
 int flag_think;
 struct spieler client;
 struct spieler opponent;
+sem_t semaphore;
 };
 
 
