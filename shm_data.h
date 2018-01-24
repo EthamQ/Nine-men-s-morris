@@ -34,5 +34,6 @@ extern int attachSHM();
 extern void writeSHM(struct SHM_data* shm_pointer, char* data, int flag);
 extern void readSHM(struct SHM_data* shm_pointer);
 void read_piecelist(struct SHM_data* shm_pointer, char* piecelist);
+void read_winner(char* piecelist, struct SHM_data* shm_pointer);
 
 #endif

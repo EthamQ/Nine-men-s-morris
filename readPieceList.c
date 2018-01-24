@@ -123,6 +123,48 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 	return 0;
 }
 
+void read_winner(char* piecelist, struct SHM_data* shm_pointer){
+	int array_length = strlen(piecelist);
+	char *search = "PLAYER0WON ";
+	
+	int search_length = strlen(search);
+	int pos_text;
+	int pos_search = 0;
+    for (pos_text = 0; pos_text < array_length; pos_text++){
+        if(piecelist[pos_text] == search[pos_search]){
+            pos_search++;
+            if(pos_search == search_length){
+                // match
+				break;
+            }
+		}
+        else{
+           pos_text -= pos_search;
+           pos_search = 0;
+        }
+    }
+	if(shm_pointer->client.spielernummer == 0){
+		if(piecelist[pos_text+1] == 'Y'){
+			printf("Client hat gewonnen\n");
+		}
+		else{
+			printf("Gegner hat gewonnen\n");
+		}
+	}
+	else{
+		if(piecelist[pos_text+1] == 'Y'){
+			printf("Gegner hat gewonnen\n");
+		}
+		else{
+			printf("Client hat gewonnen\n");
+			
+		}
+	}
+
+}
+
+
+
 int read_ready_status(char* piecelist, struct SHM_data* shm_pointer){
 	int array_length = strlen(piecelist);
 	char *search = "+ ENDPLAYERS";

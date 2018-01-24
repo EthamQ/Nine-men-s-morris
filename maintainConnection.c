@@ -69,6 +69,7 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 
 	if(strstr(serverResponse,"+ GAMEOVER")){
 		//printf("\nmaintainConnection(): received +GAMEOVER from the server\n");
+		read_winner(serverResponse, shm_pointer);
 		free(serverResponse);
 		return GAMEOVER;
 	}

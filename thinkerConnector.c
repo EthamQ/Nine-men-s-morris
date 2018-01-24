@@ -271,13 +271,12 @@ shmdt(shm_p);
 		case MOVEOK: break;
 
 		case GAMEOVER:
-		printf("S: GAMEOVER");
 		close(close(pipeFd[0]));
 		exit(0);
 		break;
 
 		case ERROR:
-		printf("CASE ERROR");
+		printf("Es ist ein Fehler aufgetreten beim Einlesen des Servernachricht\n");
 		close(close(pipeFd[0]));
 		exit(0);
 		break;
