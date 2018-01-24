@@ -17,6 +17,7 @@
 #include <semaphore.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+#include <sys/epoll.h>
 //included Headerfiles
 #include "performConnection.h"
 #include "shm_data.h"
@@ -28,6 +29,8 @@
 
 int pipeFd[2];
 int shmid;
+int epfd;
+struct epoll_event ev;
 
 
 //Connect to the server and return the socket file descriptor
@@ -117,6 +120,9 @@ static void signalHandlerThinker(int signalNum){
 	//Sendet entsprechendes Signal an den Thinker und liest dann den Spielzug aus der pipe
 	//und sendet ihn an conPlay, der die passende Nachricht an den Server sendet
 	void send_signal(int sockfd, int task, char* movePipe){
+		/*if(epoll_wait(epfd, &ev, 3000, 3000) < 0){
+			perror("Fehler bei epoll wait\n");
+		}*/
 	if(task == MOVE){
 			//SIGUSR1 Signal an den thinker
 			if(kill(getppid(),SIGUSR1)<0){
@@ -150,7 +156,7 @@ int fork_thinker_connector(){
 
   //Fork Variablen
   pid_t pid;
-  int sockfd;
+  int sockfd = -1;
 
   //Pipe BUFFER
   char *movePipe=malloc(PIPE_BUF);
@@ -179,6 +185,17 @@ int fork_thinker_connector(){
 //sem_t semaphore = shm_p->semaphore;
 sem_init(&(shm_p->semaphore),0,1);
 shmdt(shm_p);
+
+//Pipe epoll
+epfd = epoll_create(3000);
+if(epfd < 0){
+	perror("epoll Fehler\n");
+}
+	ev.events = EPOLLIN | EPOLLPRI | EPOLLERR | EPOLLHUP;
+	ev.data.fd = sockfd;
+if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
+	perror("Fehler bei epoll_ctl\n");
+}
 
 	//FORK
   switch(pid = fork()){
@@ -272,6 +289,7 @@ shmdt(shm_p);
 		case GAMEOVER:
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
+		close(epfd);
 		exit(0);
 		break;
 
@@ -279,6 +297,7 @@ shmdt(shm_p);
 		printf("Es ist ein Fehler aufgetreten beim Einlesen des Servernachricht\n");
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
+		close(epfd);
 		exit(0);
 		break;
 		}
@@ -319,6 +338,7 @@ shmdt(shm_p);
   	}
   	free(movePipe);
 	shmctl(shmid, IPC_RMID, NULL);
+	close(epfd);
 	wait(NULL);
   	return 0;
 }
