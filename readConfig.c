@@ -10,6 +10,7 @@
 #define paraGAMEID 4
 #define paraPLAYERNUMBER 6
 #define paraVERSION 7
+#define paraCOUNT 8
 
 char isGameidAlreadyDefined[BUFFER_SIZE] = " ";
 char isPlayernumberAlreadyDefined[BUFFER_SIZE] = " ";
@@ -49,6 +50,9 @@ short tellParam(char* para){
 	}
 	if( (strcmp(para,"version") == 0) || (strcmp(para,"gameversion") == 0) || (strcmp(para,"gamerVersion") == 0) || (strcmp(para,"GAMEVERSION") == 0) || (strcmp(para,"VERSION") == 0) || (strcmp(para,"Version") == 0) ){
 		return paraVERSION;
+	}
+	if( (strcmp(para,"playercount") == 0) || (strcmp(para,"playerCount") == 0) || (strcmp(para,"PLAYERCOUNT") == 0) || (strcmp(para,"anzahlspieler") == 0) ){
+		return paraCOUNT;
 	}
 	return -1;
 }
@@ -122,6 +126,9 @@ int assignParameters(char* ParameterLine){
 										strcat(gamverval,assValue);
 										strcat(gamverval,"\n");
 										strcpy(confiConst.gameVersion, gamverval);
+										break;
+			case paraCOUNT:
+										strcpy(confiConst.playerCount, assValue);
 										break;
 		 	default:
 										//printf("Parameter nicht erkannt: \"%s\" \n",assParameter);
@@ -214,7 +221,7 @@ short checkStructurComplete(){
 int read_configfile(char* paragameID, char* paraplayerNumber, char* configFileName){
 FILE* file;
 char* filepath = configFileName;
-	//printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
+	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(paragameID," ") != 0){
