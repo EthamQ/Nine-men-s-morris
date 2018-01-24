@@ -137,7 +137,7 @@ static void signalHandlerThinker(int signalNum){
 			perror("Fehler bei Senden von SIGUSR2 an den Thinker\n");
 			}
 			//Aus der Pipe den Spielzug lesen
-			if((read (pipeFd[0], movePipe, PIPE_BUF)) >0){
+			if((read (pipeFd[0], movePipe, PIPE_BUF)) <0){
 				perror("Spielzug konnte nicht aus der Pipe gelesen werden");
 			}
 			if(send_move_to_server(sockfd, movePipe) == ERROR){
@@ -233,7 +233,6 @@ shmdt(shm_p);
 	  while(1){
 		switch(maintainConnection(sockfd, shm_pointer)){
 		case MOVE:
-				printf("Client ist am Zug");
 				shm_pointer->flag_think = 1;
 				if(shm_pointer->capture_status == 0){
 				send_signal(sockfd, MOVE, movePipe);
@@ -272,12 +271,14 @@ shmdt(shm_p);
 
 		case GAMEOVER:
 		close(close(pipeFd[0]));
+		shmctl(shmid, IPC_RMID, NULL);
 		exit(0);
 		break;
 
 		case ERROR:
 		printf("Es ist ein Fehler aufgetreten beim Einlesen des Servernachricht\n");
 		close(close(pipeFd[0]));
+		shmctl(shmid, IPC_RMID, NULL);
 		exit(0);
 		break;
 		}
@@ -286,6 +287,7 @@ shmdt(shm_p);
 
         
 	close(close(pipeFd[0]));
+	shmctl(shmid, IPC_RMID, NULL);
 	exit(0);
 	 //>>=======THINKER=======<<
 	sem_wait(&(shm_pointer->semaphore));
@@ -316,6 +318,7 @@ shmdt(shm_p);
       	break;
   	}
   	free(movePipe);
+	shmctl(shmid, IPC_RMID, NULL);
 	wait(NULL);
   	return 0;
 }
@@ -361,7 +364,8 @@ int main(int argc, char *argv[]){
                 }
                 break;
       default:
-                perror("Fehler: ungueltiger Parameter, THINKCON");
+	  printf(" ");
+                //perror("Fehler: ungueltiger Parameter, THINKCON");
     }
   }
   if( (strcmp(parPlayerNumber,"1") == 0) || (strcmp(parPlayerNumber,"2") == 0) ){

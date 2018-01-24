@@ -351,6 +351,7 @@ char* think_new(struct SHM_data* shm_pointer){
 				//print(shm_pointer->field);
 				create_PLAY_command(play_command, x, y);
 				shm_pointer->field[x][y] = PLAYER_CLIENT;
+				printf("Client ist am Zug\n");
 				printf("Client legt einen Stein auf %c%i\n",buchstabe(x),y);	
 				return play_command;
 			}
@@ -368,6 +369,7 @@ char* think_new(struct SHM_data* shm_pointer){
 			create_MOVE_command(move_command, FROM[0], FROM[1], TO[0], TO[1]);
 			shm_pointer->field[FROM[0]][FROM[1]]= EMPTY;
 			shm_pointer->field[TO[0]][TO[1]]= PLAYER_CLIENT;
+			printf("Client ist am Zug\n");
 			printf("Client bewegt einen Stein von %c%i zu %c%i\n",buchstabe(FROM[0]),FROM[1],buchstabe(TO[0]),TO[1]);
 			return move_command;
 		}
@@ -376,6 +378,7 @@ char* think_new(struct SHM_data* shm_pointer){
 		create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
 		shm_pointer->field[FROM[0]][FROM[1]]= EMPTY;
 		shm_pointer->field[TO[0]][TO[1]]= PLAYER_CLIENT;
+		printf("Client ist am Zug\n");
 		printf("Client bewegt einen Stein von %c%i zu %c%i\n",buchstabe(FROM[0]),FROM[1],buchstabe(TO[0]),TO[1]);			
 		return play_command;
 		}
@@ -396,6 +399,7 @@ char* think_new(struct SHM_data* shm_pointer){
 				create_PLAY_command(play_command, x, y);
 				shm_pointer->field[x][y] = EMPTY;
 				printf("\nCapture command: %s\n", play_command);
+				printf("Client ist am Zug\n");
 				printf("Client wirft gegnerischen Stein bei %c%i\n",buchstabe(x),y);
 				return play_command;
 			}

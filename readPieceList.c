@@ -189,7 +189,8 @@ int read_ready_status(char* piecelist, struct SHM_data* shm_pointer){
 
 	
 	pos_text = pos_text-13;
-	printf("ready: %c\n",piecelist[pos_text]);
+	shm_pointer->opponent.flag_registriert = (piecelist[pos_text] -'0');
+
 	
 	int i = pos_text;
 	while(piecelist[i] != '+'){

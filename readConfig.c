@@ -124,7 +124,7 @@ int assignParameters(char* ParameterLine){
 										strcpy(confiConst.gameVersion, gamverval);
 										break;
 		 	default:
-										printf("Parameter nicht erkannt: \"%s\" \n",assParameter);
+										//printf("Parameter nicht erkannt: \"%s\" \n",assParameter);
 										break;
 		}
 	return 0;
@@ -227,10 +227,10 @@ char* filepath = configFileName;
 //Datei oeffnen und ueberpruefen ob es die datei gibt, falls nicht wird client.conf eingelesen
 	file = fopen(filepath, "r");
 	if(file == NULL){
-		printf("\ninvalid configfilename or path, opening client.conf instead\n\n");
+		//printf("\ninvalid configfilename or path, opening client.conf instead\n\n");
 		file=fopen("client.conf","r");
 		if(file == NULL){
-			perror("client.conf does not exist either D: , READCONF");
+			//perror("client.conf does not exist either D: , READCONF");
 			return -1;
 		}
 		else{

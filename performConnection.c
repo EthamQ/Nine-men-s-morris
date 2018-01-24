@@ -144,7 +144,7 @@ int performConnection(int sockfd, struct SHM_data* shm_pointer){
 	  }
 	  else {
 		printf("\nGegner ist noch nicht bereit\n");	
-		printf("servermessage:%s",dataPRS);
+		//printf("servermessage:%s",dataPRS);
 	  }
 	  read_piecelist(shm_pointer,dataPRS);
 
