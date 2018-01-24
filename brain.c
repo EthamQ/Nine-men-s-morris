@@ -254,31 +254,6 @@ void move(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2], int movetype){
 }
 
 
-	//an ein benachbartes freies Feld ziehen
-void movee(int field[ZEILEN][SPALTEN], int FROM[2], int TO[2]){
-	printf("\nFunction move:\n");
-	int x;
-	int y;
-	//bewegt zufälligen Client Stein
-	while(1){
-			x = rand()%ZEILEN;
-			y = rand()%SPALTEN;
-			if(field[x][y] == PLAYER_CLIENT){
-			int new_position[2];
-			int free = free_pos(field, new_position, x, y);
-			if(free){
-				//Füllen der Arrayposition für think_new()
-				FROM[0] = x;
-				FROM[1] = y;
-				TO[0] = new_position[0];
-				TO[1] = new_position[1];
-				return;
-			}
-		}
-	}
-}
-
-
 
 
 //Macht aus einem x und y Wert einen PLAY command für den Server, zb PLAY A1
@@ -296,7 +271,6 @@ void create_PLAY_command(char* pos, int x, int y){
 	//int zu char
 	sprintf(number_extension, "%i\n", y); 
 	strcat(pos, number_extension);
-	printf("%i\n",y);
 }
 
 //Macht aus jeweils 2 x und y Werten einen PLAY command(von einem Feld auf ein anderes ziehen) für den Server, zb PLAY A1:A2
@@ -334,14 +308,14 @@ int count_number_of(int type, struct SHM_data* shm_pointer){
 	int counter = 0;
 	switch(type){
 		case EMPTY:
-												lookfor = EMPTY;
-												break;
+		lookfor = EMPTY;
+		break;
 		case PLAYER_CLIENT:
-												lookfor = PLAYER_CLIENT;
-												break;
+		lookfor = PLAYER_CLIENT;
+		break;
 		case PLAYER_OPPONENT:
-												lookfor = PLAYER_OPPONENT;
-												break;
+		lookfor = PLAYER_OPPONENT;
+		break;
 		}
 
 		for(int x = 0; x<ZEILEN; x++){
