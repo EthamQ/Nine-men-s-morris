@@ -388,7 +388,7 @@ char* think_new(struct SHM_data* shm_pointer){
 		int TO[2];
 		//int number =3;
 		int number = count_number_of(PLAYER_CLIENT, shm_pointer);
-		printf("\nJetzt alle Spielsteine gesetzt. So viele Spielsteine sind noch auf dem Feld: %i\n", number);
+		//printf("\nJetzt alle Spielsteine gesetzt. So viele Spielsteine sind noch auf dem Feld: %i\n", number);
 		if(number > 3){
 			move(shm_pointer->field, FROM, TO, NEIGHBOURING);
 			create_MOVE_command(move_command, FROM[0], FROM[1], TO[0], TO[1]);

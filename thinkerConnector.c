@@ -14,10 +14,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/shm.h>
-
-//included Headerfiles
+#include <semaphore.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+//included Headerfiles
 #include "performConnection.h"
 #include "shm_data.h"
 #include "drawfield.h"
@@ -28,6 +28,7 @@
 
 int pipeFd[2];
 int shmid;
+sem_t semaphore;
 
 //Connect to the server and return the socket file descriptor
 int initConnect(){
@@ -144,7 +145,6 @@ static void signalHandlerThinker(int signalNum){
 			}
 		}
 	}
-
 int fork_thinker_connector(){
   //printf("\nStarte fork_thinker_connector\n");
 
@@ -181,8 +181,6 @@ int fork_thinker_connector(){
 	return ERROR;
 }
 
-semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
-
 
 	//FORK
   switch(pid = fork()){
@@ -196,8 +194,10 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
     case 0:
       //printf("Kindprozess(Connector) mit der id %d und der Variable pid = %d. Mein Elternprozess ist: %d\n", getpid(), pid, getppid());
         printf(" ");
-  		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-		 shm_pointer->flag_think = 0;
+  		
+		
+		struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+		shm_pointer->flag_think = 0;
 	  	shm_pointer->pid_connector = getpid();
 	  	shm_pointer->pid_thinker = getppid();
 		//Schreibseite der Pipe schliessen
@@ -263,6 +263,7 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 					}
 					shm_pointer->flag_think = 0;
 					drawField(shm_pointer);
+					sem_post(&semaphore);
 					break;
 
 		case WAIT: break;
@@ -281,13 +282,14 @@ semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL);
 		exit(0);
 		break;
 		}
-
+		
 	  }
 
-      
+        
 	close(close(pipeFd[0]));
 	exit(0);
 	 //>>=======THINKER=======<<
+	sem_wait(&semaphore);
   default: //printf("Elternprozess(Thinker) mit der id %d und der Variable pid = %d. MeinElternprozess ist: %d\n", getpid(), pid, getppid());
 		printf(" ");
 	struct SHM_data* shm_pointer_t = shmat(shmid, NULL, 0);
@@ -375,6 +377,8 @@ int main(int argc, char *argv[]){
     return -1; //TODO vllt einfach iwleche standardwerte assignen, statt abzustuerzen ???
   }
 
+	
+	sem_init(&semaphore,0,1);
  fork_thinker_connector();
 return 0;
 }
