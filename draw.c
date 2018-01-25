@@ -8,6 +8,8 @@
 #include "shm_data.h"
 #define zeilen 15
 #define spalten 40
+#define ME '#'
+#define OPPONENT '@'
 
 void drawField(struct SHM_data* shm_pointer){
 
@@ -125,170 +127,170 @@ void drawField(struct SHM_data* shm_pointer){
 
 
       if(shm_pointer->field[0][0]==1){
-        field[0][0]='#';
+        field[0][0]=ME;
         field[0][1]='-';
       }if (shm_pointer->field[0][0]==2){
-        field[0][0]='@';
+        field[0][0]=OPPONENT;
         field[0][1]='-';
       }
       if(shm_pointer->field[0][1]==1){
-        field[0][19]='#';
+        field[0][19]=ME;
         field[0][20]='-';
       }if (shm_pointer->field[0][1]==2){
-        field[0][19]='@';
+        field[0][19]=OPPONENT;
         field[0][20]='-';
       }
       if(shm_pointer->field[0][2]==1){
         field[0][38]='-';
-        field[0][39]='#';
+        field[0][39]=ME;
       }if (shm_pointer->field[0][2]==2){
          field[0][38]='-';
-        field[0][39]='@';
+        field[0][39]=OPPONENT;
       }
       if(shm_pointer->field[0][3]==1){
         field[7][38]='-';
-        field[7][39]='#';
+        field[7][39]=ME;
       }if (shm_pointer->field[0][3]==2){
         field[7][38]='-';
-        field[7][39]='@';
+        field[7][39]=OPPONENT;
       }
       if(shm_pointer->field[0][4]==1){
         field[14][38]='-';
-        field[14][39]='#';
+        field[14][39]=ME;
       }if (shm_pointer->field[0][4]==2){
         field[14][38]='-';
-        field[14][39]='@';
+        field[14][39]=OPPONENT;
 
       }
       if(shm_pointer->field[0][5]==1){
-        field[14][19]='#';
+        field[14][19]=ME;
         field[14][20]='-';
       }if (shm_pointer->field[0][5]==2){
-        field[14][19]='@';
+        field[14][19]=OPPONENT;
         field[14][20]='-';
       }
       if(shm_pointer->field[0][6]==1){
-        field[14][0]='#';
+        field[14][0]=ME;
         field[14][1]='-';
       }if (shm_pointer->field[0][6]==2){
-        field[14][0]='@';
+        field[14][0]=OPPONENT;
         field[14][1]='-';
       } if(shm_pointer->field[0][7]==1){
-        field[7][0]='#';
+        field[7][0]=ME;
         field[7][1]='-';
       }if (shm_pointer->field[0][7]==2){
-        field[7][0]='@';
+        field[7][0]=OPPONENT;
         field[7][1]='-';
       }
       if(shm_pointer->field[1][0]==1){
-        field[2][7]='#';
+        field[2][7]=ME;
         field[2][8]='-';
       }if (shm_pointer->field[1][0]==2){
-        field[2][7]='@';
+        field[2][7]=OPPONENT;
         field[2][8]='-';
       }
       if(shm_pointer->field[1][1]==1){
-        field[2][19]='#';
+        field[2][19]=ME;
         field[2][20]='-';
       }if (shm_pointer->field[1][1]==2){
-        field[2][19]='@';
+        field[2][19]=OPPONENT;
         field[2][20]='-';
       }
       if(shm_pointer->field[1][2]==1){
         field[2][30]='-';
-        field[2][31]='#';
+        field[2][31]=ME;
       }if (shm_pointer->field[1][2]==2){
          field[2][30]='-';
-        field[2][31]='@';
+        field[2][31]=OPPONENT;
       }if(shm_pointer->field[1][3]==1){
         field[7][30]='-';
-        field[7][31]='#';
+        field[7][31]=ME;
       }if (shm_pointer->field[1][3]==2){
         field[7][30]='-';
-        field[7][31]='@';
+        field[7][31]=OPPONENT;
       }
       if(shm_pointer->field[1][4]==1){
         field[12][30]='-';
-        field[12][31]='#';
+        field[12][31]=ME;
       }if (shm_pointer->field[1][4]==2){
         field[12][30]='-';
-        field[12][31]='@';
+        field[12][31]=OPPONENT;
       }if(shm_pointer->field[1][5]==1){
-        field[12][19]='#';
+        field[12][19]=ME;
         field[12][20]='-';
       }if (shm_pointer->field[1][5]==2){
-        field[12][19]='@';
+        field[12][19]=OPPONENT;
         field[12][20]='-';
       }
       if(shm_pointer->field[1][6]==1){
-        field[12][7]='#';
+        field[12][7]=ME;
         field[12][8]='-';
       }if (shm_pointer->field[1][6]==2){
-        field[12][7]='@';
+        field[12][7]=OPPONENT;
         field[12][8]='-';
       }
       if(shm_pointer->field[1][7]==1){
-        field[7][7]='#';
+        field[7][7]=ME;
         field[7][8]='-';
       }if (shm_pointer->field[1][7]==2){
-        field[7][7]='@';
+        field[7][7]=OPPONENT;
         field[7][8]='-';
       }
       if(shm_pointer->field[2][0]==1){
-        field[5][12]='#';
+        field[5][12]=ME;
         field[5][13]='-';
       }if (shm_pointer->field[2][0]==2){
-        field[5][12]='@';
+        field[5][12]=OPPONENT;
         field[5][13]='-';
       }
       if(shm_pointer->field[2][1]==1){
-        field[5][19]='#';
+        field[5][19]=ME;
         field[5][20]='-';
       }if (shm_pointer->field[2][1]==2){
-        field[5][19]='@';
+        field[5][19]=OPPONENT;
         field[5][20]='-';
       }
       if(shm_pointer->field[2][2]==1){
         field[5][25]='-';
-        field[5][26]='#';
+        field[5][26]=ME;
       }if (shm_pointer->field[2][2]==2){
         field[5][25]='-';
-        field[5][26]='@';
+        field[5][26]=OPPONENT;
       }
       if(shm_pointer->field[2][3]==1){
         field[7][25]='-';
-        field[7][26]='#';
+        field[7][26]=ME;
       }if (shm_pointer->field[2][3]==2){
         field[7][25]='-';
-        field[7][26]='@';
+        field[7][26]=OPPONENT;
       }
       if(shm_pointer->field[2][4]==1){
-        field[9][25]='#';
+        field[9][25]=ME;
         field[9][26]='-';
       }if (shm_pointer->field[2][4]==2){
-        field[9][25]='@';
+        field[9][25]=OPPONENT;
         field[9][26]='-';
       }
       if(shm_pointer->field[2][5]==1){
-        field[9][19]='#';
+        field[9][19]=ME;
         field[9][20]='-';
       }if (shm_pointer->field[2][5]==2){
-        field[9][19]='@';
+        field[9][19]=OPPONENT;
         field[9][20]='-';
       }
       if(shm_pointer->field[2][6]==1){
-        field[9][12]='#';
+        field[9][12]=ME;
         field[9][13]='-';
       }if (shm_pointer->field[2][6]==2){
-        field[9][12]='@';
+        field[9][12]=OPPONENT;
         field[9][13]='-';
       }
 
       if(shm_pointer->field[2][7]==1){
-        field[7][12]='#';
+        field[7][12]=ME;
         field[7][13]='-';
       }if (shm_pointer->field[2][7]==2){
-        field[7][12]='@';
+        field[7][12]=OPPONENT;
         field[7][13]='-';
       }
 
