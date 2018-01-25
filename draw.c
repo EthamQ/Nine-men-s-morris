@@ -9,7 +9,7 @@
 #define zeilen 15
 #define spalten 40
 #define ME "#"
-#define OPPONENT "@"
+#define OPPONENT "\033[31m @ \033[0m"
 #define ZEILENGRAFIK "-"
 #define SPALTENGRAFIK "|"
 
