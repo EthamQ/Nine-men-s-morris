@@ -216,9 +216,13 @@ if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
   	   perror("shmat failed");
 	   return ERROR;
   	}
+	
+	//fill shared memory
 		shm_pointer->flag_think = 0;
 	  	shm_pointer->pid_connector = getpid();
 	  	shm_pointer->pid_thinker = getppid();
+		shm_pointer->anzahl_spieler = (int)(confiConst.playerCount[0] - '0');
+		printf("Player count %i\n", shm_pointer->anzahl_spieler);
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
