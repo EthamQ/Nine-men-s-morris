@@ -337,10 +337,11 @@ char* think_new(struct SHM_data* shm_pointer){
 	}
 	//printf("think new hat folgenden Pointer erhalten: %p", shm_pointer);
 	//play_command den man returned
-	char* play_command = malloc(SIZE_PLAY_COMMAND);
+	
 
 	//stone on random empty position if not every stone is placed yet
 	if(shm_pointer->used_pieces < NUMBER_STONES){
+		char* play_command = malloc(SIZE_PLAY_COMMAND);
 		/* Intializes random number generator */
 		time_t t;
 		srand((unsigned) time(&t));
@@ -358,7 +359,7 @@ char* think_new(struct SHM_data* shm_pointer){
 		}
 	}
 	else{
-		char *move_command = malloc(SIZE_PLAY_COMMAND);
+		char *move_command = malloc(SIZE_MOVE_COMMAND);
 		int FROM[2];
 		int TO[2];
 		//int number =3;
@@ -375,15 +376,16 @@ char* think_new(struct SHM_data* shm_pointer){
 		}
 		else if(number == 3){
 		move(shm_pointer->field, FROM, TO, RANDOM);
-		create_MOVE_command(play_command, FROM[0], FROM[1], TO[0], TO[1]);
+		create_MOVE_command(move_command, FROM[0], FROM[1], TO[0], TO[1]);
 		shm_pointer->field[FROM[0]][FROM[1]]= EMPTY;
 		shm_pointer->field[TO[0]][TO[1]]= PLAYER_CLIENT;
 		printf("Client ist am Zug\n");
 		printf("Client bewegt einen Stein von %c%i zu %c%i\n",buchstabe(FROM[0]),FROM[1],buchstabe(TO[0]),TO[1]);			
-		return play_command;
+		return move_command;
 		}
 	}
-	return play_command;
+	return " ";
+	
 }
 
 	//Wird aufgerufen wenn ein Stein des Gegner geschmissen werden soll

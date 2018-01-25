@@ -35,8 +35,8 @@ struct epoll_event ev;
 
 //Connect to the server and return the socket file descriptor
 int initConnect(){
-      int sockfd;
-      int rv;
+      int sockfd = 0;
+      int rv = 0;
 
       char gameKindNameBuffer[BUFFER_SIZE];
       char portNumberBuffer[BUFFER_SIZE];
@@ -89,7 +89,7 @@ short sendMove(){
        perror("Fehler beim Schreiben des Spielzugs in die pipe\n");
        return ERROR;
     }
-  free(pipeBuffer);
+ 
   return 0;
 }
 
@@ -102,8 +102,7 @@ short sendCaptureMove(){
 		  perror("Fehler beim Schreiben des CAPTURE Spielzugs in die pipe\n");
 		  return -1;
     }
-
-	free(pipeBuffer);
+	
 	return 0;
 }
 
@@ -294,6 +293,7 @@ if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
 		close(epfd);
+		free(movePipe);
 		exit(0);
 		break;
 
@@ -302,6 +302,7 @@ if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
 		close(epfd);
+		free(movePipe);
 		exit(0);
 		break;
 		}
@@ -348,10 +349,10 @@ if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
 }
 
 int main(int argc, char *argv[]){
-  short paras;
-  char parGameId[BUFFER_SIZE];
-  char parPlayerNumber[BUFFER_SIZE];
-  char parConfigFileLocation[BUFFER_SIZE];
+  short paras = 0;
+  char parGameId[BUFFER_SIZE]= " ";
+  char parPlayerNumber[BUFFER_SIZE] = " ";
+  char parConfigFileLocation[BUFFER_SIZE]= " ";
 
   //Auslesen der Parameter
   while( (paras = getopt(argc, argv, "c:g:p:")) != -1){

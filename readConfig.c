@@ -17,7 +17,7 @@ char isPlayernumberAlreadyDefined[BUFFER_SIZE] = " ";
 
 char* cleanBlankspace(char* toClean){
 	char* bufferChar = toClean;
-	char* toReturn;
+	char* toReturn = " ";
 	if((toClean == NULL) || (strcmp(bufferChar," ") == 0) || (strcmp(bufferChar,"\0") == 0)|| (strcmp(bufferChar,"") == 0)){
 		//printf("\nEinem Parameter wurde kein Wert zugewiesen, baeh\n");
 		return "";
@@ -220,8 +220,9 @@ short checkStructurComplete(){
 
 int read_configfile(char* paragameID, char* paraplayerNumber, char* configFileName){
 FILE* file;
-char* filepath = configFileName;
-	printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
+char* filepath = " ";
+filepath = configFileName;
+	//printf("\nREADCONF: parameter: gameID : \"%s\" ,playernumber : \"%s\" , configFileName: \"%s\" \n", paragameID,paraplayerNumber, configFileName);
 
 	//Pruefen ob parameter gameID und playernumber valide sind
 	if(strcmp(paragameID," ") != 0){

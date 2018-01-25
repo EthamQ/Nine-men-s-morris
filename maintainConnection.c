@@ -87,6 +87,5 @@ short send_move_to_server(int sockfd, char* move){
 	}
 	//printf("\nClient macht folgenden Zug %s\n", move);
 	//printf("length of this command: %zu", strlen(move));
-	free(move);
 	return 0;
 }

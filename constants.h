@@ -45,7 +45,8 @@ struct configConstants confiConst;
 #define A 0
 #define B 1
 #define C 2
-#define SIZE_PLAY_COMMAND 20
+#define SIZE_PLAY_COMMAND 9
+#define SIZE_MOVE_COMMAND 12
 #define RANDOM 0
 #define NEIGHBOURING 1
 

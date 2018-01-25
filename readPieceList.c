@@ -124,7 +124,8 @@ int read_player_name(char* piecelist, struct SHM_data* shm_pointer){
 }
 
 void read_winner(char* piecelist, struct SHM_data* shm_pointer){
-	int array_length = strlen(piecelist);
+	int array_length  = 0;
+ 	    array_length  = strlen(piecelist);
 	char *search = "PLAYER0WON ";
 	
 	int search_length = strlen(search);
