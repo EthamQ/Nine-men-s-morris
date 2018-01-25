@@ -14,4 +14,4 @@ clean:
 	rm -r -f sysprak-client
 
 val:
-	valgrind --leak-check=full --trace-children=yes ./sysprak-client
+	valgrind --leak-check=full --trace-children=yes --track-origins=yes ./sysprak-client
