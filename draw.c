@@ -9,7 +9,7 @@
 #define zeilen 15
 #define spalten 40
 #define ME "#"
-#define OPPONENT "\033[31m @ \033[0m"
+#define OPPONENT "@"
 #define ZEILENGRAFIK "-"
 #define SPALTENGRAFIK "|"
 
@@ -296,9 +296,9 @@ void drawField(struct SHM_data* shm_pointer){
         field[7][13]=ZEILENGRAFIK;
       }
 
-  for(i = 0; i<15; i++){
-    for(j = 0; j<40; j++){
-      if(j%40 == 0){ // ???
+  for(i = 0; i<zeilen; i++){
+    for(j = 0; j<spalten; j++){
+      if(j%spalten == 0){
         printf("\n");
       }
     printf("%s", field[i][j]);
