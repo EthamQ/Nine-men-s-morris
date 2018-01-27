@@ -216,7 +216,7 @@ shmdt(shm_p);
 	  	shm_pointer->pid_connector = getpid();
 	  	shm_pointer->pid_thinker = getppid();
 		shm_pointer->anzahl_spieler = (int)(confiConst.playerCount[0] - '0');
-		printf("Player count %i\n", shm_pointer->anzahl_spieler);
+		//printf("Player count %i\n", shm_pointer->anzahl_spieler);
 		//Schreibseite der Pipe schliessen
 		close(pipeFd[1]);
 
