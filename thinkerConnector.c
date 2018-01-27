@@ -30,7 +30,7 @@
 int pipeFd[2];
 int shmid;
 int epfd;
-struct epoll_event ev;
+struct epoll_event ev[2];
 
 
 //Connect to the server and return the socket file descriptor
@@ -119,7 +119,7 @@ static void signalHandlerThinker(int signalNum){
 	//Sendet entsprechendes Signal an den Thinker und liest dann den Spielzug aus der pipe
 	//und sendet ihn an conPlay, der die passende Nachricht an den Server sendet
 	void send_signal(int sockfd, int task, char* movePipe){
-		/*if(epoll_wait(epfd, &ev, 3000, 3000) < 0){
+		/*if(epoll_wait(epfd, &ev[1], 10, 3000) < 0){
 			perror("Fehler bei epoll wait\n");
 		}*/
 	if(task == MOVE){
@@ -185,16 +185,13 @@ int fork_thinker_connector(){
 sem_init(&(shm_p->semaphore),0,1);
 shmdt(shm_p);
 
-//Pipe epoll
-epfd = epoll_create(3000);
-if(epfd < 0){
-	perror("epoll Fehler\n");
-}
-	ev.events = EPOLLIN | EPOLLPRI | EPOLLERR | EPOLLHUP;
-	ev.data.fd = sockfd;
-if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
-	perror("Fehler bei epoll_ctl\n");
-}
+
+
+	
+	
+
+
+
 
 	//FORK
   switch(pid = fork()){
@@ -234,6 +231,34 @@ if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev) < 0){
   		 }
       
   	 	 //printf("-Start performConnection-\n");
+
+//Pipe epoll
+epfd = epoll_create1(0);
+if(epfd < 0){
+	perror("epoll create Fehler\n");
+}
+	
+
+	memset(&ev[0], 0, sizeof(struct epoll_event));
+	memset(&ev[1], 0, sizeof(struct epoll_event));
+
+	ev[0].events = EPOLLIN;
+	ev[0].data.fd = sockfd;
+
+	printf("sockfd: %i", sockfd);
+	if(epoll_ctl(epfd, EPOLL_CTL_ADD,sockfd, &ev[0])<0){
+	perror("ev0 ctl\n");
+	
+}
+
+	ev[1].events = EPOLLIN;
+	ev[1].data.fd = pipeFd[0];
+	printf("pipefd: %i", pipeFd[0]);
+	if(epoll_ctl(epfd, EPOLL_CTL_ADD, pipeFd[0], &ev[1])<0){
+	perror("ev1 ctl\n");
+}
+	
+
 
   	    //Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
