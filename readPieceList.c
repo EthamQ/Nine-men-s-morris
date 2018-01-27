@@ -321,7 +321,7 @@ int read_ready_status(char* piecelist, struct SHM_data* shm_pointer){
 
 		//9 Pieces Spieler A
 		while(n<9){
-		pos = read_piecelist_hidden(piecelist, "PIECE0,", pos, status);
+		pos = read_piecelist_hidden(piecelist, "PIECE0.", pos, status);
 		fill_array(playerA, status, shm_pointer);
 		n++;
 		}
@@ -329,7 +329,7 @@ int read_ready_status(char* piecelist, struct SHM_data* shm_pointer){
 		//9 Pieces Spieler B
 		n = 0;
 		while(n<9){
-		pos = read_piecelist_hidden(piecelist, "PIECE1,", pos, status);
+		pos = read_piecelist_hidden(piecelist, "PIECE1.", pos, status);
 		fill_array(playerB, status, shm_pointer);
 		n++;
 		}
