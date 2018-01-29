@@ -89,6 +89,7 @@ short sendMove(){
        perror("Fehler beim Schreiben des Spielzugs in die pipe\n");
        return ERROR;
     }
+free(pipeBuffer);
  
   return 0;
 }
@@ -102,6 +103,7 @@ short sendCaptureMove(){
 		  perror("Fehler beim Schreiben des CAPTURE Spielzugs in die pipe\n");
 		  return -1;
     }
+free(pipeBuffer);
 	
 	return 0;
 }

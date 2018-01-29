@@ -13,6 +13,7 @@
 
 int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	char *serverResponse=malloc(sizeof(char)*MES_LENGTH_SERVER);
+	memset(serverResponse, 0, MES_LENGTH_SERVER);
 
 	//Servernachricht auslesen
 	if((read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER))<0){
