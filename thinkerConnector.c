@@ -264,11 +264,13 @@ shmdt(shm_p);
   	    //Prologphase und senden des ersten THINKING Befehls falls Server move sendet
     	if(performConnection(sockfd, shm_pointer) == OKTHINK) {
 
+		char *movePipee=malloc(PIPE_BUF);
 			shm_pointer->flag_think = 1;
       		//Signal an Thinker senden, erster spielzug des spiels
-     		send_signal(sockfd, MOVE, movePipe);
+     		send_signal(sockfd, MOVE, movePipee);
 			shm_pointer->flag_think = 0;
 			drawField(shm_pointer);
+		free(movePipee);
   	}
 
 
@@ -280,6 +282,7 @@ shmdt(shm_p);
 		switch(maintainConnection(sockfd, shm_pointer)){
 		case MOVE:
 				shm_pointer->flag_think = 1;
+				char *movePipe=malloc(PIPE_BUF);
 				if(shm_pointer->capture_status == 0){
 				send_signal(sockfd, MOVE, movePipe);
 				}
@@ -309,6 +312,7 @@ shmdt(shm_p);
 					shm_pointer->flag_think = 0;
 					drawField(shm_pointer);
 					sem_post(&(shm_pointer->semaphore));
+					free(movePipe);
 					break;
 
 		case WAIT: break;
@@ -319,7 +323,6 @@ shmdt(shm_p);
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
 		close(epfd);
-		free(movePipe);
 		exit(0);
 		break;
 
@@ -328,7 +331,6 @@ shmdt(shm_p);
 		close(close(pipeFd[0]));
 		shmctl(shmid, IPC_RMID, NULL);
 		close(epfd);
-		free(movePipe);
 		exit(0);
 		break;
 		}
