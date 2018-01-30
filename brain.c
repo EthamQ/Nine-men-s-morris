@@ -384,7 +384,7 @@ char* think_new(struct SHM_data* shm_pointer){
 		return move_command;
 		}
 	}
-	return " ";
+	return NULL;
 	
 }
 

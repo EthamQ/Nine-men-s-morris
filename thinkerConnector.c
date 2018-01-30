@@ -82,28 +82,49 @@ return sockfd;
 }
 
 //Normalen Spielzug an Connector schicken / in die Pipe schreiben
-short sendMove(){
-  struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
-  char *pipeBuffer=think_new(shm_pointer);
-  if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
-       perror("Fehler beim Schreiben des Spielzugs in die pipe\n");
-       return ERROR;
+short sendMove() {
+    struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
+    char *pipeBuffer = think_new(shm_pointer);
+
+    if (pipeBuffer == NULL) {
+        return ERROR;
     }
-free(pipeBuffer);
- 
-  return 0;
+	int size = strlen(pipeBuffer) + 1;
+	printf("\nSize: %i\n", size);
+	
+	if(size == 9){
+   	 if (write(pipeFd[1], pipeBuffer, SIZE_PLAY_COMMAND) <= 0) {
+        perror("Fehler beim Schreiben des Spielzugs in die pipe\n");
+        free(pipeBuffer);
+        return ERROR;
+    }
+}
+	if(size == 12){
+   	 if (write(pipeFd[1], pipeBuffer, SIZE_MOVE_COMMAND) <= 0) {
+        perror("Fehler beim Schreiben des Spielzugs in die pipe\n");
+        free(pipeBuffer);
+        return ERROR;
+    }
+}
+
+    free(pipeBuffer);
+
+    return 0;
 }
 
 //Capture Spielzug an Connector schicken / in die Pipe schreiben
 short sendCaptureMove(){
 	struct SHM_data* shm_pointer = shmat(shmid, NULL, 0);
 	char *pipeBuffer = capture(shm_pointer);
-
-	if((write(pipeFd[1], pipeBuffer, PIPE_BUF))<=0){
-		  perror("Fehler beim Schreiben des CAPTURE Spielzugs in die pipe\n");
-		  return -1;
+if (pipeBuffer == NULL) {
+    return ERROR;
+}
+	if((write(pipeFd[1], pipeBuffer, SIZE_PLAY_COMMAND))<=0){
+		perror("Fehler beim Schreiben des CAPTURE Spielzugs in die pipe\n");
+		free(pipeBuffer);
+		  return ERROR;
     }
-free(pipeBuffer);
+	free(pipeBuffer);
 	
 	return 0;
 }
