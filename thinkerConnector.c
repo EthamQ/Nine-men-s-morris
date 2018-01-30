@@ -98,6 +98,7 @@ short sendMove() {
         free(pipeBuffer);
         return ERROR;
     }
+	printf("sendmove: %s\n", pipeBuffer);
 }
 	if(size == 12){
    	 if (write(pipeFd[1], pipeBuffer, SIZE_MOVE_COMMAND) <= 0) {
@@ -105,6 +106,7 @@ short sendMove() {
         free(pipeBuffer);
         return ERROR;
     }
+printf("sendmove2: %s\n", pipeBuffer);
 }
 
     free(pipeBuffer);
@@ -124,6 +126,7 @@ if (pipeBuffer == NULL) {
 		free(pipeBuffer);
 		  return ERROR;
     }
+printf("sendcapturemove: %s\n", pipeBuffer);
 	free(pipeBuffer);
 	
 	return 0;
@@ -318,7 +321,7 @@ shmdt(shm_p);
 					if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
 						perror("Fehler beim senden von THINKING");
 					}
-					//printf("C: %s", THINKING_MSG);
+					printf("case move C: %s\n", THINKING_MSG);
 
 				//receive OKTHINK
 					if(read(sockfd, server_Response, sizeof(char)*MES_LENGTH_SERVER) < 0){

@@ -1,0 +1,246 @@
+ 
+Client ist auf Version: VERSION 2.0
+
+Server benötigt Game-ID
+Spiel erstellt mit ID 21tdkpxuarpku
+
+Gespielt wird NMMorris
+Eingegebene Mitspielernummer: PLAYER 
+
+
+Gegner ist noch nicht bereit
+
+
+Steine des Clienten werden mit # markiert
+Client ist Spieler 1 und hat den Namen White Player
+Der Gegner ist Spieler 2 und hat den Namen Black Player
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1---------B2       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#-----C2    |       |
+|      |    |             |    |       |
+A7-----B7---C7           C3 --B3------A3
+|      |    |             |    |       |
+|      |    C6-----C5----C4    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      B6----------B5---------B4       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1---------B2       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#-----C2    |       |
+|      |    |             |    |       |
+A7-----B7---C7           C3 --B3------A3
+|      |    |             |    |       |
+|      |    #------C5----C4    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      B6----------B5----------@       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1---------B2       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#-----C2    |       |
+|      |    |             |    |       |
+A7-----B7---#-           C3 --B3------A3
+|      |    |             |    |       |
+|      |    #------C5----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      B6----------B5----------@       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#------#    |       |
+|      |    |             |    |       |
+A7-----B7---#-           C3 --B3------A3
+|      |    |             |    |       |
+|      |    #------C5----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      B6----------B5----------@       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#------#    |       |
+|      |    |             |    |       |
+A7-----B7---#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------C5----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------B5----------@       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------A1-----------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#------#    |       |
+|      |    |             |    |       |
+A7-----@----#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------#-----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------B5----------@       |
+|                  |                   |
+A6-----------------A5-----------------A4
+
+Steine des Clienten werden mit # markiert
+
+A0-----------------#------------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#------#    |       |
+|      |    |             |    |       |
+A7-----@----#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------#-----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------B5----------@       |
+|                  |                   |
+A6-----------------@------------------A4
+
+Steine des Clienten werden mit # markiert
+
+#------------------#------------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    C0-----#------#    |       |
+|      |    |             |    |       |
+A7-----@----#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------#-----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------@-----------@       |
+|                  |                   |
+A6-----------------@------------------A4
+
+Steine des Clienten werden mit # markiert
+
+#------------------#------------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    #------#------#    |       |
+|      |    |             |    |       |
+A7-----@----#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------#-----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------@-----------@       |
+|                  |                   |
+@------------------@------------------A4
+
+Steine des Clienten werden mit # markiert
+
+Steine des Clienten werden mit # markiert
+
+#------------------#------------------A2
+|                  |                   |
+|      B0----------B1----------@       |
+|      |           |           |       |
+|      |           |           |       |
+|      |    #------#------#    |       |
+|      |    |             |    |       |
+A7-----@----#-           C3 --B3-------@
+|      |    |             |    |       |
+|      |    #------#-----@-    |       |
+|      |           |           |       |
+|      |           |           |       |
+|      #-----------@-----------@       |
+|                  |                   |
+A6-----------------@------------------A4
+client ist Spieler 0
+Fehler bei Servermessage:- Did not expect response from client
+
+Es ist ein Fehler aufgetreten beim Einlesen des Servernachricht
+ Client ist am Zug
+Client legt einen Stein auf C1
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf C6
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf C7
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf C2
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf B6
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf C5
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf A1
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf A0
+
+Size: 9
+Client ist am Zug
+Client legt einen Stein auf C0
+
+Size: 9
+
+Capture command: PLAY A5
+
+Client ist am Zug
+Client wirft gegnerischen Stein bei A5
+
+Capture command: PLAY A6
+
+Client ist am Zug
+Client wirft gegnerischen Stein bei A6

@@ -27,9 +27,10 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	//send THINKING
 	//printf("\nmaintainConnection(): received +MOVE from the server\n");
 	if(write(sockfd, THINKING_MSG, (int)strlen(THINKING_MSG)) <0){
+	
 		perror("Fehler beim Senden von THINKING");
 	}
-	//printf("C: %s", THINKING_MSG);
+	printf("mc +MOVE: C: %s", THINKING_MSG);
 
 	//receive OKTHINK
 	if(read(sockfd, serverResponse, sizeof(char)*MES_LENGTH_SERVER) < 0){
@@ -45,7 +46,7 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 			//printf("\nmaintainConnection(): received +WAIT from the server\n");
 			//send OKWAIT
 			write(sockfd, OKWAIT_MSG, (int)strlen(OKWAIT_MSG));
-			//printf("C: %s", OKWAIT_MSG);
+			printf("mc +WAIT: C: %s", OKWAIT_MSG);
 			printf("Der Gegner ist am Zug\n");
 			free(serverResponse);
 			return WAIT;
@@ -80,13 +81,23 @@ int maintainConnection(int sockfd, struct SHM_data* shm_pointer){
 	return ERROR;
 }
 
-
+int i = 0;
 short send_move_to_server(int sockfd, char* move){
+if(i < 5){
+	char *test[] = {"PLAY A0\n", "PLAY A6\n", "PLAY B7\n", "PLAY C7\n", "PLAY A7\n"};
+	printf("MOOOVVEE \"%s\n\"", test[i]);
+	if(write(sockfd, test[i++], 9) < 0){
+		perror("write error, MAINCON");
+		return ERROR;
+	}
+}
+else{
 	if(write(sockfd, move, strlen(move)) < 0){
 		perror("write error, MAINCON");
 		return ERROR;
 	}
 	//printf("\nClient macht folgenden Zug %s\n", move);
 	//printf("length of this command: %zu", strlen(move));
+}
 	return 0;
 }
